@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
 
 const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, errors }) => {
-  
+
   const renderField = (field, fieldName) => {
     const { title, enum: enumValues } = field;
     const uiField = uiSchema[fieldName] || {};
@@ -129,35 +129,35 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
           </div>
         );
 
-        case "daterange":
-          return (
-            <div key={fieldName} className={`${layoutClass} ${colClass}`}>
-              <label className='form-label'>{title || fieldName}</label>
-              <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
-                <DatePicker
-                  selected={formData.startDate || new Date()}
-                  onChange={(date) => handleChange("startDate", date)}
-                  selectsStart
-                  startDate={formData.startDate}
-                  minDate={formData.startDate}
-                  endDate={formData.endDate}
-                  placeholderText="Start Date"
-                  className={fieldClass}
-                />
-                <DatePicker
-                  selected={formData.endDate || new Date()}
-                  onChange={(date) => handleChange("endDate", date)}
-                  selectsEnd
-                  startDate={formData.startDate}
-                  endDate={formData.endDate}
-                  minDate={formData.startDate}
-                  placeholderText="End Date"
-                  className={fieldClass}
-                />
-              </div>
-              {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+      case "daterange":
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+            <label className='form-label'>{title || fieldName}</label>
+            <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
+              <DatePicker
+                selected={formData.startDate || new Date()}
+                onChange={(date) => handleChange("startDate", date)}
+                selectsStart
+                startDate={formData.startDate}
+                minDate={formData.startDate}
+                endDate={formData.endDate}
+                placeholderText="Start Date"
+                className={fieldClass}
+              />
+              <DatePicker
+                selected={formData.endDate || new Date()}
+                onChange={(date) => handleChange("endDate", date)}
+                selectsEnd
+                startDate={formData.startDate}
+                endDate={formData.endDate}
+                minDate={formData.startDate}
+                placeholderText="End Date"
+                className={fieldClass}
+              />
             </div>
-          );
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
 
       case "date":
         return (
@@ -170,14 +170,104 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               dateFormat="yyyy/MM/dd"
               placeholderText="Select date"
             />
-              {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
           </div>
         );
 
-      case 'button':
-        return (<Button uiField={uiField} classNames="w-100" />);
+      case "time":
+        return (
+          <div key={fieldName} className="mt-3">
+            <label className="form-label">{title}</label>
+            <input
+              type="time"
+              value={formData[fieldName] || ''}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+              className="form-control"
+            />
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
 
-      default:
+      case "datetime":
+        return (
+          <div key={fieldName} className="mt-3">
+            <label className="form-label">{title}</label>
+            <input
+              type="datetime-local"
+              value={formData[fieldName] || ''}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+              className="form-control"
+            />
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
+      case "calendar":
+        return (
+          <div key={fieldName} className="mt-3">
+            <label className="form-label">{title}</label>
+            {/* Implement a calendar picker or similar component */}
+            <input
+              type="date"
+              value={formData[fieldName] || ''}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+              className="form-control"
+            />
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
+      case "year":
+        return (
+          <div key={fieldName} className="mt-3">
+            <label className="form-label">{title}</label>
+            <input
+              type="number"
+              value={formData[fieldName] || ''}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+              min="1900"
+              max="2100"
+              className="form-control"
+            />
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
+      case "month":
+        return (
+          <div key={fieldName} className="mt-3">
+            <label className="form-label">{title}</label>
+            <input
+              type="month"
+              value={formData[fieldName] || ''}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+              className="form-control"
+            />
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
+      case "day":
+        return (
+          <div key={fieldName} className="mt-3">
+            <label className="form-label">{title}</label>
+            <input
+              type="date"
+              value={formData[fieldName] || ''}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+              className="form-control"
+            />
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
+      case 'file':
+        return (
+          <div></div>
+        )
+
+      case 'text':
+        console.log();
         return (
           <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className='form-label'>{title || fieldName}</label>
@@ -187,16 +277,25 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               name={fieldName}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
+              pattern={schema.properties[fieldName]?.pattern}
             />
             {errorMessage && <div className="text-danger">{errorMessage}</div>}
           </div>
         );
+
+      case 'button':
+        return (<Button uiField={uiField} classNames="w-100" />);
+
+      default:
+        console.log("No field found");
     }
   };
 
+  const fieldNames = uiSchema["ui:order"] || Object.keys(schema.properties);
+
   return (
     <>
-      {Object.keys(schema.properties).map((fieldName) => {
+      {fieldNames.map((fieldName) => {
         const field = schema.properties[fieldName];
         return renderField(field, fieldName);
       })}
