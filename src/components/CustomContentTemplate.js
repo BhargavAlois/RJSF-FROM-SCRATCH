@@ -4,10 +4,32 @@ import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
 
 const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, errors }) => {
+  console.log(Object.keys(formData).length);
+  
+  const initializeFormData = (schema) => {
+    console.log("Init");
+    const initialData = {};
+    
+    Object.keys(schema.properties).forEach((fieldName) => {
+      const field = schema.properties[fieldName];
+      console.log("Field default : ", field.default);
+      if (field.default) {
+        initialData[fieldName] = field.default; 
+      } else if (field.type === "object" && field.properties) {
+        
+        initialData[fieldName] = initializeFormData(field); 
+      } else if (field.type === "array" && field.items && field.items.enum) {
+        
+        initialData[fieldName] = [];
+      }
+    });
+
+    return initialData;
+  };
+
+  const defaultFormData = Object.keys(formData).length > 0 || initializeFormData(schema);
 
   const renderField = (field, fieldName) => {
-    console.log("field : ", field);
-    console.log("field name : ", fieldName);
     const { title, enum: enumValues } = field;
     const uiField = uiSchema[fieldName] || {};
     const widget = uiField["ui:widget"] || "text";
@@ -27,7 +49,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               type="password"
               name={fieldName}
               className={fieldClass}
-              value={formData[fieldName] || ""}
+              value={defaultFormData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
             />
             {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
@@ -42,7 +64,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               type="email"
               name={fieldName}
               className={fieldClass}
-              value={formData[fieldName] || ""}
+              value={defaultFormData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
             />
             {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
@@ -56,7 +78,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
             <select
               name={fieldName}
               className={fieldClass}
-              value={formData[fieldName] || ""}
+              value={defaultFormData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
             >
               <option value="">Select an option</option>
@@ -87,13 +109,12 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
                       className={fieldClass}
                       name={fieldName}
                       value={value}
-                      checked={formData[fieldName]?.includes(value)}
+                      checked={defaultFormData[fieldName]?.includes(value)}
                       onChange={(e) => {
-                        // Add or remove item from the formData array when checked/unchecked
                         const updatedValues = e.target.checked
-                          ? [...(formData[fieldName] || []), value]  // Add value if checked
-                          : (formData[fieldName] || []).filter(
-                            (val) => val !== value  // Remove value if unchecked
+                          ? [...(defaultFormData[fieldName] || []), value]
+                          : (defaultFormData[fieldName] || []).filter(
+                            (val) => val !== value
                           );
                         handleChange(fieldName, updatedValues);
                       }}
@@ -121,7 +142,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
                       className={fieldClass}
                       name={fieldName}
                       value={value}
-                      checked={formData[fieldName] === value}
+                      checked={defaultFormData[fieldName] === value}
                       onChange={() => handleChange(fieldName, value)}
                     />
                     <label className="form-check-label">{value}</label>
@@ -138,21 +159,21 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
             <label className='form-label'>{title || fieldName}</label>
             <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
               <DatePicker
-                selected={formData.startDate}
+                selected={defaultFormData.startDate}
                 onChange={(date) => handleChange("startDate", date)}
                 selectsStart
-                startDate={formData.startDate}
-                endDate={formData.endDate}
+                startDate={defaultFormData.startDate}
+                endDate={defaultFormData.endDate}
                 placeholderText="Start Date"
                 className={fieldClass}
               />
               <DatePicker
-                selected={formData.endDate}
+                selected={defaultFormData.endDate}
                 onChange={(date) => handleChange("endDate", date)}
                 selectsEnd
-                startDate={formData.startDate}
-                endDate={formData.endDate}
-                minDate={formData.startDate}
+                startDate={defaultFormData.startDate}
+                endDate={defaultFormData.endDate}
+                minDate={defaultFormData.startDate}
                 placeholderText="End Date"
                 className={fieldClass}
               />
@@ -166,7 +187,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
           <div key={fieldName} className="mt-3">
             <label className="form-label">{title || fieldName}</label>
             <DatePicker
-              selected={formData[fieldName] || new Date()}
+              selected={defaultFormData[fieldName] || new Date()}
               onChange={(date) => handleChange(fieldName, date)}
               className="form-control"
               dateFormat="yyyy/MM/dd"
@@ -175,7 +196,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
         );
 
       case 'button':
-        return (<Button uiField={uiField} />);
+        return (<Button uiField={uiField} classNames="w-100" />);
 
       default:
         return (
@@ -185,7 +206,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               type="text"
               name={fieldName}
               className={fieldClass}
-              value={formData[fieldName] || ""}
+              value={defaultFormData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
             />
             {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
@@ -198,7 +219,6 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
     const order = uiSchema["ui:order"] || Object.keys(schema.properties);
     return order.map((fieldName) => {
       const field = schema.properties[fieldName];
-      console.log("field ", field);
       return renderField(field, fieldName);
     });
   };
