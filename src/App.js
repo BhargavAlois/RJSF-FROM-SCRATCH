@@ -11,6 +11,8 @@ function App() {
 
   const renderFormData = () => {
 
+    console.log("data submitted : ", formData);
+
     return Object.keys(formData).map((key) => {
       const value = formData[key];
 

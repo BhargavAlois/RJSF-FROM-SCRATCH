@@ -4,31 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
 
 const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, errors }) => {
-  console.log(Object.keys(formData).length);
   
-  const initializeFormData = (schema) => {
-    console.log("Init");
-    const initialData = {};
-    
-    Object.keys(schema.properties).forEach((fieldName) => {
-      const field = schema.properties[fieldName];
-      console.log("Field default : ", field.default);
-      if (field.default) {
-        initialData[fieldName] = field.default; 
-      } else if (field.type === "object" && field.properties) {
-        
-        initialData[fieldName] = initializeFormData(field); 
-      } else if (field.type === "array" && field.items && field.items.enum) {
-        
-        initialData[fieldName] = [];
-      }
-    });
-
-    return initialData;
-  };
-
-  const defaultFormData = Object.keys(formData).length > 0 || initializeFormData(schema);
-
   const renderField = (field, fieldName) => {
     const { title, enum: enumValues } = field;
     const uiField = uiSchema[fieldName] || {};
@@ -49,7 +25,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               type="password"
               name={fieldName}
               className={fieldClass}
-              value={defaultFormData[fieldName] || ""}
+              value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
             />
             {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
@@ -64,7 +40,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               type="email"
               name={fieldName}
               className={fieldClass}
-              value={defaultFormData[fieldName] || ""}
+              value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
             />
             {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
@@ -78,7 +54,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
             <select
               name={fieldName}
               className={fieldClass}
-              value={defaultFormData[fieldName] || ""}
+              value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
             >
               <option value="">Select an option</option>
@@ -109,11 +85,11 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
                       className={fieldClass}
                       name={fieldName}
                       value={value}
-                      checked={defaultFormData[fieldName]?.includes(value)}
+                      checked={formData[fieldName]?.includes(value)}
                       onChange={(e) => {
                         const updatedValues = e.target.checked
-                          ? [...(defaultFormData[fieldName] || []), value]
-                          : (defaultFormData[fieldName] || []).filter(
+                          ? [...(formData[fieldName] || []), value]
+                          : (formData[fieldName] || []).filter(
                             (val) => val !== value
                           );
                         handleChange(fieldName, updatedValues);
@@ -142,7 +118,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
                       className={fieldClass}
                       name={fieldName}
                       value={value}
-                      checked={defaultFormData[fieldName] === value}
+                      checked={formData[fieldName] === value}
                       onChange={() => handleChange(fieldName, value)}
                     />
                     <label className="form-check-label">{value}</label>
@@ -153,41 +129,41 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
           </div>
         );
 
-      case "daterange":
-        return (
-          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
-            <label className='form-label'>{title || fieldName}</label>
-            <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
-              <DatePicker
-                selected={defaultFormData.startDate}
-                onChange={(date) => handleChange("startDate", date)}
-                selectsStart
-                startDate={defaultFormData.startDate}
-                endDate={defaultFormData.endDate}
-                placeholderText="Start Date"
-                className={fieldClass}
-              />
-              <DatePicker
-                selected={defaultFormData.endDate}
-                onChange={(date) => handleChange("endDate", date)}
-                selectsEnd
-                startDate={defaultFormData.startDate}
-                endDate={defaultFormData.endDate}
-                minDate={defaultFormData.startDate}
-                placeholderText="End Date"
-                className={fieldClass}
-              />
+        case "daterange":
+          return (
+            <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+              <label className='form-label'>{title || fieldName}</label>
+              <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
+                <DatePicker
+                  selected={formData.startDate}
+                  onChange={(date) => handleChange("startDate", date)}
+                  selectsStart
+                  startDate={formData.startDate}
+                  endDate={formData.endDate}
+                  placeholderText="Start Date"
+                  className={fieldClass}
+                />
+                <DatePicker
+                  selected={formData.endDate}
+                  onChange={(date) => handleChange("endDate", date)}
+                  selectsEnd
+                  startDate={formData.startDate}
+                  endDate={formData.endDate}
+                  minDate={formData.startDate}
+                  placeholderText="End Date"
+                  className={fieldClass}
+                />
+              </div>
+              {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
             </div>
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
-          </div>
-        );
+          );
 
       case "date":
         return (
           <div key={fieldName} className="mt-3">
             <label className="form-label">{title || fieldName}</label>
             <DatePicker
-              selected={defaultFormData[fieldName] || new Date()}
+              selected={formData[fieldName] || new Date()}
               onChange={(date) => handleChange(fieldName, date)}
               className="form-control"
               dateFormat="yyyy/MM/dd"
@@ -204,27 +180,24 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
             <label className='form-label'>{title || fieldName}</label>
             <input
               type="text"
-              name={fieldName}
               className={fieldClass}
-              value={defaultFormData[fieldName] || ""}
+              name={fieldName}
+              value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
             />
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errorMessage && <div className="text-danger">{errorMessage}</div>}
           </div>
         );
     }
   };
 
-  const renderFieldsInOrder = () => {
-    const order = uiSchema["ui:order"] || Object.keys(schema.properties);
-    return order.map((fieldName) => {
-      const field = schema.properties[fieldName];
-      return renderField(field, fieldName);
-    });
-  };
-
   return (
-      renderFieldsInOrder()
+    <>
+      {Object.keys(schema.properties).map((fieldName) => {
+        const field = schema.properties[fieldName];
+        return renderField(field, fieldName);
+      })}
+    </>
   );
 };
 
