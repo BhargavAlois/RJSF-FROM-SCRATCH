@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomContentTemplate from '../components/CustomContentTemplate';
 
 export default function MainTemplate(props) {
@@ -8,8 +8,34 @@ export default function MainTemplate(props) {
     const uiSchema = props.uiSchema;
     const onSubmit = props.onSubmit;
 
+    const initializeFormData = (schema) => {
+        const initialData = {};
+      
+        Object.keys(schema.properties).forEach((fieldName) => {
+          const field = schema.properties[fieldName];
+          
+          if (fieldName === 'dateRange') {
+            const dateRange = field.properties || {};
+            initialData['startDate'] = dateRange.startDate?.default || '';
+            initialData['endDate'] = dateRange.endDate?.default || '';
+          } else if (field.default) {
+            initialData[fieldName] = field.default;
+          } else if (field.type === "object" && field.properties) {
+            initialData[fieldName] = initializeFormData(field); // Recursively handle nested objects
+          } else if (field.type === "array" && field.items && field.items.enum) {
+            initialData[fieldName] = [];
+          }
+        });
+      
+        return initialData;
+      };
+
+    useEffect(() => {
+        const initialFormData = initializeFormData(schema);
+        setFormData(initialFormData);
+    }, [schema]);
+
     const handleChange = (fieldName, value) => {
-        
         setFormData((prevData) => ({
             ...prevData,
             [fieldName]: value
@@ -29,8 +55,7 @@ export default function MainTemplate(props) {
                 if (!formData.startDate || !formData.endDate) {
                     formErrors['dateRange'] = "Start Date and End Date are required";
                 }
-            }
-            else if (field === 'preferences' && (!formData[field] || formData[field].length === 0)) {
+            } else if (field === 'preferences' && (!formData[field] || formData[field].length === 0)) {
                 formErrors[field] = `${field} is required`;
             } else if (formData[field] === undefined || formData[field] === '') {
                 formErrors[field] = `${field} is required`;
@@ -47,6 +72,7 @@ export default function MainTemplate(props) {
     };
 
     const handleSubmit = (e) => {
+        console.log("submit clicked");
         e.preventDefault();
         if (onSubmit) {
             if (validateForm()) {
@@ -94,3 +120,4 @@ export default function MainTemplate(props) {
         </div>
     );
 }
+
