@@ -11,3 +11,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.error-field {
+  border-color: green;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.email-error-message {
+  color: #ff5733;
+  font-style: italic;
+  font-size: 0.9em;
+}

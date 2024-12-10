@@ -1,0 +1,18 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+const ButtonWidget = (props) => {
+    const field = props.uiField;
+    const value = field['ui:options']['value'];
+    const onClick = field['ui:options']['onClick'];
+    const btnClass = field['ui:classNames'];
+
+    return (
+        <div className='text-center'>
+        <button type="button" className={btnClass} onClick={onClick}>
+            {value || 'Click Me!'}
+        </button>
+        </div>
+    );
+};
+
+export default ButtonWidget;

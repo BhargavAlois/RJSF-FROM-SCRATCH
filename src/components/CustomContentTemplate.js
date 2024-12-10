@@ -1,0 +1,211 @@
+import React from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Button from "../widgets/ButtonWidget";
+
+const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, errors }) => {
+
+  const renderField = (field, fieldName) => {
+    console.log("field : ", field);
+    console.log("field name : ", fieldName);
+    const { title, enum: enumValues } = field;
+    const uiField = uiSchema[fieldName] || {};
+    const widget = uiField["ui:widget"] || "text";
+    const errorMessage = errors[fieldName];
+    const fieldClass = uiField["ui:classNames"] || "form-control";
+    const errorMessageClass = uiField["ui:errorMessageClass"] || "text-danger";
+    const layoutClass = uiField["ui:layout"] === "row" ? "form-group row" : "form-group";
+    const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
+    const isColumnLayout = uiField["ui:layout"] === "column";
+
+    switch (widget) {
+      case "password":
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+            <label className='form-label'>{title || fieldName}</label>
+            <input
+              type="password"
+              name={fieldName}
+              className={fieldClass}
+              value={formData[fieldName] || ""}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+            />
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
+      case "email":
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+            <label className='form-label'>{title || fieldName}</label>
+            <input
+              type="email"
+              name={fieldName}
+              className={fieldClass}
+              value={formData[fieldName] || ""}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+            />
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
+      case "select":
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+            <label className="form-label">{title || fieldName}</label>
+            <select
+              name={fieldName}
+              className={fieldClass}
+              value={formData[fieldName] || ""}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+            >
+              <option value="">Select an option</option>
+              {enumValues &&
+                enumValues.map((value, index) => (
+                  <option key={index} value={value}>
+                    {value}
+                  </option>
+                ))}
+            </select>
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
+      case "checkboxes":
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+            <label className="form-label">{title || fieldName}</label>
+            <div
+              className={`form-check ${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}
+              style={{ flexWrap: "wrap", gap: "10px", overflow: "hidden" }}
+            >
+              {field.items.enum &&
+                field.items.enum.map((value, index) => (
+                  <div key={index} className="form-check" style={{ flexBasis: "48%" }}>
+                    <input
+                      type="checkbox"
+                      className={fieldClass}
+                      name={fieldName}
+                      value={value}
+                      checked={formData[fieldName]?.includes(value)}
+                      onChange={(e) => {
+                        // Add or remove item from the formData array when checked/unchecked
+                        const updatedValues = e.target.checked
+                          ? [...(formData[fieldName] || []), value]  // Add value if checked
+                          : (formData[fieldName] || []).filter(
+                            (val) => val !== value  // Remove value if unchecked
+                          );
+                        handleChange(fieldName, updatedValues);
+                      }}
+                    />
+                    <label className="form-check-label">{value}</label>
+                  </div>
+                ))}
+            </div>
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
+      case "radio":
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+            <label className="form-label">{title || fieldName}</label>
+            <div
+              className={`form-check ${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}
+            >
+              {enumValues &&
+                enumValues.map((value, index) => (
+                  <div key={index} className="form-check">
+                    <input
+                      type="radio"
+                      className={fieldClass}
+                      name={fieldName}
+                      value={value}
+                      checked={formData[fieldName] === value}
+                      onChange={() => handleChange(fieldName, value)}
+                    />
+                    <label className="form-check-label">{value}</label>
+                  </div>
+                ))}
+            </div>
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
+      case "daterange":
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+            <label className='form-label'>{title || fieldName}</label>
+            <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
+              <DatePicker
+                selected={formData.startDate}
+                onChange={(date) => handleChange("startDate", date)}
+                selectsStart
+                startDate={formData.startDate}
+                endDate={formData.endDate}
+                placeholderText="Start Date"
+                className={fieldClass}
+              />
+              <DatePicker
+                selected={formData.endDate}
+                onChange={(date) => handleChange("endDate", date)}
+                selectsEnd
+                startDate={formData.startDate}
+                endDate={formData.endDate}
+                minDate={formData.startDate}
+                placeholderText="End Date"
+                className={fieldClass}
+              />
+            </div>
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
+      case "date":
+        return (
+          <div key={fieldName} className="mt-3">
+            <label className="form-label">{title || fieldName}</label>
+            <DatePicker
+              selected={formData[fieldName] || new Date()}
+              onChange={(date) => handleChange(fieldName, date)}
+              className="form-control"
+              dateFormat="yyyy/MM/dd"
+            />
+          </div>
+        );
+
+      case 'button':
+        return (<Button uiField={uiField} />);
+
+      default:
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+            <label className='form-label'>{title || fieldName}</label>
+            <input
+              type="text"
+              name={fieldName}
+              className={fieldClass}
+              value={formData[fieldName] || ""}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+            />
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+    }
+  };
+
+  const renderFieldsInOrder = () => {
+    const order = uiSchema["ui:order"] || Object.keys(schema.properties);
+    return order.map((fieldName) => {
+      const field = schema.properties[fieldName];
+      console.log("field ", field);
+      return renderField(field, fieldName);
+    });
+  };
+
+  return (
+      renderFieldsInOrder()
+  );
+};
+
+export default CustomContentTemplate;
