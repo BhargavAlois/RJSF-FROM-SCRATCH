@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import CustomForm from './components/CustomForm';
 import MyForm from './components/MyForm';
 import { schema } from './schemas/schema';
 import { uiSchema } from './schemas/uiSchema';
@@ -59,8 +58,6 @@ function App() {
 
   const handleFormSubmit = (data) => {
     setFormData(data);
-    window.alert("Submit function provided by user called");
-    // window.alert("User Provided");
   };
 
   return (
@@ -71,12 +68,6 @@ function App() {
           templates={templates}
           onSubmit={handleFormSubmit}
           formData/>
-        {/* <CustomForm
-          schema={schema}
-          uiSchema={uiSchema}
-          templates={templates}
-          onSubmit={handleFormSubmit}
-        /> */}
         {Object.keys(formData).length > 0 && renderFormData()}
       </div>
     </div>
