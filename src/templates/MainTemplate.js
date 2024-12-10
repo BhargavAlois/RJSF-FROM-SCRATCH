@@ -9,7 +9,6 @@ export default function MainTemplate(props) {
     const onSubmit = props.onSubmit;
 
     const handleChange = (fieldName, value) => {
-        console.log("Handle change from CustomForm");
         
         setFormData((prevData) => ({
             ...prevData,
@@ -80,7 +79,6 @@ export default function MainTemplate(props) {
                     />
                 </div>
                 
-                {/* Submit button in center */}
                 <button 
                     type="submit" 
                     className="btn btn-primary mt-3 w-100 w-md-auto text-center"
