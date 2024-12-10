@@ -135,16 +135,17 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               <label className='form-label'>{title || fieldName}</label>
               <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
                 <DatePicker
-                  selected={formData.startDate}
+                  selected={formData.startDate || new Date()}
                   onChange={(date) => handleChange("startDate", date)}
                   selectsStart
                   startDate={formData.startDate}
+                  minDate={formData.startDate}
                   endDate={formData.endDate}
                   placeholderText="Start Date"
                   className={fieldClass}
                 />
                 <DatePicker
-                  selected={formData.endDate}
+                  selected={formData.endDate || new Date()}
                   onChange={(date) => handleChange("endDate", date)}
                   selectsEnd
                   startDate={formData.startDate}
@@ -167,7 +168,9 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               onChange={(date) => handleChange(fieldName, date)}
               className="form-control"
               dateFormat="yyyy/MM/dd"
+              placeholderText="Select date"
             />
+              {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
           </div>
         );
 

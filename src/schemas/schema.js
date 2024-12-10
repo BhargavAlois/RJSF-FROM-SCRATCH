@@ -50,8 +50,8 @@ export const schema = {
       type: "object",
       title: "Date Range",
       properties: {
-        startDate: { type: "string", format: "date", default: "2023-01-01" }, // Default value
-        endDate: { type: "string", format: "date", default: "2023-12-31" }, // Default value
+        startDate: { type: "string", format: "date"}, 
+        endDate: { type: "string", format: "date"}, 
       },
     },
     actionButton: { type: "string", title: "Action Button" },
