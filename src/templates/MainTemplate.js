@@ -63,14 +63,15 @@ export default function MainTemplate(props) {
         const formErrors = {};
 
         schema.required?.forEach((field) => {
+            const fieldTitle = schema.properties[field]['title'];
             if (field === 'dateRange') {
                 if (!formData.startDate || !formData.endDate) {
                     formErrors['dateRange'] = "Start Date and End Date are required";
                 }
             } else if (field === 'preferences' && (!formData[field] || formData[field].length === 0 || formData[field] === null)) {
-                formErrors[field] = `${field} is required`;
+                formErrors[field] = `${fieldTitle} is required`;
             } else if (formData[field] === undefined || formData[field] === '') {
-                formErrors[field] = `${field} is required`;
+                formErrors[field] = `${fieldTitle} is required`;
             }
         });
 
