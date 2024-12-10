@@ -65,21 +65,21 @@ export const uiSchema = {
     "ui:classNames": "form-control",
     "ui:layout": "row",
   },
-  year: {
-    "ui:widget": "select",  
-    "ui:classNames": "form-control",
-    "ui:layout": "row",
-  },
-  month: {
-    "ui:widget": "select", 
-    "ui:classNames": "form-control",
-    "ui:layout": "row",
-  },
-  day: {
-    "ui:widget": "select",  
-    "ui:classNames": "form-control",
-    "ui:layout": "row",
-  },
+  // year: {
+  //   "ui:widget": "select",  
+  //   "ui:classNames": "form-control",
+  //   "ui:layout": "row",
+  // },
+  // month: {
+  //   "ui:widget": "select", 
+  //   "ui:classNames": "form-control",
+  //   "ui:layout": "row",
+  // },
+  // day: {
+  //   "ui:widget": "select",  
+  //   "ui:classNames": "form-control",
+  //   "ui:layout": "row",
+  // },
   file: {
     "ui:widget": "file",
     "ui:classNames": "form-control",

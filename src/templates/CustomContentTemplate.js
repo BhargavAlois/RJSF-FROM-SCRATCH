@@ -291,11 +291,9 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
     }
   };
 
-  const fieldNames = uiSchema["ui:order"] || Object.keys(schema.properties);
-
   return (
     <>
-      {fieldNames.map((fieldName) => {
+      {Object.keys(schema.properties).map((fieldName) => {
         const field = schema.properties[fieldName];
         return renderField(field, fieldName);
       })}

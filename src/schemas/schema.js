@@ -70,21 +70,21 @@ export const schema = {
       format: "date",
       title: "Calendar",
     },
-    year: {
-      type: "string",
-      format: "year",
-      title: "Year",
-    },
-    month: {
-      type: "string",
-      format: "month",
-      title: "Month",
-    },
-    day: {
-      type: "string",
-      format: "date",
-      title: "Day",
-    },
+    // year: {
+    //   type: "string",
+    //   format: "year",
+    //   title: "Year",
+    // },
+    // month: {
+    //   type: "string",
+    //   format: "month",
+    //   title: "Month",
+    // },
+    // day: {
+    //   type: "string",
+    //   format: "date",
+    //   title: "Day",
+    // },
     file: {
       type: "string",
       format: "uri",
@@ -111,6 +111,7 @@ export const schema = {
     "preferences",
     "dateRange",
     "datetime",
-    "time"
+    "time",
+    "calendar"
   ],
 };
