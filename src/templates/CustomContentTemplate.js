@@ -260,10 +260,19 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
           </div>
         );
 
-      case 'file':
+      case "file":
         return (
-          <div></div>
-        )
+          <div key={fieldName} className="mt-3">
+            <label className="form-label">{title}</label>
+            <input
+              type="file"
+              onChange={(e) => handleChange(fieldName, e.target.files[0])}
+              className="form-control"
+            />
+            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+          </div>
+        );
+
 
       case 'text':
         console.log();
