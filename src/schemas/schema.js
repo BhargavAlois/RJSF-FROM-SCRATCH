@@ -1,35 +1,31 @@
 export const schema = {
   type: "object",
-  title: "My Custom form",
+  title: "My Custom Form",
   description: "A simple form example.",
   properties: {
     firstName: {
       type: "string",
       title: "First Name",
-      default: "John", 
+      default: "John",
     },
     lastName: {
       type: "string",
       title: "Last Name",
-      // default: "Doe", 
     },
     email: {
       type: "string",
       format: "email",
       title: "Email Address",
-      // default: "johndoe@example.com", 
     },
     password: {
       type: "string",
       title: "Password",
       minLength: 6,
-      // default: "password123", 
     },
     role: {
       type: "string",
       enum: ["Admin", "User", "Guest"],
       title: "Role",
-      // default: "User", 
     },
     preferences: {
       type: "array",
@@ -38,25 +34,83 @@ export const schema = {
         enum: ["Sports", "Music", "Movies", "Reading"],
       },
       title: "Preferences",
-      default: ["Music", "Movies"], 
+      default: ["Music", "Movies"],
     },
     date: {
       type: "string",
       format: "date",
       title: "Date of Birth",
-      // default: "1990-01-01", 
+    },
+    phoneNumber: {
+      type: "string",
+      pattern: "^\\d{3}-\\d{3}-\\d{4}$",
+      title: "Phone Number",
+      description: "Phone number in format XXX-XXX-XXXX",
     },
     dateRange: {
       type: "object",
       title: "Date Range",
       properties: {
-        startDate: { type: "string", format: "date"}, 
-        endDate: { type: "string", format: "date"}, 
+        startDate: { type: "string", format: "date" },
+        endDate: { type: "string", format: "date" },
       },
     },
-    actionButton: { type: "string", title: "Action Button" },
-    myButton: { type: "string", title: "My Button" },
+    time: {
+      type: "string",
+      format: "time",
+      title: "Time",
+    },
+    datetime: {
+      type: "string",
+      format: "date-time",
+      title: "Datetime",
+    },
+    calendar: {
+      type: "string",
+      format: "date",
+      title: "Calendar",
+    },
+    year: {
+      type: "string",
+      format: "year",
+      title: "Year",
+    },
+    month: {
+      type: "string",
+      format: "month",
+      title: "Month",
+    },
+    day: {
+      type: "string",
+      format: "date",
+      title: "Day",
+    },
+    file: {
+      type: "string",
+      format: "uri",
+      title: "File",
+      description: "A file upload field, URL based",
+    },
+    actionButton: {
+      type: "string",
+      title: "Action Button",
+    },
+    myButton: {
+      type: "string",
+      title: "My Button",
+    },
   },
   footerContent: "This is footer content",
-  required: ["firstName", "lastName", "email", "password", "role", "date", "preferences", "dateRange"],
+  required: [
+    "firstName",
+    "lastName",
+    "email",
+    "password",
+    "role",
+    "date",
+    "preferences",
+    "dateRange",
+    "datetime",
+    "time"
+  ],
 };
