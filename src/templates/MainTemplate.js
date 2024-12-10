@@ -66,10 +66,10 @@ export default function MainTemplate(props) {
 
             <form 
                 onSubmit={handleSubmit}
-                className="d-flex flex-column align-items-center justify-content-center w-100 p-4 border border-dark rounded"
+                className="d-flex flex-column align-items-center justify-content-center p-4 border border-dark rounded"
                 style={{ overflow: 'auto' }}
             >
-                <div className="w-100 d-flex flex-column justify-content-between">
+                <div className="d-flex flex-column justify-content-between">
                     <CustomContentTemplate 
                         formData={formData}
                         handleChange={handleChange}
@@ -81,8 +81,8 @@ export default function MainTemplate(props) {
                 
                 <button 
                     type="submit" 
-                    className="btn btn-primary mt-3 w-100 w-md-auto text-center"
-                    style={{ maxWidth: '200px' }}
+                    className="btn btn-primary mt-3 w-25"
+                    style={{ maxWidth: '100px'}}
                 >
                     Submit
                 </button>
