@@ -206,7 +206,6 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
         return (
           <div key={fieldName} className="mt-3">
             <label className="form-label">{title}</label>
-            {/* Implement a calendar picker or similar component */}
             <input
               type="date"
               value={formData[fieldName] || ''}

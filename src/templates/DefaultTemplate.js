@@ -121,7 +121,6 @@ export default function DefaultTemplate(props) {
                     Submit
                 </button>
             </form>
-
             <footer className="mt-4 text-center">
                 {schema.footerContent}
             </footer>
