@@ -21,6 +21,7 @@ export const schema = {
       type: "string",
       title: "Password",
       minLength: 6,
+      maxLength: 8
     },
     role: {
       type: "string",
@@ -112,6 +113,7 @@ export const schema = {
     "dateRange",
     "datetime",
     "time",
-    "calendar"
+    "calendar",
+    "phoneNumber"
   ],
 };
