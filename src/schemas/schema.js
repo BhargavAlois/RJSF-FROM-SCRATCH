@@ -100,6 +100,13 @@ export const schema = {
       type: "string",
       title: "My Button",
     },
+    progress: {
+      type: "integer",
+      title: "Progress",
+      default: 40,
+      minimum: 0,
+      maximum: 100,
+    },
   },
   footerContent: "This is footer content",
   required: [

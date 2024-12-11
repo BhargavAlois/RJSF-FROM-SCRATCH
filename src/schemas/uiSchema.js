@@ -85,6 +85,11 @@ export const uiSchema = {
     "ui:classNames": "form-control",
     "ui:layout": "row",
   },
+  progress: {
+    "ui:widget": "progress",
+    "ui:classNames": "form-control",  
+    "ui:layout": "row",
+  },
   actionButton: {
     "ui:widget": "button",
     "ui:options": { "value": "Custom button", "onClick" : () => { window.alert("Custom button pressed"); }},
