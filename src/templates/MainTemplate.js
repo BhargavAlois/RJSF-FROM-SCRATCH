@@ -4,7 +4,7 @@ import CustomContentTemplate from './CustomContentTemplate';
 export default function MainTemplate(props) {
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
-    const { schema, uiSchema, onSubmit } = props;
+    const { schema, uiSchema, onSubmit, onChange, onSuccess, onError } = props;
 
     const prefilledData = {
         email: "alice.smith@example.com",
@@ -48,13 +48,12 @@ export default function MainTemplate(props) {
     }, []);
 
     const handleChange = (fieldName, value) => {
+        console.log("handle change ", formData);
+        onChange(fieldName);
         setFormData((prevData) => ({
             ...prevData,
             [fieldName]: value
         }));
-
-        console.log("form data : ", formData?.date);
-
         setErrors((prevErrors) => ({
             ...prevErrors,
             [fieldName]: ''
@@ -133,8 +132,13 @@ export default function MainTemplate(props) {
         if (onSubmit) {
             if (validateForm()) {
                 onSubmit(formData);
+                onSuccess();
             }
-            return;
+            else
+            {
+                onError();
+                return;
+            }
         }
         defaultSubmit(e);
     };
@@ -148,19 +152,21 @@ export default function MainTemplate(props) {
 
             <form
                 onSubmit={handleSubmit}
-                className="d-flex flex-column align-items-center justify-content-center p-4 border border-dark rounded"
+                className="w-full d-flex flex-column align-items-center justify-content-center p-4 border border-dark rounded"
                 style={{ overflow: 'auto' }}
             >
-                <div className="d-flex flex-column justify-content-between">
+                {/* <div className="d-flex flex-column justify-content-between"> */}
                     <CustomContentTemplate
                         formData={formData}
                         handleChange={handleChange}
                         uiSchema={uiSchema}
                         schema={schema}
                         errors={errors}
+                        onChange={onChange}
+                        onSuccess={onSuccess}
+                        onError={onError}
                     />
-                </div>
-
+                {/* </div> */}
                 <button
                     type="submit"
                     className="btn btn-primary mt-3 w-25"
