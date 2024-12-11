@@ -49,7 +49,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               onChange={(e) => handleChange(fieldName, e.target.value)}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -67,7 +67,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               onChange={(e) => handleChange(fieldName, e.target.value)}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -92,7 +92,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
                 ))}
             </select>
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -129,7 +129,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
                 ))}
             </div>
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -158,7 +158,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
                 ))}
             </div>
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -174,7 +174,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
                 onChange={(date) => handleChange("dateRange", { ...formData.dateRange, startDate: date })}
                 selectsStart
                 startDate={formData.dateRange?.startDate}
-                minDate={formData.dateRange?.startDate}
+                minDate={new Date()}
                 endDate={formData.dateRange?.endDate}
                 placeholderText="Start Date"
                 className={fieldClass}
@@ -191,7 +191,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               />
             </div>
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -199,7 +199,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
 
       case "date":
         return (
-          <div key={fieldName} className="mt-3">
+          <div key={fieldName} className="mt-2">
             <label className="form-label">{title || fieldName}</label>
             <DatePicker
               selected={formData[fieldName] || new Date()}
@@ -209,15 +209,38 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               placeholderText="Select date"
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
         );
 
+      case "progress":
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+            <label className="form-label">{title || fieldName}</label>
+            <div className="progress" style={{ height: "30px" }}>
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{ width: `${formData[fieldName] || 0}%` }}
+                aria-valuenow={formData[fieldName] || 0}
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+                {formData[fieldName] || 0}%
+              </div>
+            </div>
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className="text-danger mb-0">{error}</p>
+            ))}
+          </div>
+        );
+
+
       case "time":
         return (
-          <div key={fieldName} className="mt-3">
+          <div key={fieldName} className="mt-2">
             <label className="form-label">{title}</label>
             <input
               type="time"
@@ -226,7 +249,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               className="form-control"
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -234,7 +257,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
 
       case "datetime":
         return (
-          <div key={fieldName} className="mt-3">
+          <div key={fieldName} className="mt-2">
             <label className="form-label">{title}</label>
             <input
               type="datetime-local"
@@ -243,7 +266,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               className="form-control"
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -251,7 +274,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
 
       case "calendar":
         return (
-          <div key={fieldName} className="mt-3">
+          <div key={fieldName} className="mt-2">
             <label className="form-label">{title}</label>
             <input
               type="date"
@@ -260,7 +283,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               className="form-control"
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -268,7 +291,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
 
       case "year":
         return (
-          <div key={fieldName} className="mt-3">
+          <div key={fieldName} className="mt-2">
             <label className="form-label">{title}</label>
             <input
               type="number"
@@ -279,7 +302,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               className="form-control"
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -287,7 +310,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
 
       case "month":
         return (
-          <div key={fieldName} className="mt-3">
+          <div key={fieldName} className="mt-2">
             <label className="form-label">{title}</label>
             <input
               type="month"
@@ -296,7 +319,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               className="form-control"
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -304,7 +327,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
 
       case "day":
         return (
-          <div key={fieldName} className="mt-3">
+          <div key={fieldName} className="mt-2">
             <label className="form-label">{title}</label>
             <input
               type="date"
@@ -313,7 +336,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               className="form-control"
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -321,7 +344,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
 
       case "file":
         return (
-          <div key={fieldName} className="mt-3">
+          <div key={fieldName} className="mt-2">
             <label className="form-label">{title}</label>
             <input
               type="file"
@@ -348,7 +371,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
             )}
 
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
 
           </div>
@@ -367,7 +390,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               onChange={(e) => handleChange(fieldName, e.target.value)}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger'>{error}</p>
+              <p key={index} className='text-danger m-0'>{error}</p>
             ))}
           </div>
         );
