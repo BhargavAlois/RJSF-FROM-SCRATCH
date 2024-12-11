@@ -17,17 +17,19 @@ export default function MainTemplate(props) {
 
     const initializeFormData = (schema) => {
         const initialData = {};
-
+    
         Object.keys(schema.properties).forEach((fieldName) => {
             const field = schema.properties[fieldName];
-
+    
             const prefilledValue = prefilledData?.[fieldName];
             if (prefilledValue !== undefined) {
                 initialData[fieldName] = prefilledValue;
             } else if (fieldName === 'dateRange') {
                 const dateRange = field.properties || {};
-                initialData['startDate'] = prefilledData?.startDate || dateRange.startDate?.default || '';
-                initialData['endDate'] = prefilledData?.endDate || dateRange.endDate?.default || '';
+                initialData['dateRange'] = {
+                    startDate: prefilledData?.startDate || dateRange.startDate?.default || '',
+                    endDate: prefilledData?.endDate || dateRange.endDate?.default || ''
+                };
             } else if (field.default !== undefined) {
                 initialData[fieldName] = field.default;
             } else if (field.type === "object" && field.properties) {
@@ -36,7 +38,7 @@ export default function MainTemplate(props) {
                 initialData[fieldName] = [];
             }
         });
-
+    
         return initialData;
     };
 
@@ -60,24 +62,65 @@ export default function MainTemplate(props) {
     };
 
     const validateForm = () => {
+        console.log("Validate : ", formData);
         const formErrors = {};
-
+    
         schema.required?.forEach((field) => {
             const fieldTitle = schema.properties[field]['title'];
+    
             if (field === 'dateRange') {
-                if (!formData.startDate || !formData.endDate) {
-                    formErrors['dateRange'] = "Start Date and End Date are required";
+                const { startDate, endDate } = formData.dateRange || {};
+                if (!startDate || !endDate) {
+                    if (!formErrors['dateRange']) formErrors['dateRange'] = [];
+                    formErrors['dateRange'].push("Start Date and End Date are required");
                 }
             } else if (field === 'preferences' && (!formData[field] || formData[field].length === 0 || formData[field] === null)) {
-                formErrors[field] = `${fieldTitle} is required`;
+                if (!formErrors[field]) formErrors[field] = [];
+                formErrors[field].push(`${fieldTitle} is required`);
             } else if (formData[field] === undefined || formData[field] === '') {
-                formErrors[field] = `${fieldTitle} is required`;
+                if (!formErrors[field]) formErrors[field] = [];
+                formErrors[field].push(`${fieldTitle} is required`);
             }
         });
-
+    
+        Object.keys(formData).forEach((fieldName) => {
+            const field = schema.properties[fieldName];
+            const fieldTitle = field['title'];
+            console.log("Main temp field : ", field);
+    
+            if (field?.pattern) {
+                const regex = new RegExp(field.pattern);
+                if (!regex.test(formData[fieldName])) {
+                    if (!formErrors[fieldName]) formErrors[fieldName] = [];
+                    formErrors[fieldName].push(`${fieldTitle} is not in the correct format`);
+                }
+            }
+    
+            if (field?.minLength && formData[fieldName]?.length < field.minLength) {
+                if (!formErrors[fieldName]) formErrors[fieldName] = [];
+                formErrors[fieldName].push(`${fieldTitle} should have at least ${field.minLength} characters`);
+            }
+    
+            if (field?.maxLength && formData[fieldName]?.length > field.maxLength) {
+                if (!formErrors[fieldName]) formErrors[fieldName] = [];
+                formErrors[fieldName].push(`${fieldTitle} should have no more than ${field.maxLength} characters`);
+            }
+    
+            if (field?.minimum && formData[fieldName] < field.minimum) {
+                if (!formErrors[fieldName]) formErrors[fieldName] = [];
+                formErrors[fieldName].push(`${fieldTitle} should be greater than or equal to ${field.minimum}`);
+            }
+    
+            if (field?.maximum && formData[fieldName] > field.maximum) {
+                if (!formErrors[fieldName]) formErrors[fieldName] = [];
+                formErrors[fieldName].push(`${fieldTitle} should be less than or equal to ${field.maximum}`);
+            }
+        });
+    
         setErrors(formErrors);
         return Object.keys(formErrors).length === 0;
     };
+    
 
     const defaultSubmit = (e) => {
         e.preventDefault();
