@@ -85,6 +85,15 @@ export const uiSchema = {
     "ui:classNames": "form-control",
     "ui:layout": "row",
   },
+  "alt-date": {
+    "ui:widget": "alt-date",
+    "ui:options": {
+      "yearsRange": [2000, 2100],
+      "format": "YMD"  
+    },
+    "ui:classNames": "form-control",
+    "ui:layout": "row",
+  },
   progress: {
     "ui:widget": "progress",
     "ui:classNames": "form-control",  
@@ -93,15 +102,15 @@ export const uiSchema = {
   actionButton: {
     "ui:widget": "button",
     "ui:options": { "value": "Custom button", "onClick" : () => { window.alert("Custom button pressed"); }},
-    "ui:classNames": "btn btn-success mt-2 w-25",
+    "ui:classNames": "btn btn-success mt-2",
     "ui:layout": "row",  
-    "ui:col": 6,
+    // "ui:col": 6,
   },
   myButton: {
     "ui:widget": "button",
     "ui:options": { "value": "My button", "onClick" : () => { window.alert("My button pressed"); }},
-    "ui:classNames": "btn btn-danger mt-2 w-25",
+    "ui:classNames": "btn btn-danger mt-2",
     "ui:layout": "row",  
-    "ui:col": 6,
+    // "ui:col": 6,
   },
 };
