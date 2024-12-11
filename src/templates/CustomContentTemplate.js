@@ -3,17 +3,18 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
 
-const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, errors }) => {
+const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, errors, onChange, onSuccess, onError }) => {
   const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
+
   const renderField = (field, fieldName) => {
     const { title, enum: enumValues } = field;
     const uiField = uiSchema[fieldName] || {};
     const widget = uiField["ui:widget"] || "text";
     const errorMessage = errors[fieldName];
     const fieldClass = uiField["ui:classNames"] || "form-control";
-    const errorMessageClass = uiField["ui:errorMessageClass"] || "text-danger";
-    const layoutClass = uiField["ui:layout"] === "row" ? "form-group row" : "form-group";
+    // const errorMessageClass = uiField["ui:errorMessageClass"] || "text-danger";
+    const layoutClass = uiField["ui:layout"];
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
     const isColumnLayout = uiField["ui:layout"] === "column";
 
@@ -35,6 +36,11 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
       handleChange(fieldName, file);
     };
 
+    const handleChangeDatePart = (part, value) => {
+      const updatedDate = { ...formData[fieldName] };
+      updatedDate[part] = value;
+      handleChange(fieldName, updatedDate);
+    };
 
     switch (widget) {
       case "password":
@@ -197,6 +203,115 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
           </div>
         );
 
+      case "alt-date":
+        const { yearsRange, format: dateFormat } = uiField["ui:options"] || {};
+        const startYear = yearsRange ? yearsRange[0] : 1900;
+        const endYear = yearsRange ? yearsRange[1] : 2100;
+
+        const months = [
+          "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+        ];
+
+        const getDaysInMonth = (month, year) => {
+          return new Date(year, month, 0).getDate();
+        };
+
+        const dayOptions = [];
+        const monthOptions = months.map((month, index) => (
+          <option key={index} value={index + 1}>
+            {month}
+          </option>
+        ));
+        const yearOptions = [];
+        for (let i = startYear; i <= endYear; i++) {
+          yearOptions.push(<option key={i} value={i}>{i}</option>);
+        }
+
+        const selectedYear = formData[fieldName]?.year || new Date().getFullYear();
+        const selectedMonth = formData[fieldName]?.month || new Date().getMonth() + 1;
+        const selectedDay = formData[fieldName]?.day || new Date().getDate();
+        const daysInMonth = getDaysInMonth(selectedMonth, selectedYear);
+
+        for (let i = 1; i <= daysInMonth; i++) {
+          dayOptions.push(<option key={i} value={i}>{i}</option>);
+        }
+
+        const isYMD = dateFormat === "YMD";
+        const isMDY = dateFormat === "MDY";
+
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+            <label className="form-label">{title || fieldName}</label>
+            <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
+              {isYMD && (
+                <>
+                  <select
+                    name={`${fieldName}_year`}
+                    className={fieldClass}
+                    value={selectedYear}
+                    onChange={(e) => handleChangeDatePart("year", e.target.value)}
+                  >
+                    <option value="">Year</option>
+                    {yearOptions}
+                  </select>
+                  <select
+                    name={`${fieldName}_month`}
+                    className={fieldClass}
+                    value={selectedMonth}
+                    onChange={(e) => handleChangeDatePart("month", e.target.value)}
+                  >
+                    <option value="">Month</option>
+                    {monthOptions}
+                  </select>
+                  <select
+                    name={`${fieldName}_day`}
+                    className={fieldClass}
+                    value={selectedDay}
+                    onChange={(e) => handleChangeDatePart("day", e.target.value)}
+                  >
+                    <option value="">Day</option>
+                    {dayOptions}
+                  </select>
+                </>
+              )}
+              {isMDY && (
+                <>
+                  <select
+                    name={`${fieldName}_month`}
+                    className={fieldClass}
+                    value={selectedMonth}
+                    onChange={(e) => handleChangeDatePart("month", e.target.value)}
+                  >
+                    <option value="">Month</option>
+                    {monthOptions}
+                  </select>
+                  <select
+                    name={`${fieldName}_day`}
+                    className={fieldClass}
+                    value={selectedDay}
+                    onChange={(e) => handleChangeDatePart("day", e.target.value)}
+                  >
+                    <option value="">Day</option>
+                    {dayOptions}
+                  </select>
+                  <select
+                    name={`${fieldName}_year`}
+                    className={fieldClass}
+                    value={selectedYear}
+                    onChange={(e) => handleChangeDatePart("year", e.target.value)}
+                  >
+                    <option value="">Year</option>
+                    {yearOptions}
+                  </select>
+                </>
+              )}
+            </div>
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className="text-danger">{error}</p>
+            ))}
+          </div>
+        );
+
       case "date":
         return (
           <div key={fieldName} className="mt-2">
@@ -338,7 +453,6 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
             {errors[fieldName] && errors[fieldName].map((error, index) => (
               <p key={index} className='text-danger m-0'>{error}</p>
             ))}
-
           </div>
         );
 
@@ -377,7 +491,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
           </div>
         );
 
-      case 'text':
+      case "text":
         console.log();
         return (
           <div key={fieldName} className={`${layoutClass} ${colClass}`}>
@@ -395,8 +509,8 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
           </div>
         );
 
-      case 'button':
-        return (<Button uiField={uiField} classNames="w-100" />);
+      case "button":
+        return (<Button uiField={uiField} />);
 
       default:
         console.log("No field found");
@@ -404,12 +518,12 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
   };
 
   return (
-    <>
+    <div>
       {Object.keys(schema.properties).map((fieldName) => {
         const field = schema.properties[fieldName];
         return renderField(field, fieldName);
       })}
-    </>
+    </div>
   );
 };
 
