@@ -31,28 +31,41 @@ function App() {
         )
       }
 
-      if (key === 'startDate' && value) {
-        const formattedStartDate = value ? new Date(value).toLocaleDateString() : '';
-        return (
-          <p key={key}>
-            <strong>From :</strong> {formattedStartDate}
-          </p>
-        );
-      }
+      // if (key === 'startDate' && value) {
+      //   const formattedStartDate = value ? new Date(value).toLocaleDateString() : '';
+      //   return (
+      //     <p key={key}>
+      //       <strong>From :</strong> {formattedStartDate}
+      //     </p>
+      //   );
+      // }
 
-      if (key === 'endDate' && value) {
-        const formattedEndDate = value ? new Date(value).toLocaleDateString() : '';
-        return (
-          <p key={key}>
-            <strong>to :</strong> {formattedEndDate}
-          </p>
-        );
-      }
+      // if (key === 'endDate' && value) {
+      //   const formattedEndDate = value ? new Date(value).toLocaleDateString() : '';
+      //   return (
+      //     <p key={key}>
+      //       <strong>to :</strong> {formattedEndDate}
+      //     </p>
+      //   );
+      // }
 
       if (key === 'date' && value) {
         return (
           <p key={key}>
             <strong>{schema.properties[key]?.title}:</strong> {new Date(value).toLocaleDateString()}
+          </p>
+        );
+      }
+
+      if (key === 'dateRange' && value) {
+        const { startDate, endDate } = value;
+        const formattedStartDate = startDate ? new Date(startDate).toLocaleDateString() : '';
+        const formattedEndDate = endDate ? new Date(endDate).toLocaleDateString() : '';
+
+        return (
+          <p>
+            <strong>From :</strong> {formattedStartDate}
+            <strong> To : </strong>{formattedEndDate}
           </p>
         );
       }
