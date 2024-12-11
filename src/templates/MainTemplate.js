@@ -33,7 +33,7 @@ export default function MainTemplate(props) {
             } else if (field.default !== undefined) {
                 initialData[fieldName] = field.default;
             } else if (field.type === "object" && field.properties) {
-                initialData[fieldName] = initializeFormData(field); // Recursively handle nested objects
+                initialData[fieldName] = initializeFormData(field); 
             } else if (field.type === "array" && field.items && field.items.enum) {
                 initialData[fieldName] = [];
             }
