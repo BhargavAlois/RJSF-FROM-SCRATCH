@@ -16,6 +16,21 @@ function App() {
     return Object.keys(formData).map((key) => {
       const value = formData[key];
 
+      if (key === 'file') {
+        console.log(value);
+        return (
+          <div className='d-flex flex-column'>
+            <strong> File Details : </strong>
+            <strong>File Name: </strong>
+            <p>{value['name']}</p>
+            <strong>File size: </strong>
+            <p>{value['size']}</p>
+            <strong>File Type: </strong>
+            <p>{value['type']}</p>
+          </div>
+        )
+      }
+
       if (key === 'startDate' && value) {
         const formattedStartDate = value ? new Date(value).toLocaleDateString() : '';
         return (
@@ -69,7 +84,7 @@ function App() {
           uiSchema={uiSchema}
           templates={templates}
           onSubmit={handleFormSubmit}
-          formData/>
+          formData />
         {Object.keys(formData).length > 0 && renderFormData()}
       </div>
     </div>
