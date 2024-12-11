@@ -92,13 +92,10 @@ export const schema = {
       title: "File",
       description: "A file upload field, URL based",
     },
-    actionButton: {
+    "alt-date": {
       type: "string",
-      title: "Action Button",
-    },
-    myButton: {
-      type: "string",
-      title: "My Button",
+      format: "date",
+      title: "Alternative Date",
     },
     progress: {
       type: "integer",
@@ -106,6 +103,14 @@ export const schema = {
       default: 40,
       minimum: 0,
       maximum: 100,
+    },
+    actionButton: {
+      type: "string",
+      title: "Action Button",
+    },
+    myButton: {
+      type: "string",
+      title: "My Button",
     },
   },
   footerContent: "This is footer content",
