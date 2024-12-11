@@ -31,23 +31,14 @@ function App() {
         )
       }
 
-      // if (key === 'startDate' && value) {
-      //   const formattedStartDate = value ? new Date(value).toLocaleDateString() : '';
-      //   return (
-      //     <p key={key}>
-      //       <strong>From :</strong> {formattedStartDate}
-      //     </p>
-      //   );
-      // }
-
-      // if (key === 'endDate' && value) {
-      //   const formattedEndDate = value ? new Date(value).toLocaleDateString() : '';
-      //   return (
-      //     <p key={key}>
-      //       <strong>to :</strong> {formattedEndDate}
-      //     </p>
-      //   );
-      // }
+      if (key === 'alt-date') {
+        return (<div>
+          <p><strong>From (alt-date) </strong></p>
+          <strong>Day</strong><p>{value['day']}</p>
+          <strong>Month</strong><p>{value['month']}</p>
+          <strong>Year</strong><p>{value['year']}</p>
+        </div>)
+      }
 
       if (key === 'date' && value) {
         return (
@@ -90,6 +81,18 @@ function App() {
     setFormData(data);
   };
 
+  const handleOnError = () => {
+    console.log("Error occured");
+  }
+
+  const handleOnSuccess = () => {
+    window.alert("Form Submitted");
+  }
+
+  const handleOnChange = (fieldName) => {
+    console.log("Change occurred in : ", fieldName);
+  } 
+
   return (
     <div className="App d-flex h-100 flex-column justify-content-center align-items-center">
       <div className="container w-75">
@@ -97,6 +100,9 @@ function App() {
           uiSchema={uiSchema}
           templates={templates}
           onSubmit={handleFormSubmit}
+          onChange={handleOnChange}
+          onSuccess={handleOnSuccess}
+          onError={handleOnError}
           formData />
         {Object.keys(formData).length > 0 && renderFormData()}
       </div>
