@@ -5,7 +5,7 @@ import Button from "../widgets/ButtonWidget";
 
 const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, errors }) => {
   const [preview, setPreview] = useState();
-  const [fileDetails, setFileDetails] = useState(null); 
+  const [fileDetails, setFileDetails] = useState(null);
   const renderField = (field, fieldName) => {
     const { title, enum: enumValues } = field;
     const uiField = uiSchema[fieldName] || {};
@@ -19,11 +19,11 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
 
     const handleFileChange = (fieldName, e) => {
       const file = e.target.files[0];
-  
+
       if (file && file.type.startsWith("image/")) {
         const objectUrl = URL.createObjectURL(file);
         setPreview(objectUrl);
-        setFileDetails(null); 
+        setFileDetails(null);
       } else if (file) {
         setPreview(null);
         setFileDetails({
@@ -31,10 +31,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
           type: file.type,
           size: file.size,
         });
-      }  
+      }
       handleChange(fieldName, file);
     };
-  
+
 
     switch (widget) {
       case "password":
@@ -48,7 +48,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
             />
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -63,7 +66,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
             />
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -85,7 +91,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
                   </option>
                 ))}
             </select>
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -119,7 +128,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
                   </div>
                 ))}
             </div>
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -145,7 +157,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
                   </div>
                 ))}
             </div>
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -155,27 +170,30 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
             <label className='form-label'>{title || fieldName}</label>
             <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
               <DatePicker
-                selected={formData.startDate || new Date()}
-                onChange={(date) => handleChange("startDate", date)}
+                selected={formData.dateRange?.startDate || new Date()}
+                onChange={(date) => handleChange("dateRange", { ...formData.dateRange, startDate: date })}
                 selectsStart
-                startDate={formData.startDate}
-                minDate={formData.startDate}
-                endDate={formData.endDate}
+                startDate={formData.dateRange?.startDate}
+                minDate={formData.dateRange?.startDate}
+                endDate={formData.dateRange?.endDate}
                 placeholderText="Start Date"
                 className={fieldClass}
               />
               <DatePicker
-                selected={formData.endDate || new Date()}
-                onChange={(date) => handleChange("endDate", date)}
+                selected={formData.dateRange?.endDate || new Date()}
+                onChange={(date) => handleChange("dateRange", { ...formData.dateRange, endDate: date })}
                 selectsEnd
-                startDate={formData.startDate}
-                endDate={formData.endDate}
-                minDate={formData.startDate}
+                startDate={formData.dateRange?.startDate}
+                endDate={formData.dateRange?.endDate}
+                minDate={formData.dateRange?.startDate}
                 placeholderText="End Date"
                 className={fieldClass}
               />
             </div>
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -190,7 +208,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               dateFormat="yyyy/MM/dd"
               placeholderText="Select date"
             />
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -204,7 +225,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               onChange={(e) => handleChange(fieldName, e.target.value)}
               className="form-control"
             />
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -218,7 +242,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               onChange={(e) => handleChange(fieldName, e.target.value)}
               className="form-control"
             />
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -232,7 +259,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               onChange={(e) => handleChange(fieldName, e.target.value)}
               className="form-control"
             />
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -248,7 +278,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               max="2100"
               className="form-control"
             />
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -262,7 +295,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               onChange={(e) => handleChange(fieldName, e.target.value)}
               className="form-control"
             />
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
@@ -276,41 +312,47 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               onChange={(e) => handleChange(fieldName, e.target.value)}
               className="form-control"
             />
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
           </div>
         );
 
-        case "file":
-          return (
-            <div key={fieldName} className="mt-3">
-              <label className="form-label">{title}</label>
-              <input
-                type="file"
-                onChange={(e) => handleFileChange(fieldName, e)}
-                className="form-control"
-              />
-              
-              {preview && (
-                <div className="mt-2">
-                  <img
-                    src={preview}
-                    alt="Preview"
-                    style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "cover" }}
-                  />
-                </div>
-              )}
-  
-              {fileDetails && (
-                <div className="mt-2">
-                  <p><strong>File Name:</strong> {fileDetails.name}</p>
-                  <p><strong>File Type:</strong> {fileDetails.type}</p>
-                  <p><strong>File Size:</strong> {Math.round(fileDetails.size / 1024)} KB</p>
-                </div>
-              )}
-  
-              {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
-            </div>
-          );
+      case "file":
+        return (
+          <div key={fieldName} className="mt-3">
+            <label className="form-label">{title}</label>
+            <input
+              type="file"
+              onChange={(e) => handleFileChange(fieldName, e)}
+              className="form-control"
+            />
+
+            {preview && (
+              <div className="mt-2">
+                <img
+                  src={preview}
+                  alt="Preview"
+                  style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "cover" }}
+                />
+              </div>
+            )}
+
+            {fileDetails && (
+              <div className="mt-2">
+                <p><strong>File Name:</strong> {fileDetails.name}</p>
+                <p><strong>File Type:</strong> {fileDetails.type}</p>
+                <p><strong>File Size:</strong> {Math.round(fileDetails.size / 1024)} KB</p>
+              </div>
+            )}
+
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
+
+          </div>
+        );
 
       case 'text':
         console.log();
@@ -323,9 +365,10 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
               name={fieldName}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-              pattern={schema.properties[fieldName]?.pattern}
             />
-            {errorMessage && <div className="text-danger">{errorMessage}</div>}
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger'>{error}</p>
+            ))}
           </div>
         );
 
