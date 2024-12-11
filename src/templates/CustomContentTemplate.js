@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
 
 const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, errors }) => {
-
+  const [preview, setPreview] = useState();
+  const [fileDetails, setFileDetails] = useState(null); 
   const renderField = (field, fieldName) => {
     const { title, enum: enumValues } = field;
     const uiField = uiSchema[fieldName] || {};
@@ -15,6 +16,25 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
     const layoutClass = uiField["ui:layout"] === "row" ? "form-group row" : "form-group";
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
     const isColumnLayout = uiField["ui:layout"] === "column";
+
+    const handleFileChange = (fieldName, e) => {
+      const file = e.target.files[0];
+  
+      if (file && file.type.startsWith("image/")) {
+        const objectUrl = URL.createObjectURL(file);
+        setPreview(objectUrl);
+        setFileDetails(null); 
+      } else if (file) {
+        setPreview(null);
+        setFileDetails({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+        });
+      }  
+      handleChange(fieldName, file);
+    };
+  
 
     switch (widget) {
       case "password":
@@ -260,19 +280,37 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
           </div>
         );
 
-      case "file":
-        return (
-          <div key={fieldName} className="mt-3">
-            <label className="form-label">{title}</label>
-            <input
-              type="file"
-              onChange={(e) => handleChange(fieldName, e.target.files[0])}
-              className="form-control"
-            />
-            {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
-          </div>
-        );
-
+        case "file":
+          return (
+            <div key={fieldName} className="mt-3">
+              <label className="form-label">{title}</label>
+              <input
+                type="file"
+                onChange={(e) => handleFileChange(fieldName, e)}
+                className="form-control"
+              />
+              
+              {preview && (
+                <div className="mt-2">
+                  <img
+                    src={preview}
+                    alt="Preview"
+                    style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "cover" }}
+                  />
+                </div>
+              )}
+  
+              {fileDetails && (
+                <div className="mt-2">
+                  <p><strong>File Name:</strong> {fileDetails.name}</p>
+                  <p><strong>File Type:</strong> {fileDetails.type}</p>
+                  <p><strong>File Size:</strong> {Math.round(fileDetails.size / 1024)} KB</p>
+                </div>
+              )}
+  
+              {errorMessage && <div className={errorMessageClass}>{errorMessage}</div>}
+            </div>
+          );
 
       case 'text':
         console.log();
