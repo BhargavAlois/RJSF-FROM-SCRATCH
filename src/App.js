@@ -7,10 +7,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
 function App() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({"firstName" : "Johnew", "lastName" : "Doe", "password" : "hello1"});
+  // const [formData, setFormData] = useState({});
 
   const renderFormData = () => {
-
     console.log("data submitted : ", formData);
 
     return Object.keys(formData).map((key) => {
@@ -103,7 +103,7 @@ function App() {
           onChange={handleOnChange}
           onSuccess={handleOnSuccess}
           onError={handleOnError}
-          formData />
+          formData={formData} />
         {Object.keys(formData).length > 0 && renderFormData()}
       </div>
     </div>
