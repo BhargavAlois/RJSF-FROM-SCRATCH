@@ -4,23 +4,27 @@ import CustomContentTemplate from './CustomContentTemplate';
 export default function MainTemplate(props) {
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
-    const { schema, uiSchema, onSubmit, onChange, onSuccess, onError } = props;
+    const { schema, uiSchema, onSubmit, onChange, onSuccess, onError, formData: prefilledFormData } = props;
 
-    const prefilledData = {
-        email: "alice.smith@example.com",
-        preferences: ["Music", "Reading"],
-        // firstName: "Alice",
-        // lastName: "Smith",
-        // startDate: "2024-01-01",
-        // endDate: "2024-12-31"
-    };
+    // const prefilledData = {
+    //     email: "alice.smith@example.com",
+    //     preferences: ["Music", "Reading"],
+    //     // firstName: "Alice",
+    //     // lastName: "Smith",
+    //     // startDate: "2024-01-01",
+    //     // endDate: "2024-12-31"
+    // };
+    const prefilledData = prefilledFormData;
+
+    console.log("Prefill : ", prefilledData);
+    console.log("Formdata : ", formData);
 
     const initializeFormData = (schema) => {
         const initialData = {};
-    
+
         Object.keys(schema.properties).forEach((fieldName) => {
             const field = schema.properties[fieldName];
-    
+
             const prefilledValue = prefilledData?.[fieldName];
             if (prefilledValue !== undefined) {
                 initialData[fieldName] = prefilledValue;
@@ -33,12 +37,12 @@ export default function MainTemplate(props) {
             } else if (field.default !== undefined) {
                 initialData[fieldName] = field.default;
             } else if (field.type === "object" && field.properties) {
-                initialData[fieldName] = initializeFormData(field); 
+                initialData[fieldName] = initializeFormData(field);
             } else if (field.type === "array" && field.items && field.items.enum) {
                 initialData[fieldName] = [];
             }
         });
-    
+
         return initialData;
     };
 
@@ -49,7 +53,9 @@ export default function MainTemplate(props) {
 
     const handleChange = (fieldName, value) => {
         console.log("handle change ", formData);
-        onChange(fieldName);
+        if (onChange) {
+            onChange(fieldName);
+        }
         setFormData((prevData) => ({
             ...prevData,
             [fieldName]: value
@@ -63,10 +69,10 @@ export default function MainTemplate(props) {
     const validateForm = () => {
         console.log("Validate : ", formData);
         const formErrors = {};
-    
+
         schema.required?.forEach((field) => {
             const fieldTitle = schema.properties[field]['title'];
-    
+
             if (field === 'dateRange') {
                 const { startDate, endDate } = formData.dateRange || {};
                 if (!startDate || !endDate) {
@@ -81,12 +87,12 @@ export default function MainTemplate(props) {
                 formErrors[field].push(`${fieldTitle} is required`);
             }
         });
-    
+
         Object.keys(formData).forEach((fieldName) => {
             const field = schema.properties[fieldName];
             const fieldTitle = field['title'];
             console.log("Main temp field : ", field);
-    
+
             if (field?.pattern) {
                 const regex = new RegExp(field.pattern);
                 if (!regex.test(formData[fieldName])) {
@@ -94,49 +100,68 @@ export default function MainTemplate(props) {
                     formErrors[fieldName].push(`${fieldTitle} is not in the correct format`);
                 }
             }
-    
+
             if (field?.minLength && formData[fieldName]?.length < field.minLength) {
                 if (!formErrors[fieldName]) formErrors[fieldName] = [];
                 formErrors[fieldName].push(`${fieldTitle} should have at least ${field.minLength} characters`);
             }
-    
+
             if (field?.maxLength && formData[fieldName]?.length > field.maxLength) {
                 if (!formErrors[fieldName]) formErrors[fieldName] = [];
                 formErrors[fieldName].push(`${fieldTitle} should have no more than ${field.maxLength} characters`);
             }
-    
+
             if (field?.minimum && formData[fieldName] < field.minimum) {
                 if (!formErrors[fieldName]) formErrors[fieldName] = [];
                 formErrors[fieldName].push(`${fieldTitle} should be greater than or equal to ${field.minimum}`);
             }
-    
+
             if (field?.maximum && formData[fieldName] > field.maximum) {
                 if (!formErrors[fieldName]) formErrors[fieldName] = [];
                 formErrors[fieldName].push(`${fieldTitle} should be less than or equal to ${field.maximum}`);
             }
         });
-    
+
         setErrors(formErrors);
         return Object.keys(formErrors).length === 0;
     };
-    
+
 
     const defaultSubmit = (e) => {
         e.preventDefault();
-        window.alert("Default called");
+        window.alert("Default submit called");
     };
+
+    const defaultOnSuccess = (e) => {
+        window.alert("Submission successfull!");
+    }
+
+    const defaultOnError = (e) => {
+        window.alert("Error occurred!");
+    }
 
     const handleSubmit = (e) => {
         console.log("submit clicked");
         e.preventDefault();
         if (onSubmit) {
             if (validateForm()) {
+                if (onSuccess) {
+                    onSuccess();
+                }
+                else {
+                    defaultOnSuccess();
+                }
                 onSubmit(formData);
-                onSuccess();
+                return;
             }
-            else
-            {
-                onError();
+            else {
+                if (onError) {
+                    onError();
+                }
+                else
+                {
+                    defaultOnError();
+                }
                 return;
             }
         }
@@ -156,16 +181,16 @@ export default function MainTemplate(props) {
                 style={{ overflow: 'auto' }}
             >
                 {/* <div className="d-flex flex-column justify-content-between"> */}
-                    <CustomContentTemplate
-                        formData={formData}
-                        handleChange={handleChange}
-                        uiSchema={uiSchema}
-                        schema={schema}
-                        errors={errors}
-                        onChange={onChange}
-                        onSuccess={onSuccess}
-                        onError={onError}
-                    />
+                <CustomContentTemplate
+                    formData={formData}
+                    handleChange={handleChange}
+                    uiSchema={uiSchema}
+                    schema={schema}
+                    errors={errors}
+                    onChange={onChange}
+                    onSuccess={onSuccess}
+                    onError={onError}
+                />
                 {/* </div> */}
                 <button
                     type="submit"
