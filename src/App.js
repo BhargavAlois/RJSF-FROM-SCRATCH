@@ -5,6 +5,8 @@ import { uiSchema } from './schemas/uiSchema';
 import MainTemplate from './templates/MainTemplate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import MyPasswordWidget from './fields/MyPasswordWidget';
+import CustomFileWidget from './fields/CustomFileWidget';
 
 function App() {
   const [formData, setFormData] = useState({});
@@ -78,6 +80,11 @@ function App() {
     myCustomRowTemplate: MainTemplate
   }
 
+  const customFields = {
+    myPasswordWidget : MyPasswordWidget,
+    customFileWidget : CustomFileWidget
+  }
+
   const handleFormSubmit = (data) => {
     setFormData(data);
   };
@@ -100,6 +107,7 @@ function App() {
         <MyForm schema={schema}
           uiSchema={uiSchema}
           templates={templates}
+          fields={customFields}
           onSubmit={handleFormSubmit}
           onChange={handleOnChange}
           onSuccess={handleOnSuccess}

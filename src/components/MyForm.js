@@ -5,15 +5,11 @@ export default function MyForm(props) {
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
     const { schema, uiSchema, onSubmit, onChange, onSuccess, onError, formData: prefilledFormData } = props;
-
     const templates = props.templates;
     const templateName = props.uiSchema['ui:layout'];    
     const MyTemplate = templates[templateName];
-
     const prefilledData = prefilledFormData;
-
-    console.log("Prefill : ", prefilledData);
-    console.log("Formdata : ", formData);
+    const fields = props.fields;
 
     const validateForm = () => {
         console.log("Validate : ", formData);
@@ -150,7 +146,11 @@ export default function MyForm(props) {
     }, []);
 
     const handleChange = (fieldName, value) => {
-        console.log("handle change ", formData);
+        console.log("Change in ", fieldName, " ", value);
+        console.log("Schema properties for that value : ", uiSchema[fieldName]);
+        const options = uiSchema[fieldName]['ui:options'];
+        console.log("options : ", options);
+
         setFormData((prevData) => ({
             ...prevData,
             [fieldName]: value
@@ -167,11 +167,11 @@ export default function MyForm(props) {
     };
 
     if (!MyTemplate) {
-        return <DefaultTemplate schema={schema} uiSchema={uiSchema} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors}/>;
+        return <DefaultTemplate schema={schema} uiSchema={uiSchema} fields={fields} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors}/>;
     }
     
     return (
-        <MyTemplate schema={schema} uiSchema={uiSchema} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors} />
+        <MyTemplate schema={schema} uiSchema={uiSchema} fields={fields} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors} />
     );
 }
 

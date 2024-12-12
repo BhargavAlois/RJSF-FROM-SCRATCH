@@ -3,9 +3,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
 
-const CustomContentTemplate = ({ formData, uiSchema, schema, errors, onChange : handleChange, onSuccess, onError, onSubmit }) => {
+const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onChange : handleChange, onSuccess, onError, onSubmit }) => {
   const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
+
+  console.log("fields : ", fields);
 
   const renderField = (field, fieldName) => {
     const { title, enum: enumValues } = field;
@@ -17,6 +19,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, errors, onChange : 
     const layoutClass = uiField["ui:layout"];
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
     const isColumnLayout = uiField["ui:layout"] === "column";
+
 
     const handleFileChange = (fieldName, e) => {
       const file = e.target.files[0];
@@ -513,7 +516,13 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, errors, onChange : 
         return (<Button uiField={uiField} />);
 
       default:
-        console.log("No field found");
+        const CustomField = fields[widget];
+        if(CustomField)
+        {
+          console.log("Returning custom field");
+          return <CustomField onChange={(e) => handleChange(fieldName, e.target.value)}/>;
+        }
+        return <p className="text-danger">No such component available</p>;
     }
   };
 

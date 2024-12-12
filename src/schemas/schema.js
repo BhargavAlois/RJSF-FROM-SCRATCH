@@ -104,6 +104,10 @@ export const schema = {
       minimum: 0,
       maximum: 100,
     },
+    passwordWidget: {
+      type: "string",
+      title: "Password widget"
+    },
     actionButton: {
       type: "string",
       title: "Action Button",
@@ -111,7 +115,7 @@ export const schema = {
     myButton: {
       type: "string",
       title: "My Button",
-    },
+    }
   },
   footerContent: "This is footer content",
   required: [

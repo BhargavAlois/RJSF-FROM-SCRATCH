@@ -1,10 +1,10 @@
 export const uiSchema = {
   "ui:order": [
-    "firstName", "lastName", "email", "password", "phoneNumber", "role", "preferences", "dateRange", "date", 
-     "time", "datetime", "calendar", "year", "month", "day", "file", 
+    "firstName", "lastName", "email", "password", "phoneNumber", "role", "preferences", "dateRange", "date",
+    "time", "datetime", "calendar", "year", "month", "day", "file",
     "actionButton", "myButton"
-  ],  
-  "ui:layout": "myCustomRowTemplate", 
+  ],
+  "ui:layout": "myCustomRowTemplate",
   firstName: {
     "ui:widget": "text",
     "ui:classNames": "form-control",
@@ -33,12 +33,12 @@ export const uiSchema = {
   preferences: {
     "ui:widget": "checkboxes",
     "ui:classNames": "form-check-input",
-    "ui:layout": "row",
+    // "ui:layout": "row",
   },
   dateRange: {
     "ui:widget": "daterange",
     "ui:classNames": "form-control",
-    "ui:layout": "row", 
+    "ui:layout": "row",
   },
   date: {
     "ui:widget": "date",
@@ -89,28 +89,35 @@ export const uiSchema = {
     "ui:widget": "alt-date",
     "ui:options": {
       "yearsRange": [2000, 2100],
-      "format": "YMD"  
+      "format": "YMD"
     },
     "ui:classNames": "form-control",
     "ui:layout": "row",
   },
   progress: {
     "ui:widget": "progress",
-    "ui:classNames": "form-control",  
+    "ui:classNames": "form-control",
     "ui:layout": "row",
+  },
+  passwordWidget: {
+    "ui:widget": "myPasswordWidget",
+    "ui:classNames": "form-control",
+    "ui:options" : [
+      'application/pdf'
+    ]
   },
   actionButton: {
     "ui:widget": "button",
-    "ui:options": { "value": "Custom button", "onClick" : () => { window.alert("Custom button pressed"); }},
+    "ui:options": { "value": "Custom button", "onClick": () => { window.alert("Custom button pressed"); } },
     "ui:classNames": "btn btn-success mt-2",
-    "ui:layout": "row",  
+    "ui:layout": "row",
     // "ui:col": 6,
   },
   myButton: {
     "ui:widget": "button",
-    "ui:options": { "value": "My button", "onClick" : () => { window.alert("My button pressed"); }},
+    "ui:options": { "value": "My button", "onClick": () => { window.alert("My button pressed"); } },
     "ui:classNames": "btn btn-danger mt-2",
-    "ui:layout": "row",  
+    "ui:layout": "row",
     // "ui:col": 6,
   },
 };
