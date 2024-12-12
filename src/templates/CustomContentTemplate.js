@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
 
-const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, errors, onChange, onSuccess, onError }) => {
+const CustomContentTemplate = ({ formData, uiSchema, schema, errors, onChange : handleChange, onSuccess, onError, onSubmit }) => {
   const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
 
@@ -11,7 +11,7 @@ const CustomContentTemplate = ({ formData, handleChange, uiSchema, schema, error
     const { title, enum: enumValues } = field;
     const uiField = uiSchema[fieldName] || {};
     const widget = uiField["ui:widget"] || "text";
-    const errorMessage = errors[fieldName];
+    // const errorMessage = errors[fieldName];
     const fieldClass = uiField["ui:classNames"] || "form-control";
     // const errorMessageClass = uiField["ui:errorMessageClass"] || "text-danger";
     const layoutClass = uiField["ui:layout"];

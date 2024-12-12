@@ -7,8 +7,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
 function App() {
-  const [formData, setFormData] = useState({"firstName" : "Johnew", "lastName" : "Doe", "password" : "hello1"});
+  const [formData, setFormData] = useState({});
   // const [formData, setFormData] = useState({});
+  const prefilledFormData = {"firstName" : "Johnew", "lastName" : "Doe", "password" : "hello1"};
 
   const renderFormData = () => {
     console.log("data submitted : ", formData);
@@ -103,7 +104,7 @@ function App() {
           onChange={handleOnChange}
           onSuccess={handleOnSuccess}
           onError={handleOnError}
-          formData={formData} />
+          formData={prefilledFormData} />
         {Object.keys(formData).length > 0 && renderFormData()}
       </div>
     </div>
