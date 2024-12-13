@@ -92,6 +92,11 @@ export const schema = {
       title: "File",
       description: "A file upload field, URL based",
     },
+    customFile: {
+      type: "string", 
+      format: "uri",
+      title: "Custom file input",
+    },
     "alt-date": {
       type: "string",
       format: "date",
@@ -106,7 +111,8 @@ export const schema = {
     },
     passwordWidget: {
       type: "string",
-      title: "Password widget"
+      title: "Password widget",
+      maxLength: 8
     },
     actionButton: {
       type: "string",

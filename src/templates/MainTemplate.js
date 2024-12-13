@@ -13,7 +13,7 @@ export default function MainTemplate(props) {
 
             <form
                 onSubmit={onSubmit}
-                className="w-full d-flex flex-column align-items-center justify-content-center p-4 border border-dark rounded"
+                className="w-full d-flex flex-column bg-light align-items-center justify-content-center p-5 border border-dark border-opacity-25 rounded"
                 style={{ overflow: 'auto' }}
             >
                 <CustomContentTemplate
@@ -28,8 +28,8 @@ export default function MainTemplate(props) {
                 />
                 <button
                     type="submit"
-                    className="btn btn-primary mt-3 w-25"
-                    style={{ maxWidth: '100px' }}
+                    className="btn mt-3 w-25"
+                    style={{ backgroundColor: '#0a52cf', maxWidth: '100px', color : 'white'}}
                 >
                     Submit
                 </button>

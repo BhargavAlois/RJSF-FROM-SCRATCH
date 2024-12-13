@@ -15,6 +15,7 @@ export default function MyForm(props) {
         console.log("Validate : ", formData);
         const formErrors = {};
 
+        //Below errors are generated for required validations
         schema.required?.forEach((field) => {
             const fieldTitle = schema.properties[field]['title'];
 
@@ -33,10 +34,10 @@ export default function MyForm(props) {
             }
         });
 
+        //These errors are generated for other validations such as minLength, maxLength, etc..
         Object.keys(formData).forEach((fieldName) => {
             const field = schema.properties[fieldName];
             const fieldTitle = field['title'];
-            console.log("Main temp field : ", field);
 
             if (field?.pattern) {
                 const regex = new RegExp(field.pattern);
@@ -65,12 +66,23 @@ export default function MyForm(props) {
                 if (!formErrors[fieldName]) formErrors[fieldName] = [];
                 formErrors[fieldName].push(`${fieldTitle} should be less than or equal to ${field.maximum}`);
             }
+
+            const uiOptions = uiSchema[fieldName]?.['ui:options'] || {};
+            if (uiOptions?.accept && formData[fieldName]) {
+                const file = formData[fieldName];
+                console.log("file : ", file);
+                console.log("file type : ", file.type);
+                if (file && !uiOptions.accept.includes(file.type)) {
+                    if (!formErrors[fieldName]) formErrors[fieldName] = [];
+                    console.log("INserting errors");
+                    formErrors[fieldName].push(`${fieldTitle} must be one of the accepted file types: ${uiOptions.accept.join(', ')}`);
+                }
+            }
         });
 
         setErrors(formErrors);
         return Object.keys(formErrors).length === 0;
     };
-
 
     const defaultSubmit = (e) => {
         e.preventDefault();
@@ -150,6 +162,8 @@ export default function MyForm(props) {
         console.log("Schema properties for that value : ", uiSchema[fieldName]);
         const options = uiSchema[fieldName]['ui:options'];
         console.log("options : ", options);
+
+        console.log("formDAta : ", formData);
 
         setFormData((prevData) => ({
             ...prevData,

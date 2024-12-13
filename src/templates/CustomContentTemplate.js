@@ -60,7 +60,6 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             {errors[fieldName] && errors[fieldName].map((error, index) => (
               <p key={index} className='text-danger m-0'>{error}</p>
             ))}
-
           </div>
         );
 
@@ -186,6 +185,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 minDate={new Date()}
                 endDate={formData.dateRange?.endDate}
                 placeholderText="Start Date"
+                dateFormat={uiSchema[fieldName]['ui:options']?.format}
                 className={fieldClass}
               />
               <DatePicker
@@ -196,6 +196,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 endDate={formData.dateRange?.endDate}
                 minDate={formData.dateRange?.startDate}
                 placeholderText="End Date"
+                dateFormat={uiSchema[fieldName]['ui:options']?.format}
                 className={fieldClass}
               />
             </div>
@@ -323,7 +324,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               selected={formData[fieldName] || new Date()}
               onChange={(date) => handleChange(fieldName, date)}
               className="form-control"
-              dateFormat="yyyy/MM/dd"
+              dateFormat={uiSchema[fieldName]['ui:options']?.format}
               placeholderText="Select date"
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
@@ -520,7 +521,8 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         if(CustomField)
         {
           console.log("Returning custom field");
-          return <CustomField onChange={(e) => handleChange(fieldName, e.target.value)}/>;
+          // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
+          return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={handleChange} errors={errors[fieldName]}/>;
         }
         return <p className="text-danger">No such component available</p>;
     }

@@ -39,11 +39,17 @@ export const uiSchema = {
     "ui:widget": "daterange",
     "ui:classNames": "form-control",
     "ui:layout": "row",
+    "ui:options": {
+      "format": "yyyy/MM/dd"
+    }
   },
   date: {
     "ui:widget": "date",
     "ui:classNames": "form-control",
     "ui:layout": "row",
+    "ui:options": {
+      "format": "dd/MM/yyyy"
+    }
   },
   phoneNumber: {
     "ui:widget": "text",
@@ -89,7 +95,7 @@ export const uiSchema = {
     "ui:widget": "alt-date",
     "ui:options": {
       "yearsRange": [2000, 2100],
-      "format": "YMD"
+      "format": "MDY" //YMD ALSO WORKS
     },
     "ui:classNames": "form-control",
     "ui:layout": "row",
@@ -102,9 +108,13 @@ export const uiSchema = {
   passwordWidget: {
     "ui:widget": "myPasswordWidget",
     "ui:classNames": "form-control",
-    "ui:options" : [
-      'application/pdf'
-    ]
+  },
+  customFile:{
+    "ui:widget": "customFileWidget",
+    "ui:classNames": "form-control",
+    "ui:options" : {
+      "accept" : ['image/png']
+    }
   },
   actionButton: {
     "ui:widget": "button",
