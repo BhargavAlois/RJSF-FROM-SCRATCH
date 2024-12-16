@@ -1,43 +1,38 @@
-import React from 'react';
-import CustomContentTemplate from './CustomContentTemplate';
+    import React from 'react';
+    import CustomContentTemplate from './CustomContentTemplate';
+    import Button from '@mui/material/Button';
 
-export default function MainTemplate(props) {
-    const { schema, uiSchema, fields, onSubmit, onError, onSuccess, onChange, formData, errors } = props;
+    export default function MainTemplate(props) {
+        const { schema, uiSchema, fields, onSubmit, onError, onSuccess, onChange, formData, errors } = props;
 
-    return (
-        <div className="d-flex flex-column mh-100">
-            <header className="text-center mb-4">
-                <h3>{schema.title || 'Default title'}</h3>
-                <p>{schema.description || 'This is default description of form'}</p>
-            </header>
+        return (
+            <div className="d-flex flex-column mw-70 ">
+                <header className="text-center mb-4">
+                    <h3>{schema.title || 'Default title'}</h3>
+                    <p>{schema.description || 'This is default description of form'}</p>
+                </header>
 
-            <form
-                onSubmit={onSubmit}
-                className="w-full d-flex flex-column bg-light align-items-center justify-content-center p-5 border border-dark border-opacity-25 rounded"
-                style={{ overflow: 'auto' }}
-            >
-                <CustomContentTemplate
-                    formData={formData}
-                    uiSchema={uiSchema}
-                    schema={schema}
-                    fields={fields}
-                    errors={errors}
-                    onChange={onChange}
-                    onSuccess={onSuccess}
-                    onError={onError}
-                />
-                <button
-                    type="submit"
-                    className="btn mt-3 w-25"
-                    style={{ backgroundColor: '#0a52cf', maxWidth: '100px', color : 'white'}}
+                <form
+                    onSubmit={onSubmit}
+                    className="d-flex mw-70 flex-column bg-light align-items-center justify-content-center p-5 border border-dark border-opacity-25 rounded-4"
+                    style={{ overflow: 'auto' }}
                 >
-                    Submit
-                </button>
-            </form>
+                    <CustomContentTemplate
+                        formData={formData}
+                        uiSchema={uiSchema}
+                        schema={schema}
+                        fields={fields}
+                        errors={errors}
+                        onChange={onChange}
+                        onSuccess={onSuccess}
+                        onError={onError}
+                    />
+                    <Button variant="contained" className='mt-3' color='primary' type='submit'>Submit</Button>
+                </form>
 
-            <footer className="mt-4 text-center">
-                {schema.footerContent}
-            </footer>
-        </div>
-    );
-}
+                <footer className="mt-4 text-center">
+                    {schema.footerContent}
+                </footer>
+            </div>
+        );
+    }
