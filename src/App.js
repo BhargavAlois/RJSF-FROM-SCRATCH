@@ -102,7 +102,7 @@ function App() {
   } 
 
   return (
-      <div className="d-flex flex-column mw-75 justify-content-center align-items-center align-middle ">
+      <div className="d-flex flex-column justify-content-center align-items-center align-middle">
         <MyForm schema={schema}
           uiSchema={uiSchema}
           templates={templates}

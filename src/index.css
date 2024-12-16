@@ -27,3 +27,10 @@ code {
   font-style: italic;
   font-size: 0.9em;
 }
+
+.text-danger {
+  position: relative;
+  color: red;
+  font-size: 0.875rem;
+}
+
