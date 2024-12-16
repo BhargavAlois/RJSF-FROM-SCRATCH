@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
@@ -21,21 +21,21 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
     const isColumnLayout = uiField["ui:layout"] === "column";
 
-    const handleNestedChange = (fieldName, value) => {
-      const keys = fieldName.split('.');
-      let nestedData = { ...formData };
+    // const handleNestedChange = (fieldName, value) => {
+    //   const keys = fieldName.split('.');
+    //   let nestedData = { ...formData };
   
-      keys.reduce((acc, key, index) => {
-        if (index === keys.length - 1) {
-          acc[key] = value;
-        } else {
-          acc[key] = acc[key] || {};
-        }
-        return acc[key];
-      }, nestedData);
+    //   keys.reduce((acc, key, index) => {
+    //     if (index === keys.length - 1) {
+    //       acc[key] = value;
+    //     } else {
+    //       acc[key] = acc[key] || {};
+    //     }
+    //     return acc[key];
+    //   }, nestedData);
   
-      handleChange(fieldName, nestedData);
-    };
+    //   handleChange(fieldName, nestedData);
+    // };
 
     const convertToBase64 = (file) => {
       // Convert file to Base64

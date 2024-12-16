@@ -190,32 +190,32 @@ export default function MyForm(props) {
         defaultSubmit(e);
     };
 
-    const initializeFormData = (schema) => {
-        const initialData = {};
+    // const initializeFormData = (schema) => {
+    //     const initialData = {};
 
-        Object.keys(schema.properties).forEach((fieldName) => {
-            const field = schema.properties[fieldName];
+    //     Object.keys(schema.properties).forEach((fieldName) => {
+    //         const field = schema.properties[fieldName];
 
-            const prefilledValue = prefilledData?.[fieldName];
-            if (prefilledValue !== undefined) {
-                initialData[fieldName] = prefilledValue;
-            } else if (fieldName === 'dateRange') {
-                const dateRange = field.properties || {};
-                initialData['dateRange'] = {
-                    startDate: prefilledData?.startDate || dateRange.startDate?.default || '',
-                    endDate: prefilledData?.endDate || dateRange.endDate?.default || ''
-                };
-            } else if (field.default !== undefined) {
-                initialData[fieldName] = field.default;
-            } else if (field.type === "object" && field.properties) {
-                initialData[fieldName] = initializeFormData(field);
-            } else if (field.type === "array" && field.items && field.items.enum) {
-                initialData[fieldName] = [];
-            }
-        });
+    //         const prefilledValue = prefilledData?.[fieldName];
+    //         if (prefilledValue !== undefined) {
+    //             initialData[fieldName] = prefilledValue;
+    //         } else if (fieldName === 'dateRange') {
+    //             const dateRange = field.properties || {};
+    //             initialData['dateRange'] = {
+    //                 startDate: prefilledData?.startDate || dateRange.startDate?.default || '',
+    //                 endDate: prefilledData?.endDate || dateRange.endDate?.default || ''
+    //             };
+    //         } else if (field.default !== undefined) {
+    //             initialData[fieldName] = field.default;
+    //         } else if (field.type === "object" && field.properties) {
+    //             initialData[fieldName] = initializeFormData(field);
+    //         } else if (field.type === "array" && field.items && field.items.enum) {
+    //             initialData[fieldName] = [];
+    //         }
+    //     });
 
-        return initialData;
-    };
+    //     return initialData;
+    // };
 
     useEffect(() => {
         const initialFormData = convertToSchemaFormat(schema, prefilledData);
@@ -225,7 +225,7 @@ export default function MyForm(props) {
 
     const handleChange = (fieldName, value) => {
         console.log("Handle change called");
-        const options = uiSchema[fieldName]['ui:options'];
+        // const options = uiSchema[fieldName]['ui:options'];
 
         setFormData((prevData) => ({
             ...prevData,
