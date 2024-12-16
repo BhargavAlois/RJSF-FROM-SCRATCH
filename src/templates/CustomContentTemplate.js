@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
+import { format } from 'date-fns';
 
 const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onChange: handleChange, onSuccess, onError, onSubmit }) => {
   const [preview, setPreview] = useState();
@@ -18,22 +19,63 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
     const isColumnLayout = uiField["ui:layout"] === "column";
 
+    const convertToBase64 = (file) => {
+      // Convert file to Base64
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64File = reader.result; // This will be a Base64 encoded string
+        handleChange(fieldName, base64File); // Pass the Base64 string to the handler
+      };
+      reader.readAsDataURL(file);
+    }
+
     const handleFileChange = (fieldName, e) => {
       const file = e.target.files[0];
 
-      if (file && file.type.startsWith("image/")) {
-        const objectUrl = URL.createObjectURL(file);
-        setPreview(objectUrl);
-        setFileDetails(null);
-      } else if (file) {
-        setPreview(null);
-        setFileDetails({
-          name: file.name,
-          type: file.type,
-          size: file.size,
-        });
+      if (file) {
+        if (file.type.startsWith("image/")) {
+          const objectUrl = URL.createObjectURL(file);
+          setPreview(objectUrl);
+          setFileDetails(null); 
+        } else {
+          setPreview(null);  
+          setFileDetails({
+            name: file.name,
+            type: file.type,
+            size: file.size,
+          });
+        }
+
+        const outputFormat = uiSchema[fieldName]?.['ui:options']?.['output'];
+        if (outputFormat === 'base64') {
+          convertToBase64(file);
+        } else {
+          handleChange(fieldName, file);
+        }
       }
-      handleChange(fieldName, file);
+    };
+
+    const handleDateChange = (fieldName, date, formatString) => {
+      let formattedDate;
+
+      // Use the current date if the selected date is invalid
+      if (!date || isNaN(date.getTime())) {
+        date = new Date(); // Fallback to current date
+      }
+
+      // Format the date as per the provided formatString
+      if (formatString) {
+        try {
+          formattedDate = format(date, formatString);
+        } catch (error) {
+          console.error("Invalid date format", error);
+          formattedDate = date.toISOString(); // Fallback to ISO format if formatting fails
+        }
+      } else {
+        formattedDate = new Date(date).toISOString(); // Default to ISO format
+      }
+
+      handleChange(fieldName, formattedDate);
     };
 
     const handleChangeDatePart = (part, value) => {
@@ -42,33 +84,23 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
       handleChange(fieldName, updatedDate);
     };
 
-    //To handle custom input fields : file and other type..
     const handleDefaultFieldChange = (e) => {
       const inputType = e.target?.files ? 'file' : 'other';
-  
+
       if (inputType === 'file') {
-          const outputFormat = uiField['ui:options']['output'];
-          const file = e.target.files[0]; // Assuming only one file is being uploaded
-  
-          if (outputFormat === 'base64') {
-              // Convert file to Base64
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                  const base64File = reader.result; // This will be a Base64 encoded string
-                  console.log("Base64", base64File);
-                  handleChange(fieldName, base64File); // Pass the Base64 string to the handler
-              };
-              reader.readAsDataURL(file);
-          } else {
-              // Output file as a Blob (raw file data)
-              console.log("Output blob", file);
-              handleChange(fieldName, file); // Pass the raw file (Blob) to the handler
-          }
+        const outputFormat = uiField['ui:options']['output'];
+        const file = e.target.files[0]; 
+
+        if (outputFormat === 'base64') {
+          convertToBase64(file);
+        } else {
+          handleChange(fieldName, file);
+        }
       } else {
-          handleChange(fieldName, e.target.value); // For non-file inputs
+        handleChange(fieldName, e.target.value); // For non-file inputs
       }
-  };
-  
+    };
+
 
     switch (widget) {
       case "password":
@@ -347,7 +379,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             <label className="form-label">{title || fieldName}</label>
             <DatePicker
               selected={formData[fieldName] || new Date()}
-              onChange={(date) => handleChange(fieldName, date)}
+              onChange={(date) => handleDateChange(fieldName, date, uiSchema[fieldName]['ui:options']?.format)}
               className="form-control"
               dateFormat={uiSchema[fieldName]['ui:options']?.format}
               placeholderText="Select date"
