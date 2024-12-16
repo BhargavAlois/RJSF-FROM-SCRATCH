@@ -10,7 +10,6 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
   const [fileDetails, setFileDetails] = useState(null);
 
   
-
   const renderField = (field, fieldName) => {
     const { title, enum: enumValues } = field;
     const uiField = uiSchema[fieldName] || {};
@@ -21,6 +20,22 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
     const layoutClass = uiField["ui:layout"];
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
     const isColumnLayout = uiField["ui:layout"] === "column";
+
+    const handleNestedChange = (fieldName, value) => {
+      const keys = fieldName.split('.');
+      let nestedData = { ...formData };
+  
+      keys.reduce((acc, key, index) => {
+        if (index === keys.length - 1) {
+          acc[key] = value;
+        } else {
+          acc[key] = acc[key] || {};
+        }
+        return acc[key];
+      }, nestedData);
+  
+      handleChange(fieldName, nestedData);
+    };
 
     const convertToBase64 = (file) => {
       // Convert file to Base64
@@ -105,6 +120,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         handleChange(fieldName, e.target.value); // For non-file inputs
       }
     };
+    
 
     switch (widget) {
       case "password":
@@ -129,11 +145,12 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
           <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className='form-label'>{title || fieldName}</label>
             <input
-              type="email"
+              type="text"
               name={fieldName}
               className={fieldClass}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
+            
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
               <p key={index} className='text-danger m-0'>{error}</p>

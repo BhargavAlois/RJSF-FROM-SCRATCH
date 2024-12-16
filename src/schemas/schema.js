@@ -16,6 +16,7 @@ export const schema = {
       type: "string",
       format: "email",
       title: "Email Address",
+      pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
     },
     password: {
       type: "string",
@@ -124,18 +125,18 @@ export const schema = {
     }
   },
   footerContent: "This is footer content",
-  // required: [
-  //   "firstName",
-  //   "lastName",
-  //   "email",
-  //   "password",
-  //   "role",
-  //   "date",
-  //   "preferences",
-  //   "dateRange",
-  //   "datetime",
-  //   "time",
-  //   "calendar",
-  //   "phoneNumber"
-  // ],
+  required: [
+    "firstName",
+    "lastName",
+    "email",
+    "password",
+    "role",
+    "date",
+    "preferences",
+    "dateRange",
+    "datetime",
+    "time",
+    "calendar",
+    "phoneNumber"
+  ],
 };
