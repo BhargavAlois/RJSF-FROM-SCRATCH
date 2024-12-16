@@ -5,7 +5,7 @@ import Button from "../widgets/ButtonWidget";
 import { format } from 'date-fns';
 
 const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onChange: handleChange, onSuccess, onError, onSubmit }) => {
-  const [preview, setPreview] = useState();
+  const [preview, setPreview] = useState(formData?.file);
   const [fileDetails, setFileDetails] = useState(null);
 
   const renderField = (field, fieldName) => {
@@ -36,9 +36,9 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         if (file.type.startsWith("image/")) {
           const objectUrl = URL.createObjectURL(file);
           setPreview(objectUrl);
-          setFileDetails(null); 
+          setFileDetails(null);
         } else {
-          setPreview(null);  
+          setPreview(null);
           setFileDetails({
             name: file.name,
             type: file.type,
@@ -89,7 +89,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
       if (inputType === 'file') {
         const outputFormat = uiField['ui:options']['output'];
-        const file = e.target.files[0]; 
+        const file = e.target.files[0];
 
         if (outputFormat === 'base64') {
           convertToBase64(file);
@@ -526,10 +526,10 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               className="form-control"
             />
 
-            {preview && (
+            {formData[fieldName] && typeof formData[fieldName] === 'string' && formData[fieldName].startsWith('data:') && (
               <div className="mt-2">
                 <img
-                  src={preview}
+                  src={formData[fieldName]}
                   alt="Preview"
                   style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "cover" }}
                 />
@@ -547,7 +547,6 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             {errors[fieldName] && errors[fieldName].map((error, index) => (
               <p key={index} className='text-danger m-0'>{error}</p>
             ))}
-
           </div>
         );
 
