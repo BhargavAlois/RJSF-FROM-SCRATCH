@@ -3,11 +3,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
 
-const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onChange : handleChange, onSuccess, onError, onSubmit }) => {
+const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onChange: handleChange, onSuccess, onError, onSubmit }) => {
   const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
-
-  console.log("fields : ", fields);
 
   const renderField = (field, fieldName) => {
     const { title, enum: enumValues } = field;
@@ -19,7 +17,6 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
     const layoutClass = uiField["ui:layout"];
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
     const isColumnLayout = uiField["ui:layout"] === "column";
-
 
     const handleFileChange = (fieldName, e) => {
       const file = e.target.files[0];
@@ -44,6 +41,34 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
       updatedDate[part] = value;
       handleChange(fieldName, updatedDate);
     };
+
+    //To handle custom input fields : file and other type..
+    const handleDefaultFieldChange = (e) => {
+      const inputType = e.target?.files ? 'file' : 'other';
+  
+      if (inputType === 'file') {
+          const outputFormat = uiField['ui:options']['output'];
+          const file = e.target.files[0]; // Assuming only one file is being uploaded
+  
+          if (outputFormat === 'base64') {
+              // Convert file to Base64
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                  const base64File = reader.result; // This will be a Base64 encoded string
+                  console.log("Base64", base64File);
+                  handleChange(fieldName, base64File); // Pass the Base64 string to the handler
+              };
+              reader.readAsDataURL(file);
+          } else {
+              // Output file as a Blob (raw file data)
+              console.log("Output blob", file);
+              handleChange(fieldName, file); // Pass the raw file (Blob) to the handler
+          }
+      } else {
+          handleChange(fieldName, e.target.value); // For non-file inputs
+      }
+  };
+  
 
     switch (widget) {
       case "password":
@@ -356,7 +381,6 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
           </div>
         );
 
-
       case "time":
         return (
           <div key={fieldName} className="mt-2">
@@ -496,7 +520,6 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         );
 
       case "text":
-        console.log();
         return (
           <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className='form-label'>{title || fieldName}</label>
@@ -518,11 +541,9 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
       default:
         const CustomField = fields[widget];
-        if(CustomField)
-        {
-          console.log("Returning custom field");
+        if (CustomField) {
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
-          return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={handleChange} errors={errors[fieldName]}/>;
+          return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={handleDefaultFieldChange} errors={errors[fieldName]} />;
         }
         return <p className="text-danger">No such component available</p>;
     }
