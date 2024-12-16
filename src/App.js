@@ -102,8 +102,7 @@ function App() {
   } 
 
   return (
-    <div className="App d-flex h-100 flex-column justify-content-center align-items-center">
-      <div className="container w-75">
+      <div className="d-flex flex-column mw-75 justify-content-center align-items-center align-middle ">
         <MyForm schema={schema}
           uiSchema={uiSchema}
           templates={templates}
@@ -114,8 +113,7 @@ function App() {
           onError={handleOnError}
           formData={prefilledFormData} />
         {/* {Object.keys(formData).length > 0 && renderFormData()} */}
-      </div>
-    </div>
+     </div>
   );
 }
 
