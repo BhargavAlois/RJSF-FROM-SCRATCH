@@ -3,7 +3,7 @@ import React from 'react'
 export default function MyPasswordWidget(props) {
   return (
     <div>
-        <label className='form-label'>{props.schema.title}</label>
+        <label className="mt-2">{props.schema.title}</label>
         <input type="password" onChange={props.onChange}/>
         {/* <input type="password" onChange={(e) => {props.onChange(props.fieldName, e.target.value)}}/> */}
         {props.errors && props.errors.map((error, index) => (
