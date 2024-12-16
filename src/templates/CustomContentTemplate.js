@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
@@ -6,8 +6,10 @@ import { format } from 'date-fns';
 import '../index.css';
 
 const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onChange: handleChange, onSuccess, onError, onSubmit }) => {
-  const [preview, setPreview] = useState(formData?.file);
+  const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
+
+  
 
   const renderField = (field, fieldName) => {
     const { title, enum: enumValues } = field;
@@ -32,6 +34,8 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
     const handleFileChange = (fieldName, e) => {
       const file = e.target.files[0];
+      setPreview();
+      setFileDetails();
 
       if (file) {
         if (file.type.startsWith("image/")) {
@@ -101,7 +105,6 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         handleChange(fieldName, e.target.value); // For non-file inputs
       }
     };
-
 
     switch (widget) {
       case "password":
@@ -393,6 +396,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         );
 
       case "progress":
+        console.log("inside progress", field?.default);
         return (
           <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className="form-label">{title || fieldName}</label>
@@ -400,12 +404,12 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               <div
                 className="progress-bar"
                 role="progressbar"
-                style={{ width: `${formData[fieldName] || 0}%` }}
-                aria-valuenow={formData[fieldName] || 0}
+                style={{ width: `${field?.default}%`, backgroundColor: "#007bff" }}
+                aria-valuenow={field?.default || 0}
                 aria-valuemin="0"
                 aria-valuemax="100"
               >
-                {formData[fieldName] || 0}%
+                {field?.default || 0}%
               </div>
             </div>
             {errors[fieldName] && errors[fieldName].map((error, index) => (
@@ -527,10 +531,10 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               className="form-control"
             />
 
-            {formData[fieldName] && typeof formData[fieldName] === 'string' && formData[fieldName].startsWith('data:') && (
+            {(formData[fieldName] && typeof formData[fieldName] === 'string' && formData[fieldName].startsWith('data:') || preview) && (
               <div className="mt-2">
                 <img
-                  src={formData[fieldName]}
+                  src={preview || formData[fieldName]}
                   alt="Preview"
                   style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "cover" }}
                 />

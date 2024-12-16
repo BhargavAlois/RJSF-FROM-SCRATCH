@@ -124,14 +124,14 @@ export const uiSchema = {
   actionButton: {
     "ui:widget": "button",
     "ui:options": { "value": "Custom button", "onClick": () => { window.alert("Custom button pressed"); } },
-    "ui:classNames": "btn btn-success border rounded-3 mt-3",
+    "ui:classNames": "btn btn-success border rounded-5 mt-3",
     "ui:layout": "row",
     // "ui:col": 6,
   },
   myButton: {
     "ui:widget": "button",
     "ui:options": { "value": "My button", "onClick": () => { window.alert("My button pressed"); } },
-    "ui:classNames": "btn border rounded btn-danger mt-3",
+    "ui:classNames": "btn border rounded-5 btn-danger mt-3",
     "ui:layout": "row",
     // "ui:col": 6,
   },

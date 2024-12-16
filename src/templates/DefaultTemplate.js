@@ -6,7 +6,7 @@ export default function DefaultTemplate(props) {
     const { schema, uiSchema, fields, onSubmit, onError, onSuccess, onChange, formData, errors } = props;
 
     return (
-        <div className="d-flex flex-column" style={{maxWidth : "60%", width: "60%"}}>
+        <div className="d-flex flex-column" style={{maxWidth : "70%", width: "70%"}}>
             <header className="text-center mb-4">
                 <h3>{schema.title || 'Default title'}</h3>
                 <p>{schema.description || 'This is default description of form'}</p>
