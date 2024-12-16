@@ -124,18 +124,18 @@ export const schema = {
     }
   },
   footerContent: "This is footer content",
-  required: [
-    "firstName",
-    "lastName",
-    "email",
-    "password",
-    "role",
-    "date",
-    "preferences",
-    "dateRange",
-    "datetime",
-    "time",
-    "calendar",
-    "phoneNumber"
-  ],
+  // required: [
+  //   "firstName",
+  //   "lastName",
+  //   "email",
+  //   "password",
+  //   "role",
+  //   "date",
+  //   "preferences",
+  //   "dateRange",
+  //   "datetime",
+  //   "time",
+  //   "calendar",
+  //   "phoneNumber"
+  // ],
 };

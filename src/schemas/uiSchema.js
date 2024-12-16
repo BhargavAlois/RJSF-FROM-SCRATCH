@@ -40,7 +40,7 @@ export const uiSchema = {
     "ui:classNames": "form-control",
     "ui:layout": "row",
     "ui:options": {
-      "format": "yyyy/MM/dd"
+      "format": "yyyy/dd/MM"
     }
   },
   date: {
@@ -48,7 +48,7 @@ export const uiSchema = {
     "ui:classNames": "form-control",
     "ui:layout": "row",
     "ui:options": {
-      "format": "dd/MM/yyyy"
+      "format": "MM/dd/yyyy"
     }
   },
   phoneNumber: {
@@ -90,6 +90,10 @@ export const uiSchema = {
     "ui:widget": "file",
     "ui:classNames": "form-control",
     "ui:layout": "row",
+    "ui:options" : {
+      "accept" : ['image/png'],
+      "output" : "blob", // blob is also possible
+    }
   },
   "alt-date": {
     "ui:widget": "alt-date",
