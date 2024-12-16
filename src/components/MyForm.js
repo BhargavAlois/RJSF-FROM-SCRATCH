@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import DefaultTemplate from '../templates/DefaultTemplate';
+import { format, parseISO } from 'date-fns';
 
 export default function MyForm(props) {
     const [formData, setFormData] = useState({});
@@ -11,11 +12,66 @@ export default function MyForm(props) {
     const prefilledData = prefilledFormData;
     const fields = props.fields;
 
+    const convertToSchemaFormat = (schema, data) => {
+        const formattedData = {};
+      
+        Object.keys(schema.properties).forEach((fieldName) => {
+          const field = schema.properties[fieldName];
+          const fieldValue = data[fieldName];
+      
+          if (field.type === 'string' && field.format === 'date' && fieldValue) {
+            const formatString = field['ui:options']?.format || 'yyyy-MM-dd'; 
+      
+            try {
+              let parsedDate;
+              
+              if (fieldValue.includes('T') || fieldValue.includes('Z')) {
+                parsedDate = parseISO(fieldValue); 
+              } else {
+                parsedDate = new Date(fieldValue);
+              }
+      
+              formattedData[fieldName] = format(parsedDate, formatString); 
+            } catch (error) {
+              console.error(`Error parsing date for field ${fieldName}:`, error);
+              formattedData[fieldName] = fieldValue; 
+            }
+          } else if (field.type === 'object' && fieldName === 'dateRange') {
+            const dateRange = fieldValue || {};
+      
+            formattedData[fieldName] = {
+              startDate: dateRange.startDate ? formatDate(dateRange.startDate, field['ui:options']?.format) : '',
+              endDate: dateRange.endDate ? formatDate(dateRange.endDate, field['ui:options']?.format) : '',
+            };
+          } else {
+            formattedData[fieldName] = fieldValue;
+          }
+        });
+      
+        return formattedData;
+      };
+      
+      const formatDate = (date, formatString) => {
+        try {
+          let parsedDate = date;
+      
+          if (typeof date === 'string' && (date.includes('T') || date.includes('Z'))) {
+            parsedDate = parseISO(date);
+          } else if (!(date instanceof Date)) {
+            parsedDate = new Date(date); 
+          }
+      
+          return format(parsedDate, formatString);
+        } catch (error) {
+          console.error('Error formatting date:', error);
+          return date;
+        }
+      };
+
     const validateForm = () => {
         console.log("Validate : ", formData);
         const formErrors = {};
 
-        //Below errors are generated for required validations
         schema.required?.forEach((field) => {
             const fieldTitle = schema.properties[field]['title'];
 
@@ -34,7 +90,6 @@ export default function MyForm(props) {
             }
         });
 
-        //These errors are generated for other validations such as minLength, maxLength, etc..
         Object.keys(formData).forEach((fieldName) => {
             const field = schema.properties[fieldName];
             const fieldTitle = field['title'];
@@ -163,11 +218,13 @@ export default function MyForm(props) {
     };
 
     useEffect(() => {
-        const initialFormData = initializeFormData(schema);
+        const initialFormData = convertToSchemaFormat(schema, prefilledData);
         setFormData(initialFormData);
-    }, []);
+        console.log("Initial data : ", initialFormData);
+    }, [prefilledData, schema]);
 
     const handleChange = (fieldName, value) => {
+        console.log("Handle change called");
         const options = uiSchema[fieldName]['ui:options'];
 
         setFormData((prevData) => ({
