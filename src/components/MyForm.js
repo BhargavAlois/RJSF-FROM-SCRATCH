@@ -68,16 +68,27 @@ export default function MyForm(props) {
             }
 
             const uiOptions = uiSchema[fieldName]?.['ui:options'] || {};
+
             if (uiOptions?.accept && formData[fieldName]) {
+                let fileType;
+            
                 const file = formData[fieldName];
-                console.log("file : ", file);
-                console.log("file type : ", file.type);
-                if (file && !uiOptions.accept.includes(file.type)) {
+                
+                if (typeof file === "string" && file.startsWith("data:")) {
+                    const mimeTypeMatch = file.match(/data:(.*?);base64,/);
+                    if (mimeTypeMatch && mimeTypeMatch[1]) {
+                        fileType = mimeTypeMatch[1];
+                    }
+                } else if (file instanceof Blob) {
+                    fileType = file.type;
+                }
+            
+                if (fileType && !uiOptions.accept.includes(fileType)) {
                     if (!formErrors[fieldName]) formErrors[fieldName] = [];
-                    console.log("INserting errors");
                     formErrors[fieldName].push(`${fieldTitle} must be one of the accepted file types: ${uiOptions.accept.join(', ')}`);
                 }
             }
+            
         });
 
         setErrors(formErrors);
@@ -98,7 +109,6 @@ export default function MyForm(props) {
     }
 
     const handleSubmit = (e) => {
-        console.log("submit clicked");
         e.preventDefault();
         if (onSubmit) {
             if (validateForm()) {
@@ -158,12 +168,7 @@ export default function MyForm(props) {
     }, []);
 
     const handleChange = (fieldName, value) => {
-        console.log("Change in ", fieldName, " ", value);
-        console.log("Schema properties for that value : ", uiSchema[fieldName]);
         const options = uiSchema[fieldName]['ui:options'];
-        console.log("options : ", options);
-
-        console.log("formDAta : ", formData);
 
         setFormData((prevData) => ({
             ...prevData,
