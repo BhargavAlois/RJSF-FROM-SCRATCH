@@ -21,8 +21,8 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
     const fieldClass = uiField["ui:classNames"] || "form-control";
     // const errorMessageClass = uiField["ui:errorMessageClass"] || "text-danger";
     const layoutClass = uiField["ui:layout"];
-    const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
     const isColumnLayout = uiField["ui:layout"] === "column";
+    const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
 
     const convertToBase64 = (file) => {
       // Convert file to Base64
@@ -33,14 +33,14 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
       };
       reader.readAsDataURL(file);
     }
-    
+
     if (field.type === 'object' && field.properties) {
       return (
         <div key={fieldName}>
           <h5 className="mt-3">{title || fieldName}</h5>
           <div className="ms-3">
             {Object.keys(field.properties).map((nestedFieldName) => {
-              const nestedField = field.properties[nestedFieldName]; 
+              const nestedField = field.properties[nestedFieldName];
               const updatedParentSchema = parentSchema.properties[nestedFieldName];
               return renderField(nestedField, `${nestedFieldName}`, updatedParentSchema);
             })}
@@ -605,14 +605,14 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
   };
 
   return (
-    <div>
+    <div className="row">
       {Object.keys(schema.properties).map((fieldName) => {
         console.log("field name : ", fieldName);
         const field = schema.properties[fieldName];
         return renderField(field, fieldName);
       })}
     </div>
-  );
+  )
 };
 
 export default CustomContentTemplate;

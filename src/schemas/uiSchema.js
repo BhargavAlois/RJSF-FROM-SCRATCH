@@ -9,21 +9,25 @@ export const uiSchema = {
     "ui:widget": "text",
     "ui:classNames": "form-control",
     "ui:layout": "row",
+    "ui:col": 6
   },
   lastName: {
     "ui:widget": "text",
     "ui:classNames": "form-control",
     "ui:layout": "row",
+    "ui:col": 6
   },
   email: {
     "ui:widget": "email",
     "ui:classNames": "form-control",
     "ui:layout": "row",
+    // "ui:col": 6
   },
   password: {
     "ui:widget": "password",
     "ui:classNames": "form-control",
     "ui:layout": "row",
+    // "ui:col": 6
   },
   role: {
     "ui:widget": "select",

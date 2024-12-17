@@ -28,6 +28,7 @@ export default function MainTemplate(props) {
                         fontWeight: '500', 
                         textTransform: 'none', 
                         transition: 'all 0.3s ease', 
+                        backgroundColor: '#0045b5'
                     }}
                     onMouseEnter={(e) => e.target.style.backgroundColor = '#0056b3'} 
                     onMouseLeave={(e) => e.target.style.backgroundColor = '#1976d2'} 
