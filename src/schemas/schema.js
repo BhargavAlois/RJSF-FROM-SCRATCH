@@ -50,7 +50,7 @@ export const schema = {
       description: "Phone number in format XXX-XXX-XXXX",
     },
     dateRange: {
-      type: "object",
+      type: "string",
       title: "Date Range",
       properties: {
         startDate: { type: "string", format: "date" },
