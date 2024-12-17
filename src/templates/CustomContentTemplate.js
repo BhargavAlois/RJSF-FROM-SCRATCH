@@ -135,6 +135,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               className={fieldClass}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
+              placeholder={uiField["ui:placeholder"]}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
               <p key={index} className='text-danger m-0'>{error}</p>
@@ -152,7 +153,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               className={fieldClass}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-
+              placeholder={uiField["ui:placeholder"]}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
               <p key={index} className='text-danger m-0'>{error}</p>
@@ -170,6 +171,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               className={fieldClass}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
+              placeholder={uiField["ui:placeholder"]}
             >
               <option value="">Select an option</option>
               {enumValues &&
@@ -240,6 +242,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                       value={value}
                       checked={formData[fieldName] === value}
                       onChange={() => handleChange(fieldName, value)}
+                      placeholder={uiField["ui:placeholder"]}
                     />
                     <label className="form-check-label">{value}</label>
                   </div>
@@ -267,6 +270,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 placeholderText="Start Date"
                 dateFormat={uiSchema[fieldName]['ui:options']?.format}
                 className={fieldClass}
+                placeholder={uiField["ui:placeholder"]}
               />
               <DatePicker
                 selected={formData.dateRange?.endDate || new Date()}
@@ -278,6 +282,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 placeholderText="End Date"
                 dateFormat={uiSchema[fieldName]['ui:options']?.format}
                 className={fieldClass}
+                placeholder={uiField["ui:placeholder"]}
               />
             </div>
             {errors[fieldName] && errors[fieldName].map((error, index) => (
@@ -405,7 +410,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               onChange={(date) => handleDateChange(fieldName, date, uiSchema[fieldName]['ui:options']?.format)}
               className="form-control"
               dateFormat={uiSchema[fieldName]['ui:options']?.format}
-              placeholderText="Select date"
+              placeholderText={uiField["ui:placeholder"]}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
               <p key={index} className='text-danger m-0'>{error}</p>
@@ -446,6 +451,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               value={formData[fieldName] || ''}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               className="form-control"
+              placeholder={uiField["ui:placeholder"]}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
               <p key={index} className='text-danger m-0'>{error}</p>
@@ -584,6 +590,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               name={fieldName}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
+              placeholder={uiField["ui:placeholder"]}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
               <p key={index} className='text-danger m-0'>{error}</p>

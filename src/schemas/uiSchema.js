@@ -9,25 +9,31 @@ export const uiSchema = {
     "ui:widget": "text",
     "ui:classNames": "form-control",
     "ui:layout": "row",
-    "ui:col": 6
+    "ui:col": 6,
+    "ui:placeholder": "Enter first name"
   },
   lastName: {
     "ui:widget": "text",
     "ui:classNames": "form-control",
     "ui:layout": "row",
-    "ui:col": 6
+    "ui:col": 6,
+    "ui:placeholder": "Enter last name"
   },
   email: {
     "ui:widget": "email",
     "ui:classNames": "form-control",
     "ui:layout": "row",
     // "ui:col": 6
+    "ui:placeholder": "Enter your email"
+
   },
   password: {
     "ui:widget": "password",
     "ui:classNames": "form-control",
     "ui:layout": "row",
     // "ui:col": 6
+    "ui:placeholder": "Enter password"
+
   },
   role: {
     "ui:widget": "select",
@@ -59,6 +65,7 @@ export const uiSchema = {
     "ui:widget": "text",
     "ui:classNames": "form-control",
     "ui:layout": "row",
+    "ui:placeholder": "Enter phone number"   
   },
   time: {
     "ui:widget": "time",
