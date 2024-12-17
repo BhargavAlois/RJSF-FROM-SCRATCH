@@ -8,15 +8,15 @@ export const uiSchema = {
   firstName: {
     "ui:widget": "text",
     "ui:classNames": "form-control",
-    "ui:layout": "row",
-    "ui:col": 6,
+    // "ui:layout": "row",
+    // "ui:col": 6,
     "ui:placeholder": "Enter first name"
   },
   lastName: {
     "ui:widget": "text",
     "ui:classNames": "form-control",
     "ui:layout": "row",
-    "ui:col": 6,
+    // "ui:col": 6,
     "ui:placeholder": "Enter last name"
   },
   email: {
@@ -33,7 +33,6 @@ export const uiSchema = {
     "ui:layout": "row",
     // "ui:col": 6
     "ui:placeholder": "Enter password"
-
   },
   role: {
     "ui:widget": "select",
@@ -43,8 +42,9 @@ export const uiSchema = {
   preferences: {
     "ui:widget": "checkboxes",
     "ui:classNames": "form-check-input",
-    // "ui:layout": "row",
+    "ui:layout": "row",
   },
+  
   dateRange: {
     "ui:widget": "daterange",
     "ui:classNames": "form-control",
@@ -136,14 +136,14 @@ export const uiSchema = {
   actionButton: {
     "ui:widget": "button",
     "ui:options": { "value": "Custom button", "onClick": () => { window.alert("Custom button pressed"); } },
-    "ui:classNames": "btn btn-success border rounded-5 mt-3",
+    "ui:classNames": "btn btn-success border rounded-1 mt-3",
     "ui:layout": "row",
     // "ui:col": 6,
   },
   myButton: {
     "ui:widget": "button",
     "ui:options": { "value": "My button", "onClick": () => { window.alert("My button pressed"); } },
-    "ui:classNames": "btn border rounded-5 btn-danger mt-3",
+    "ui:classNames": "btn border rounded-1 btn-danger mt-3",
     "ui:layout": "row",
     // "ui:col": 6,
   },

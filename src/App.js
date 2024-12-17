@@ -117,8 +117,8 @@ function App() {
           onSuccess={handleOnSuccess}
           onError={handleOnError}
           formData={prefilledFormData} />
-        {/* {Object.keys(formData).length > 0 && renderFormData()} */}
-     </div>
+     {/* {Object.keys(formData).length > 0 && renderFormData()} */}
+      </div>
   );
 }
 

@@ -194,11 +194,11 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             <label className="form-label">{title || fieldName}</label>
             <div
               className={`form-check ${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}
-              style={{ flexWrap: "wrap", gap: "10px", overflow: "hidden" }}
+              style={{ overflow: "hidden" }}
             >
               {field.items.enum &&
                 field.items.enum.map((value, index) => (
-                  <div key={index} className="form-check" style={{ flexBasis: "48%" }}>
+                  <div key={index} className="form-check" style={{ flexBasis: "20%" }}>
                     <input
                       type="checkbox"
                       className={fieldClass}
@@ -403,7 +403,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
       case "date":
         return (
-          <div key={fieldName} className="mt-2">
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className="form-label">{title || fieldName}</label>
             <DatePicker
               selected={formData[fieldName] || new Date()}
@@ -444,7 +444,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
       case "time":
         return (
-          <div key={fieldName} className="mt-2">
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className="form-label">{title}</label>
             <input
               type="time"
@@ -462,7 +462,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
       case "datetime":
         return (
-          <div key={fieldName} className="mt-2">
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className="form-label">{title}</label>
             <input
               type="datetime-local"
@@ -479,7 +479,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
       case "calendar":
         return (
-          <div key={fieldName} className="mt-2">
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className="form-label">{title}</label>
             <input
               type="date"
@@ -496,7 +496,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
       case "year":
         return (
-          <div key={fieldName} className="mt-2">
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className="form-label">{title}</label>
             <input
               type="number"
@@ -515,7 +515,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
       case "month":
         return (
-          <div key={fieldName} className="mt-2">
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className="form-label">{title}</label>
             <input
               type="month"
@@ -532,7 +532,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
       case "day":
         return (
-          <div key={fieldName} className="mt-2">
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className="form-label">{title}</label>
             <input
               type="date"
@@ -548,7 +548,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
       case "file":
         return (
-          <div key={fieldName} className="mt-2">
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
             <label className="form-label">{title}</label>
             <input
               type="file"
@@ -606,20 +606,20 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         if (CustomField) {
           console.log("dfffff ", uiSchema[fieldName]);
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
-          return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={uiSchema[fieldName]["ui:placeholder"]}/>;
+          return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={uiSchema[fieldName]["ui:placeholder"]} />;
         }
         return <p className="text-danger">No such component available</p>;
     }
   };
 
   return (
-    <div className="row">
-      {Object.keys(schema.properties).map((fieldName) => {
+    // <div className="row align-items-center justify-content-center">
+      Object.keys(schema.properties).map((fieldName) => {
         console.log("field name : ", fieldName);
         const field = schema.properties[fieldName];
         return renderField(field, fieldName);
-      })}
-    </div>
+      })
+    // </div>
   )
 };
 

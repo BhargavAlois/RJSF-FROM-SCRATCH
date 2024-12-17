@@ -6,15 +6,15 @@ export default function MainTemplate(props) {
 
     return (
         <div className="d-flex flex-column" style={{ maxWidth: "60%", width: "60%" }}>
-            <header className="text-center mb-4">
+            <header className="mb-4 text-center">
                 <h3>{schema.title || 'Default title'}</h3>
                 <p>{schema.description || 'This is default description of form'}</p>
             </header>
 
             <form
                 onSubmit={onSubmit}
-                className="d-flex flex-column bg-light align-items-center align-middle justify-content-center p-5 border border-dark border-opacity-25 rounded-4"
-                style={{ overflow: 'auto' }}
+                className="d-flex flex-column bg-light align-items-center p-5 border border-4 rounded-4"
+                style={{ overflowX: 'auto' }}
             >
                 {content}
                 <Button
@@ -23,7 +23,7 @@ export default function MainTemplate(props) {
                     color="primary"
                     type="submit"
                     style={{
-                        borderRadius: '20px',
+                        borderRadius: '7px',
                         padding: '5px 20px',
                         fontWeight: '500', 
                         textTransform: 'none', 

@@ -3,7 +3,7 @@ import React from 'react'
 export default function CustomFileWidget(props) {
   console.log(props.placeholder);
   return (
-    <div>
+    <div className="row col-12">
     <label className="mt-2">{props.schema.title}</label>
     <input type="file" onChange={props.onChange} placeholder={props.placeholder}/>
     {/* <input type="file" onChange={(e) => {props.onChange(props.fieldName, e.target.files[0])}}/> */}
