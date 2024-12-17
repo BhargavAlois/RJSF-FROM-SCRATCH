@@ -123,6 +123,7 @@ export const uiSchema = {
   passwordWidget: {
     "ui:widget": "myPasswordWidget",
     "ui:classNames": "form-control",
+    "ui:placeholder": "Enter password"
   },
   customFile:{
     "ui:widget": "customFileWidget",

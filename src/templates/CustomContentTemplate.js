@@ -604,8 +604,9 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
       default:
         const CustomField = fields[widget];
         if (CustomField) {
+          console.log("dfffff ", uiSchema[fieldName]);
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
-          return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={handleDefaultFieldChange} errors={errors[fieldName]} />;
+          return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={uiSchema[fieldName]["ui:placeholder"]}/>;
         }
         return <p className="text-danger">No such component available</p>;
     }

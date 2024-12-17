@@ -113,7 +113,7 @@ export const schema = {
     passwordWidget: {
       type: "string",
       title: "Password widget",
-      maxLength: 8
+      maxLength: 8,
     },
     actionButton: {
       type: "string",
