@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import MyForm from './components/MyForm';
 import { schema } from './schemas/schema';
 import { uiSchema } from './schemas/uiSchema';
+
+// import { schema } from './schemas/altSchema';
+// import { uiSchema } from './schemas/altUiSchema';
 import MainTemplate from './templates/MainTemplate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';

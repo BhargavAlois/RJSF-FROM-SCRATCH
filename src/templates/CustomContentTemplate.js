@@ -8,9 +8,10 @@ import '../index.css';
 const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onChange: handleChange, onSuccess, onError, onSubmit }) => {
   const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
+  var fieldHierarchy = "";
 
-  
-  const renderField = (field, fieldName) => {
+  const renderField = (field, fieldName, parentSchema = schema) => {
+    console.log("called for fieldName: ", fieldName, "for field: ", field);
     const { title, enum: enumValues } = field;
     const uiField = uiSchema[fieldName] || {};
     const widget = uiField["ui:widget"] || "text";
@@ -21,22 +22,6 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
     const isColumnLayout = uiField["ui:layout"] === "column";
 
-    // const handleNestedChange = (fieldName, value) => {
-    //   const keys = fieldName.split('.');
-    //   let nestedData = { ...formData };
-  
-    //   keys.reduce((acc, key, index) => {
-    //     if (index === keys.length - 1) {
-    //       acc[key] = value;
-    //     } else {
-    //       acc[key] = acc[key] || {};
-    //     }
-    //     return acc[key];
-    //   }, nestedData);
-  
-    //   handleChange(fieldName, nestedData);
-    // };
-
     const convertToBase64 = (file) => {
       // Convert file to Base64
       const reader = new FileReader();
@@ -45,6 +30,21 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         handleChange(fieldName, base64File); // Pass the Base64 string to the handler
       };
       reader.readAsDataURL(file);
+    }
+    
+    if (field.type === 'object' && field.properties) {
+      return (
+        <div key={fieldName}>
+          <h5 className="mt-3">{title || fieldName}</h5>
+          <div className="ms-3">
+            {Object.keys(field.properties).map((nestedFieldName) => {
+              const nestedField = field.properties[nestedFieldName]; 
+              const updatedParentSchema = parentSchema.properties[nestedFieldName];
+              return renderField(nestedField, `${nestedFieldName}`, updatedParentSchema);
+            })}
+          </div>
+        </div>
+      );
     }
 
     const handleFileChange = (fieldName, e) => {
@@ -120,7 +120,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         handleChange(fieldName, e.target.value); // For non-file inputs
       }
     };
-    
+
 
     switch (widget) {
       case "password":
@@ -150,7 +150,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               className={fieldClass}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-            
+
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
               <p key={index} className='text-danger m-0'>{error}</p>
@@ -605,6 +605,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
   return (
     <div>
       {Object.keys(schema.properties).map((fieldName) => {
+        console.log("field name : ", fieldName);
         const field = schema.properties[fieldName];
         return renderField(field, fieldName);
       })}
