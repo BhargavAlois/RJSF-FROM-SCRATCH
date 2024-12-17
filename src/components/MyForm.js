@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import DefaultTemplate from '../templates/DefaultTemplate';
 import { format, parseISO } from 'date-fns';
+import CustomContentTemplate from '../templates/CustomContentTemplate';
 
 export default function MyForm(props) {
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
     const { schema, uiSchema, onSubmit, onChange, onSuccess, onError, formData: prefilledFormData } = props;
+    console.log("onchange in myform ", onChange);
     const templates = props.templates;
     const templateName = props.uiSchema['ui:layout'];    
     const MyTemplate = templates[templateName];
@@ -165,6 +167,7 @@ export default function MyForm(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log("handle submit called myform");
         if (onSubmit) {
             if (validateForm()) {
                 if (onSuccess) {
@@ -242,12 +245,15 @@ export default function MyForm(props) {
         }
     };
 
+    const content = <CustomContentTemplate formData={formData} schema={schema} uiSchema={uiSchema} errors={errors} fields={fields} onSubmit={handleSubmit} onError={onError} onChange={handleChange} onSuccess={onSuccess}/>;
+
     if (!MyTemplate) {
-        return <DefaultTemplate schema={schema} uiSchema={uiSchema} fields={fields} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors}/>;
+        return <DefaultTemplate schema={schema} uiSchema={uiSchema} content={content} onSubmit={handleSubmit}/>;
     }
     
     return (
-        <MyTemplate schema={schema} uiSchema={uiSchema} fields={fields} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors} />
+        // <MyTemplate schema={schema} uiSchema={uiSchema} fields={fields} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors} />
+        <MyTemplate schema={schema} uiSchema={uiSchema} content={content} onSubmit={handleSubmit} />
     );
 }
 

@@ -1,9 +1,8 @@
 import React from 'react';
-import CustomContentTemplate from './CustomContentTemplate';
 import Button from '@mui/material/Button';
 
 export default function MainTemplate(props) {
-    const { schema, uiSchema, fields, onSubmit, onError, onSuccess, onChange, formData, errors } = props;
+    const { schema, content, onSubmit } = props;
 
     return (
         <div className="d-flex flex-column" style={{ maxWidth: "60%", width: "60%" }}>
@@ -17,16 +16,7 @@ export default function MainTemplate(props) {
                 className="d-flex flex-column bg-light align-items-center align-middle justify-content-center p-5 border border-dark border-opacity-25 rounded-4"
                 style={{ overflow: 'auto' }}
             >
-                <CustomContentTemplate
-                    formData={formData}
-                    uiSchema={uiSchema}
-                    schema={schema}
-                    fields={fields}
-                    errors={errors}
-                    onChange={onChange}
-                    onSuccess={onSuccess}
-                    onError={onError}
-                />
+                {content}
                 <Button
                     variant="contained"
                     className="mt-3"

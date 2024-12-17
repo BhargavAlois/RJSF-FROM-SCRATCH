@@ -6,9 +6,11 @@ import { format } from 'date-fns';
 import '../index.css';
 
 const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onChange: handleChange, onSuccess, onError, onSubmit }) => {
+  // console.log("schema from : ", schema);
+  console.log("handle change in customcontent", handleChange);
+  console.log("handle submit in customcontent", onSubmit);
   const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
-  var fieldHierarchy = "";
 
   const renderField = (field, fieldName, parentSchema = schema) => {
     console.log("called for fieldName: ", fieldName, "for field: ", field);
