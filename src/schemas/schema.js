@@ -137,6 +137,6 @@ export const schema = {
     "datetime",
     "time",
     "calendar",
-    "phoneNumber"
+    "phoneNumber",
   ],
 };
