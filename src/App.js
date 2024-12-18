@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MyForm from './components/MyForm';
 import { schema } from './schemas/schema';
 import { uiSchema } from './schemas/uiSchema';
-
+import { errorSchema } from './schemas/errorSchema';
 // import { schema } from './schemas/altSchema';
 // import { uiSchema } from './schemas/altUiSchema';
 import MainTemplate from './templates/MainTemplate';
@@ -116,7 +116,8 @@ function App() {
           onChange={handleOnChange}
           onSuccess={handleOnSuccess}
           onError={handleOnError}
-          formData={prefilledFormData} />
+          formData={prefilledFormData}
+          errorSchema={errorSchema} />
      {/* {Object.keys(formData).length > 0 && renderFormData()} */}
       </div>
   );
