@@ -6,7 +6,7 @@ import CustomContentTemplate from '../templates/CustomContentTemplate';
 export default function MyForm(props) {
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
-    const { schema, uiSchema, onSubmit, onChange, onSuccess, onError, formData: prefilledFormData } = props;
+    const { schema, uiSchema, onSubmit, onChange, onSuccess, onError, formData: prefilledFormData, errorSchema } = props;
     console.log("onchange in myform ", onChange);
     const templates = props.templates;
     const templateName = props.uiSchema['ui:layout'];    
@@ -101,6 +101,14 @@ export default function MyForm(props) {
                 if (!regex.test(formData[fieldName])) {
                     if (!formErrors[fieldName]) formErrors[fieldName] = [];
                     formErrors[fieldName].push(`${fieldTitle} is not in the correct format`);
+                    console.log("Error schema : ", errorSchema[fieldName]?.errors);
+                    if (errorSchema[fieldName]?.errors)
+                    {
+                        Object.keys(errorSchema[fieldName]?.errors).map((err) => {
+                            console.log("hhhhhhhhh: ", errorSchema[fieldName]?.errors[err]);
+                            formErrors[fieldName].push(errorSchema[fieldName]?.errors[err]);
+                        })
+                    }
                 }
             }
 
