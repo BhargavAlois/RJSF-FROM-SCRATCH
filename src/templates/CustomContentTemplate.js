@@ -14,7 +14,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
     const uiField = uiSchema[fieldName] || {};
     const widget = uiField["ui:widget"] || "text";
     // const errorMessage = errors[fieldName];
-    const fieldClass = uiField["ui:classNames"] || "form-control";
+    const fieldClass = uiField["ui:classNames"];
     // const errorMessageClass = uiField["ui:errorMessageClass"] || "text-danger";
     const layoutClass = uiField["ui:layout"];
     const isColumnLayout = uiField["ui:layout"] === "column";
@@ -116,7 +116,8 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
           handleChange(fieldName, file);
         }
       } else {
-        handleChange(fieldName, e.target.value); // For non-file inputs
+        console.log("inside other type");
+        handleChange(fieldName, e.target.value);
       }
     };
 
@@ -128,13 +129,13 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             <input
               type="password"
               name={fieldName}
-              className={fieldClass}
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               placeholder={uiField["ui:placeholder"]}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
           </div>
         );
@@ -146,13 +147,13 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             <input
               type="text"
               name={fieldName}
-              className={fieldClass}
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               placeholder={uiField["ui:placeholder"]}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
           </div>
         );
@@ -163,7 +164,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             <label className="form-label">{title || fieldName}</label>
             <select
               name={fieldName}
-              className={fieldClass}
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               placeholder={uiField["ui:placeholder"]}
@@ -177,7 +178,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 ))}
             </select>
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
 
           </div>
@@ -196,7 +197,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                   <div key={index} className="form-check" style={{ flexBasis: "20%" }}>
                     <input
                       type="checkbox"
-                      className={fieldClass}
+                      className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                       name={fieldName}
                       value={value}
                       checked={formData[fieldName]?.includes(value)}
@@ -214,9 +215,8 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 ))}
             </div>
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
-
           </div>
         );
 
@@ -232,21 +232,53 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                   <div key={index} className="form-check">
                     <input
                       type="radio"
-                      className={fieldClass}
+                      className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                       name={fieldName}
                       value={value}
                       checked={formData[fieldName] === value}
                       onChange={() => handleChange(fieldName, value)}
-                      placeholder={uiField["ui:placeholder"]}
                     />
                     <label className="form-check-label">{value}</label>
                   </div>
                 ))}
             </div>
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
 
+          </div>
+        );
+
+      case "range":
+        const min = field.minimum || 0;
+        const max = field.maximum || 100;
+        const defaultValue = (field.default !== undefined && field.default !== null) ? field.default : min;
+        const rangeValue = formData[fieldName] || defaultValue;
+
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+            <label className="form-label">{title || fieldName}</label>
+            <input
+              type="range"
+              name={fieldName}
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              value={rangeValue}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+              min={min}
+              max={max}
+              step="1"
+              placeholder={uiField["ui:placeholder"]}
+            />
+            <div className="range-value">
+              <span>{rangeValue}</span>
+            </div>
+            {errors[fieldName] && (
+              <div className="invalid-feedback">
+                {errors[fieldName].map((error, index) => (
+                  <p key={index} className="m-0">{error}</p>
+                ))}
+              </div>
+            )}
           </div>
         );
 
@@ -264,7 +296,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 endDate={formData.dateRange?.endDate}
                 placeholderText="Start Date"
                 dateFormat={uiSchema[fieldName]['ui:options']?.format}
-                className={fieldClass}
+                className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                 placeholder={uiField["ui:placeholder"]}
               />
               <DatePicker
@@ -276,12 +308,12 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 minDate={formData.dateRange?.startDate}
                 placeholderText="End Date"
                 dateFormat={uiSchema[fieldName]['ui:options']?.format}
-                className={fieldClass}
+                className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                 placeholder={uiField["ui:placeholder"]}
               />
             </div>
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
 
           </div>
@@ -331,7 +363,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 <>
                   <select
                     name={`${fieldName}_year`}
-                    className={fieldClass}
+                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                     value={selectedYear}
                     onChange={(e) => handleChangeDatePart("year", e.target.value)}
                   >
@@ -340,7 +372,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                   </select>
                   <select
                     name={`${fieldName}_month`}
-                    className={fieldClass}
+                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                     value={selectedMonth}
                     onChange={(e) => handleChangeDatePart("month", e.target.value)}
                   >
@@ -349,7 +381,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                   </select>
                   <select
                     name={`${fieldName}_day`}
-                    className={fieldClass}
+                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                     value={selectedDay}
                     onChange={(e) => handleChangeDatePart("day", e.target.value)}
                   >
@@ -362,7 +394,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 <>
                   <select
                     name={`${fieldName}_month`}
-                    className={fieldClass}
+                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                     value={selectedMonth}
                     onChange={(e) => handleChangeDatePart("month", e.target.value)}
                   >
@@ -371,7 +403,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                   </select>
                   <select
                     name={`${fieldName}_day`}
-                    className={fieldClass}
+                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                     value={selectedDay}
                     onChange={(e) => handleChangeDatePart("day", e.target.value)}
                   >
@@ -380,7 +412,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                   </select>
                   <select
                     name={`${fieldName}_year`}
-                    className={fieldClass}
+                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                     value={selectedYear}
                     onChange={(e) => handleChangeDatePart("year", e.target.value)}
                   >
@@ -403,12 +435,12 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             <DatePicker
               selected={formData[fieldName] || new Date()}
               onChange={(date) => handleDateChange(fieldName, date, uiSchema[fieldName]['ui:options']?.format)}
-              className="form-control"
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''} form-control`}
               dateFormat={uiSchema[fieldName]['ui:options']?.format}
               placeholderText={uiField["ui:placeholder"]}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
 
           </div>
@@ -444,13 +476,12 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               type="time"
               value={formData[fieldName] || ''}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-              className="form-control"
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
               placeholder={uiField["ui:placeholder"]}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
-
           </div>
         );
 
@@ -462,10 +493,10 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               type="datetime-local"
               value={formData[fieldName] || ''}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-              className="form-control"
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
 
           </div>
@@ -479,10 +510,10 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               type="date"
               value={formData[fieldName] || ''}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-              className="form-control"
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
 
           </div>
@@ -498,10 +529,10 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               onChange={(e) => handleChange(fieldName, e.target.value)}
               min="1900"
               max="2100"
-              className="form-control"
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
 
           </div>
@@ -515,10 +546,10 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               type="month"
               value={formData[fieldName] || ''}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-              className="form-control"
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
 
           </div>
@@ -532,10 +563,10 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               type="date"
               value={formData[fieldName] || ''}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-              className="form-control"
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
           </div>
         );
@@ -547,7 +578,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             <input
               type="file"
               onChange={(e) => handleFileChange(fieldName, e)}
-              className="form-control"
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
             />
 
             {(formData[fieldName] && typeof formData[fieldName] === 'string' && formData[fieldName].startsWith('data:') || preview) && (
@@ -569,7 +600,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             )}
 
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
           </div>
         );
@@ -580,17 +611,54 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             <label className='form-label'>{title || fieldName}</label>
             <input
               type="text"
-              className={fieldClass}
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
               name={fieldName}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               placeholder={uiField["ui:placeholder"]}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
             ))}
           </div>
         );
+
+      case "updown":
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+            <label className='form-label'>{title || fieldName}</label>
+            <input
+              type="number"
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              name={fieldName}
+              value={formData[fieldName] || ""}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+              placeholder={uiField["ui:placeholder"]}
+            />
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
+            ))}
+          </div>
+        );
+
+      case "textarea":
+        return (
+          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+            <label className='form-label'>{title || fieldName}</label>
+            <textarea
+              type="textarea"
+              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              name={fieldName}
+              value={formData[fieldName] || ""}
+              onChange={(e) => handleChange(fieldName, e.target.value)}
+              placeholder={uiField["ui:placeholder"]}
+            />
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='invalid-feedback m-0'>{error}</p>
+            ))}
+          </div>
+        );
+
 
       case "button":
         return (<Button uiField={uiField} />);
@@ -607,10 +675,10 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
   return (
     // <div className="row align-items-center justify-content-center">
-      Object.keys(schema.properties).map((fieldName) => {
-        const field = schema.properties[fieldName];
-        return renderField(field, fieldName);
-      })
+    Object.keys(schema.properties).map((fieldName) => {
+      const field = schema.properties[fieldName];
+      return renderField(field, fieldName);
+    })
     // </div>
   )
 };

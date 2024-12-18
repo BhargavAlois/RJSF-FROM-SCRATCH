@@ -4,7 +4,7 @@ export const uiSchema = {
     "time", "datetime", "calendar", "year", "month", "day", "file",
     "actionButton", "myButton"
   ],
-  "ui:layout": "myCustomRowTemplate",
+  // "ui:layout": "myCustomRowTemplate",
   firstName: {
     "ui:widget": "text",
     "ui:classNames": "form-control",
@@ -44,7 +44,14 @@ export const uiSchema = {
     "ui:classNames": "form-check-input",
     "ui:layout": "row",
   },
-  
+  numberEnum: {
+    "ui:widget": "radio",
+    "ui:classNames": "form-check-input"
+  },  
+  "integerRange": {
+    "ui:widget": "range",
+    "ui:classNames": "form-control-range"
+  },
   dateRange: {
     "ui:widget": "daterange",
     "ui:classNames": "form-control",

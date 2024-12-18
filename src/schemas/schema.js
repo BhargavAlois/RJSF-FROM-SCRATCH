@@ -38,6 +38,22 @@ export const schema = {
       title: "Preferences",
       default: ["Music", "Movies"],
     },
+    numberEnum: {
+      "type": "number",
+      "title": "Number enum",
+      "enum": [
+        1,
+        2,
+        3
+      ]
+    },
+    integerRange: {
+      "title": "Integer range",
+      "type": "integer",
+      "minimum": -50,
+      "maximum": 50,
+      "default": 0
+    },
     date: {
       type: "string",
       format: "date",
@@ -138,5 +154,7 @@ export const schema = {
     "time",
     "calendar",
     "phoneNumber",
+    "integerRange",
+    "numberEnum"
   ],
 };
