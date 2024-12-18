@@ -228,7 +228,7 @@ export default function MyForm(props) {
 
     const handleChange = (fieldName, value) => {
         // const options = uiSchema[fieldName]['ui:options'];
-
+        console.log("value : ", value);
         setFormData((prevData) => ({
             ...prevData,
             [fieldName]: value
