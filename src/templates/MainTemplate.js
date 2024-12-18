@@ -13,26 +13,36 @@ export default function MainTemplate(props) {
 
             <form
                 onSubmit={onSubmit}
-                className="d-flex flex-column bg-light align-items-center p-5 border border-4 rounded-4"
-                style={{ overflowX: 'auto' }}
+                className="d-flex flex-column align-items-center align-middle justify-content-center p-5 border border-dark border-opacity-25 rounded-4 shadow"
+                style={{ overflow: 'auto' }}
             >
                 {content}
-                <Button
-                    variant="contained"
+                <button
                     className="mt-3"
-                    color="primary"
                     type="submit"
                     style={{
-                        borderRadius: '7px',
-                        padding: '5px 20px',
-                        fontWeight: '500', 
-                        textTransform: 'none', 
-                        transition: 'all 0.3s ease', 
-                        backgroundColor: '#0045b5'
+                        border: '2px solid rgb(0, 79, 162)',
+                        borderRadius: '2px',
+                        padding: '6px',
+                        fontWeight: '600',
+                        fontSize: '16px',
+                        backgroundColor: 'rgb(0, 79, 162)',
+                        color: '#fff',
+                        transition: 'all 0.3s ease',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                     }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = '#0056b3'} 
-                    onMouseLeave={(e) => e.target.style.backgroundColor = '#1976d2'} 
-                >Submit</Button>
+                    onMouseEnter={(e) => {
+                        e.target.style.backgroundColor = '#0056b3';
+                        e.target.style.borderColor = '#0056b3';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = '#007bff';
+                        e.target.style.borderColor = '#007bff';
+                    }}
+                >
+                    Submit
+                </button>
             </form>
 
             <footer className="mt-4 text-center">
