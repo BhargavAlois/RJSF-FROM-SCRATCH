@@ -35,9 +35,11 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
     }
 
     if (field.type === 'object' && field.properties) {
+      console.log(field?.description);
       return (
-        <div key={fieldName}>
+        <div key={fieldName} className={`${layoutClass} ${colClass}`}>
           <h5 className="mt-3">{title || fieldName}</h5>
+          <p>{field?.description}</p>
           <div className="ms-3">
             {Object.keys(field.properties).map((nestedFieldName) => {
               const nestedField = field.properties[nestedFieldName];
