@@ -1,7 +1,6 @@
 import React from 'react'
 
 export default function CustomFileWidget(props) {
-  console.log(props.placeholder);
   return (
     <div className="row col-12">
     <label className="mt-2">{props.schema.title}</label>

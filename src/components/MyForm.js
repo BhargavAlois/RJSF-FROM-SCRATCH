@@ -7,7 +7,6 @@ export default function MyForm(props) {
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
     const { schema, uiSchema, onSubmit, onChange, onSuccess, onError, formData: prefilledFormData, errorSchema } = props;
-    console.log("onchange in myform ", onChange);
     const templates = props.templates;
     const templateName = props.uiSchema['ui:layout'];    
     const MyTemplate = templates[templateName];
@@ -35,7 +34,6 @@ export default function MyForm(props) {
       
               formattedData[fieldName] = format(parsedDate, formatString); 
             } catch (error) {
-              console.error(`Error parsing date for field ${fieldName}:`, error);
               formattedData[fieldName] = fieldValue; 
             }
           } else if (field.type === 'object' && fieldName === 'dateRange') {
@@ -65,13 +63,11 @@ export default function MyForm(props) {
       
           return format(parsedDate, formatString);
         } catch (error) {
-          console.error('Error formatting date:', error);
           return date;
         }
       };
 
     const validateForm = () => {
-        console.log("Validate : ", formData);
         const formErrors = {};
 
         schema.required?.forEach((field) => {
@@ -101,11 +97,9 @@ export default function MyForm(props) {
                 if (!regex.test(formData[fieldName])) {
                     if (!formErrors[fieldName]) formErrors[fieldName] = [];
                     formErrors[fieldName].push(`${fieldTitle} is not in the correct format`);
-                    console.log("Error schema : ", errorSchema[fieldName]?.errors);
                     if (errorSchema[fieldName]?.errors)
                     {
                         Object.keys(errorSchema[fieldName]?.errors).map((err) => {
-                            console.log("hhhhhhhhh: ", errorSchema[fieldName]?.errors[err]);
                             formErrors[fieldName].push(errorSchema[fieldName]?.errors[err]);
                         })
                     }
@@ -175,7 +169,6 @@ export default function MyForm(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("handle submit called myform");
         if (onSubmit) {
             if (validateForm()) {
                 if (onSuccess) {
@@ -231,11 +224,9 @@ export default function MyForm(props) {
     useEffect(() => {
         const initialFormData = convertToSchemaFormat(schema, prefilledData);
         setFormData(initialFormData);
-        console.log("Initial data : ", initialFormData);
     }, [prefilledData, schema]);
 
     const handleChange = (fieldName, value) => {
-        console.log("Handle change called");
         // const options = uiSchema[fieldName]['ui:options'];
 
         setFormData((prevData) => ({

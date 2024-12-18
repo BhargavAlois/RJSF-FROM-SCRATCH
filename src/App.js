@@ -91,6 +91,7 @@ function App() {
   }
 
   const handleFormSubmit = (data) => {
+    console.log(data);
     setFormData(data);
   };
 
