@@ -3,8 +3,6 @@ import MyForm from './components/MyForm';
 import { schema } from './schemas/schema';
 import { uiSchema } from './schemas/uiSchema';
 import { errorSchema } from './schemas/errorSchema';
-// import { schema } from './schemas/altSchema';
-// import { uiSchema } from './schemas/altUiSchema';
 import MainTemplate from './templates/MainTemplate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
@@ -91,8 +89,8 @@ function App() {
   }
 
   const handleFormSubmit = (data) => {
-    console.log(data);
     setFormData(data);
+    console.log("data : ", data);
   };
 
   const handleOnError = () => {
