@@ -1,0 +1,70 @@
+.queryBuilder {
+
+    select {
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    button {
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: white;
+    }
+
+    input {
+        padding: 5px;
+        border-radius: 5px;
+        outline: none;
+        border: 1px solid;
+    }
+
+    >.ruleGroup {
+        background-color: white !important;
+    }
+
+    .ruleGroup {
+        background-color: rgb(255, 81, 0, 0.05);
+
+        div {
+            width: auto !important; //This will affect branches positioning
+        }
+
+        .ruleGroup-header {
+            .ruleGroup-addRule {
+                background-color: $theme-color ;
+                border: 1px solid $theme-color;
+            }
+
+            .ruleGroup-addGroup {
+                background-color: $fig-11;
+                border: 1px solid $fig-11;
+            }
+
+            .ruleGroup-cloneGroup {
+                background-color: $fig-11 ;
+                border: 1px solid $fig-11;
+            }
+
+            .ruleGroup-remove {
+                background-color: $fig-11 ;
+                border: 1px solid $fig-11;
+            }
+        }
+
+        .ruleGroup-body {
+            .ant-input {
+                width: auto;
+            }
+
+            .rule-cloneRule {
+                background-color: $fig-11 ;
+                border: 1px solid $fig-11;
+            }
+
+            .rule-remove {
+                background-color: $fig-11 ;
+                border: 1px solid $fig-11;
+            }
+        }
+    }
+}

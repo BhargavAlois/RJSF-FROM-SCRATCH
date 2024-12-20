@@ -1,0 +1,167 @@
+.buzz-card {
+  height: 18rem;
+  overflow: hidden !important;
+
+  .card-body {
+    height: 2rem;
+  }
+
+  .card-img-top {
+    height: 16rem;
+    object-fit: fill;
+    object-position: center;
+    overflow: hidden !important;
+  }
+
+  &:hover {
+    cursor: pointer;
+    scale: 1.01;
+  }
+
+  &:active {
+    cursor: grab;
+    scale: 0.95;
+  }
+}
+
+.buzz-buttons {
+  // position: sticky;
+  // top: 0;
+  // right: 0;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: right;
+  z-index: $app-buzz-btns-zindex !important;
+}
+
+.buzz-pop-footer {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: right;
+}
+
+.buzz-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  margin: 1.5rem 0;
+
+  .buzzBtn {
+    border: none;
+  }
+
+  .buzzBtnActive {
+    box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 7px;
+  }
+}
+
+.buzz-checkbox {
+  display: inline;
+  width: 20px;
+}
+
+@include scrollbar('.buzz-container', 3px);
+
+.buzz-container {
+  position: relative;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.buzz-pdf-platform {
+  // background: url("https://bucket.akinolabs.com/assist/table-background-q22vfr8c6qhf27om.webp") no-repeat center center;
+  background-color: #3f3f3f;
+  background-size: cover;
+  height: 100%;
+  width: 80vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .prevBtn {
+    border-radius: 2px;
+    position: absolute;
+    top: 50;
+    left: 0;
+    z-index: 2;
+    color: white;
+    padding: 15px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(208, 208, 208);
+      color: black;
+      scale: 1.1;
+    }
+
+    &:active {
+      scale: 0.9;
+    }
+  }
+
+  .nxtBtn {
+    border-radius: 2px;
+    position: absolute;
+    top: 50;
+    right: 0;
+    z-index: 2;
+    color: white;
+    padding: 15px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(208, 208, 208);
+      color: black;
+      scale: 1.1;
+    }
+
+    &:active {
+      scale: 0.9;
+    }
+  }
+
+  .pageCount {
+    position: absolute;
+    z-index: 2;
+    margin-left: 5px;
+    bottom: 0;
+    left: 50;
+    color: white;
+    font-size: small;
+  }
+
+  .tool-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    gap: 10px;
+    z-index: 2;
+    color: white;
+    margin-right: 10px;
+
+    >* {
+      cursor: pointer;
+    }
+
+    /* Target direct children and change color to offwhite on hover */
+    >*:hover {
+      color: #dcdcdc; // Light gray color for better contrast (you can adjust this)
+      background-color: rgba(255, 255, 255, 0.2); // Slightly transparent background for effect
+      transition: color 0.3s ease, background-color 0.3s ease; // Smooth transition
+      scale: 1.1;
+    }
+
+    >*:active {
+      scale: 0.9;
+    }
+
+  }
+}

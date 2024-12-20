@@ -1,0 +1,113 @@
+.collapse-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  transition: width 0.1s ease-in;
+  background-color: $white;
+
+  &.w-10 {
+    width: 10% !important;
+  }
+
+  &.w-8 {
+    width: 8% !important;
+  }
+  
+  &.w-12{
+    width: 12% !important;
+  }
+
+  &.w-15 {
+    width: 15% !important;
+  }
+
+  &.w-20 {
+    width: 20% !important;
+  }
+
+  &.w-30 {
+    width: 30% !important;
+  }
+
+  .content {
+    overflow: auto;
+    width: 100%;
+    height: 92%;
+    transition: transform 0.1s linear;
+
+    .card {
+      overflow: hidden;
+      border: none;
+      border-radius: 20px !important;
+
+      .card-body {
+        height: 100%;
+        width: auto;
+        border: none;
+      }
+
+      .sm-Gladiators {
+        background: url('/public/assets/Gladiators.webp') no-repeat center / contain;
+      }
+
+      .sm-Samurai {
+        background: url('/public/assets/Samurai.webp') no-repeat center / contain;
+
+      }
+
+      .sm-Immortals {
+        background: url('/public/assets/Immortals.webp') no-repeat center / contain;
+
+      }
+
+      .sm-Knights {
+        background: url('/public/assets/Knights.webp') no-repeat center / contain;
+
+      }
+
+      .lg-Gladiators {
+        background: url('/public/assets/Gladiators\ 1.svg') no-repeat center / contain;
+      }
+
+      .lg-Samurai {
+        background: url('/public/assets/Samurai\ 1.svg') no-repeat center / contain;
+
+      }
+
+      .lg-Immortals {
+        background: url('/public/assets/Immortals\ 1.svg') no-repeat center / contain;
+
+      }
+
+      .lg-Knights {
+        background: url('/public/assets/Knights\ 1.svg') no-repeat center / contain;
+
+      }
+    }
+  }
+
+  .collapse-btn {
+    cursor: pointer;
+    width: 100%;
+    height: 8%;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // @media (max-width: 600px) {
+  //   &.w-10 {
+  //     width: 20%;
+  //   }
+
+  //   &.w-25 {
+  //     width: 50%;
+  //   }
+  // }
+}

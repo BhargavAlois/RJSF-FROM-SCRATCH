@@ -1,0 +1,55 @@
+.carousel-with-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .carousel {
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+        cursor: '-webkit-grab';
+
+    }
+
+    .carousel-item-list {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        // gap: 2rem;
+        height: 250px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 145, 78, 0.5) rgba(0, 0, 0, 0.1);
+
+
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 145, 78, 0.7);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .img-card {
+            margin: 0rem 1rem;
+            box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+             &:active{
+                transform: scale(0.95);
+             }
+        }
+
+        .active {
+            box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px !important;
+            transform: scale(1.05);
+        }
+    }
+
+
+}

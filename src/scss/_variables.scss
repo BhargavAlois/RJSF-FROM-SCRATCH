@@ -1,0 +1,158 @@
+// Variable overrides
+//
+// If you want to customize your project please add your variables below.
+$theme-color: #FF5100 !default;
+$white: white !default;
+$black: black !default;
+$fig-1: #3b3d3c !default;
+$fig-2: #175572 !default;
+$fig-3: #678498 !default;
+$fig-4: #26c6ea !default;
+$fig-5: #b5d3d1 !default;
+$fig-6: #ff914e !default;
+$fig-7: #e2ccbf !default;
+$fig-8: #daeff4 !default;
+$fig-9:#080A0C !default;
+$fig-10:#b8b8b8 !default;
+$fig-11:#606060 !default;
+$fig-12:#FF0000 !default;
+$border-radius-lg: 10px !default;
+$spacer: 1rem !default;
+$text-mute: #678498 !default;
+$text-normal: #3b3d3c !default;
+$shadow-black: #00000066 !default;
+$shadow-blue: #26c6ea !default;
+$form-box-color: #678498 !default;
+$form-box-border: #ced4da !default;
+$header-color: #3b3d3c !default;
+$search-placeholder: #a4b3ba !default;
+
+$app-content-width: 94% !default;
+$secondary-sidebar-width: 5% !default;
+
+$form-box-color: #678498 !default;
+$form-box-border: #ced4da !default;
+$c1: #5856d6;
+$c2: #0d6efd;
+
+
+$enable-deprecation-messages: false !default;
+$font-weight-extra-light: 100 !default;
+// MIXINS
+// Define generic styles using mixins
+$body-bg-gradient: linear-gradient(255.43deg, #ff914e 6.44%, #a4b3ba 53.98%, #b5d3d1 105.65%);
+
+//APP Z-INDEXES
+$app-base-zindex: 10 !default;
+$app-header-zindex: $app-base-zindex + 20 !default;
+$app-container-zindex: $app-base-zindex + 10 !default;
+$app-buzz-btns-zindex: $app-container-zindex + 1 !default;
+$app-secondary-sidebar-zindex : $app-container-zindex + 10 !default;
+$app-chatbot-zindex: $app-container-zindex + 10 !default;
+$app-popup-zindex: $app-chatbot-zindex + 10 !default;
+$app-toast-zindex: $app-popup-zindex + 10 !default;
+
+@mixin clearfix {
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin flex($justify: center, $align: center, $dir: column, $gap: 1rem, $wrap: wrap) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $dir;
+  gap: $gap;
+  flex-wrap: $wrap;
+}
+
+@mixin transition($property, $duration, $timing) {
+  transition: $property $duration $timing;
+}
+
+@mixin responsive-font($min-size, $max-size, $min-width, $max-width) {
+  font-size: $min-size;
+
+  @media screen and (min-width: $min-width) {
+    font-size: calc(#{$min-size} + #{$max-size - $min-size} * (100vw - #{$min-width}) / #{$max-width - $min-width});
+  }
+
+  @media screen and (min-width: $max-width) {
+    font-size: $max-size;
+  }
+}
+
+// Define header styles using mixins
+@mixin header-style($fSize: 2.5rem, $fWeight: 600, $color: $fig-1, $case: capitalize) {
+  font-size: $fSize;
+  font-weight: $fWeight;
+  color: $color;
+  text-transform: $case;
+  font-family: 'Open Sans', sans-serif !important;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
+}
+
+// Define subheader styles using mixins
+@mixin subheader-style($font-size, $font-weight, $color, $margin) {
+  font-size: $font-size;
+  font-weight: $font-weight;
+  color: $color;
+  margin: $margin;
+}
+
+@mixin scrollbar($class, $width: 5px) {
+  #{$class}::-webkit-scrollbar {
+      width: $width !important;
+  }
+
+  #{$class}::-webkit-scrollbar-track {
+      background: #34495e !important;
+  }
+
+  #{$class}::-webkit-scrollbar-thumb {
+      background-color: #f85402 !important;
+
+      &:hover {
+          background-color: #f8793a !important;
+      }
+
+      &:active {
+          background-color: #f8793a !important;
+      }
+  }
+}
+
+@mixin width-helper($value, $unit) {
+  width: #{$value}#{$unit} !important;
+}
+
+@mixin height-helper($value, $unit) {
+  height: #{$value}#{$unit} !important;
+}
+
+// Apply the mixins to your elements
+header {
+  @include header-style(2rem, 700, #333, 1rem 0);
+}
+
+.subheader {
+  @include subheader-style(1.5rem, 600, #555, 0.5rem 0);
+}
+
+.btn-container {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(3, auto);
+  gap: 1em;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+button {
+  @include transition(all, 0.3s, ease-in-out);
+}

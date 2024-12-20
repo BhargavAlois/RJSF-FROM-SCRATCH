@@ -1,0 +1,34 @@
+.image_preview_navbar {
+  width: 60vw;
+  height: 60px;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 7px;
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999999;
+
+  svg {
+    width: 27px;
+    height: 27px;
+    cursor: pointer;
+  }
+  .aux {
+    width: 8rem;
+  }
+
+  .navigator {
+    svg {
+      color: $c1;
+      transition: 0.5s all ease;
+      &:hover {
+        color: $c2;
+      }
+    }
+  }
+
+  .action_panel {
+  }
+}

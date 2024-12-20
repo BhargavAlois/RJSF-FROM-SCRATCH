@@ -1,0 +1,73 @@
+.magazine {
+  margin: 0 auto;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  // overflow: hidden;
+  /* pointer-events: none !important;
+    transform: none !important;
+    transition: none !important; */
+}
+#flipbook {
+  width: 800px; /* Width of the book */
+  height: 500px; /* Height of the book */
+  margin: 0 auto; /* Center the book */
+}
+
+#flipbook .page {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+#flipbook .page img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#flipbook .hard {
+  background: #ccc;
+  color: #333;
+  font-weight: bold;
+}
+
+#flipbook .page-wrapper {
+  perspective: 2000px;
+}
+
+.react-transform-component {
+  height: 100% !important;
+}
+
+.magazine .shadow {
+  display: none;
+  /* cursor: zoom-in; */
+  /* height: 100%; */
+  /* transition-duration: 4.5s !important; */
+  /* pointer-events: none !important; */
+}
+
+/* .page:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+  img:hover {
+    transform: none !important;
+    transition: none !important;
+    pointer-events: none;
+  }
+  img {
+    pointer-events: none;
+  }
+  
+   */
+.magazine .page img {
+  max-width: 100%;
+  height: 100%;
+  pointer-events: none !important;
+}

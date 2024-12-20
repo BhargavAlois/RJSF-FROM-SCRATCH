@@ -1,0 +1,84 @@
+.mainHead {
+  height: 12%;
+  display: flex;
+  align-items: center;
+  background-color: #ff5510;
+}
+
+.mainHead p {
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.font-medium {
+  font-size: 0.9rem;
+}
+
+.userbackground {
+  background-color: #f75d45;
+}
+
+.userbackground2 {
+  background-color: #f77e07;
+}
+
+.textColor {
+  color: #195572;
+}
+
+.scrollable {
+  height: 80%;
+  overflow-y: auto;
+  // margin-top: 10px;
+  // margin-bottom: 10px;
+}
+
+@include scrollbar('.scrollable',2px);
+
+.fc-toolbar h2 {
+  color: #ff5510;
+  font-weight: bold;
+}
+
+.fc .fc-button {
+  color: #ff5510 !important;
+  background-color: #ffffff00 !important;
+  border: none;
+}
+
+.fc .fc-button.fc-prev {
+  background-color: transparent !important;
+}
+
+.fc .fc-button.fc-next {
+  background-color: transparent !important;
+}
+
+.fc .fc-button:hover {
+  background-color: #ff5510 !important;
+  color: white !important;
+}
+
+.fc .fc-daygrid-day-number {
+  text-decoration: none;
+  color: #909090;
+  font-weight: bold;
+}
+
+.fc .fc-daygrid-day-number:hover {
+  color: #909090;
+}
+
+.fc .fc-col-header-cell a {
+  text-decoration: none;
+  color: #ff5510;
+}
+
+.fc .fc-col-header-cell a:hover {
+  color: #ff7710;
+}
+
+.fc-direction-ltr {
+  height: 85vh;
+}

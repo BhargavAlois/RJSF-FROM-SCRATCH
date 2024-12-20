@@ -1,0 +1,189 @@
+.chatbot-container {
+  z-index: $app-chatbot-zindex !important;
+
+  .chatbot-outer {
+    z-index: $app-chatbot-zindex !important;
+    display: flex;
+    width: 350px;
+    height: 440px;
+    flex-direction: column;
+    position: fixed;
+    bottom: 6rem;
+    left: 4rem;
+    justify-content: end;
+    backdrop-filter: blur(4px) saturate(200%);
+    background-color: $white;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+    box-shadow: 1px 1px 11px 0px rgba(69, 68, 68, 0.75);
+
+    .selection-msg {
+      margin: 0;
+      background: $fig-8;
+      border-radius: 10px;
+      border: 1px solid 5px;
+    }
+
+    .form-check {
+      label {
+        padding-right: 1rem;
+      }
+    }
+
+    .form-check input[type='radio']:checked {
+      background-color: #000;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .form-check input[type='radio'] {
+      border: 2px solid black;
+    }
+
+    .chatbot-input {
+      border-radius: 5px;
+      border: 1px solid $text-normal;
+      color: $text-normal;
+      width: 80%;
+      height: 40px;
+    }
+
+    .send-chat-btn {
+      background: $white;
+      width: 17%;
+      height: 40px;
+      // border: 1px solid $text-normal;
+      border-radius: 5px;
+
+      .icon {
+        fill: $theme-color;
+        width: 30px;
+      }
+    }
+
+    .typing-loader {
+      margin: 10px 10px;
+      width: 6px;
+      height: 6px;
+      background: #daeff4;
+      border-radius: 10px;
+      border: 1px solid #b5d3d1;
+      -webkit-animation: line 1s linear infinite alternate;
+      -moz-animation: line 1s linear infinite alternate;
+      animation: line 1s linear infinite alternate;
+    }
+
+    @-webkit-keyframes line {
+      0% {
+        background-color: rgba(0, 0, 0, 1);
+        box-shadow:
+          12px 0px 0px 0px rgba(0, 0, 0, 0.2),
+          24px 0px 0px 0px rgba(0, 0, 0, 0.2);
+      }
+
+      25% {
+        background-color: rgba(0, 0, 0, 0.4);
+        box-shadow:
+          12px 0px 0px 0px rgba(0, 0, 0, 2),
+          24px 0px 0px 0px rgba(0, 0, 0, 0.2);
+      }
+
+      75% {
+        background-color: rgba(0, 0, 0, 0.4);
+        box-shadow:
+          12px 0px 0px 0px rgba(0, 0, 0, 0.2),
+          24px 0px 0px 0px rgba(0, 0, 0, 2);
+      }
+    }
+
+    @-moz-keyframes line {
+      0% {
+        background-color: rgba(0, 0, 0, 1);
+        box-shadow:
+          12px 0px 0px 0px rgba(0, 0, 0, 0.2),
+          24px 0px 0px 0px rgba(0, 0, 0, 0.2);
+      }
+
+      25% {
+        background-color: rgba(0, 0, 0, 0.4);
+        box-shadow:
+          12px 0px 0px 0px rgba(0, 0, 0, 2),
+          24px 0px 0px 0px rgba(0, 0, 0, 0.2);
+      }
+
+      75% {
+        background-color: rgba(0, 0, 0, 0.4);
+        box-shadow:
+          12px 0px 0px 0px rgba(0, 0, 0, 0.2),
+          24px 0px 0px 0px rgba(0, 0, 0, 2);
+      }
+    }
+
+    @keyframes line {
+      0% {
+        background-color: rgba(0, 0, 0, 1);
+        box-shadow:
+          12px 0px 0px 0px rgba(0, 0, 0, 0.2),
+          24px 0px 0px 0px rgba(0, 0, 0, 0.2);
+      }
+
+      25% {
+        background-color: rgba(0, 0, 0, 0.4);
+        box-shadow:
+          12px 0px 0px 0px rgba(0, 0, 0, 2),
+          24px 0px 0px 0px rgba(0, 0, 0, 0.2);
+      }
+
+      75% {
+        background-color: rgba(0, 0, 0, 0.4);
+        box-shadow:
+          12px 0px 0px 0px rgba(0, 0, 0, 0.2),
+          24px 0px 0px 0px rgba(0, 0, 0, 2);
+      }
+    }
+  }
+
+  .chatbot-btn {
+    z-index: $app-chatbot-zindex !important;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 2rem;
+    left: 1.5rem;
+
+    background: $theme-color;
+    display: grid;
+    place-items: center;
+
+    .icon {
+      width: 30px;
+      height: 30px;
+      fill: $white;
+    }
+  }
+
+  // Hide the default radio button
+  input[type='radio'] {
+    display: none;
+  }
+
+  // Add styles for the label to resemble the appearance of nav pills
+  .nav-pills label {
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 0;
+  }
+
+  // Default background color for the labels
+  .nav-pills label {
+    background-color: $form-box-border;
+  }
+
+  // Active background color for the selected option
+  .nav-pills label.active {
+    background-color: $theme-color;
+    color: $white;
+    font-weight: bold;
+  }
+}

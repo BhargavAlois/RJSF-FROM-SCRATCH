@@ -1,0 +1,108 @@
+.login-main-container {
+  height: 100vh;
+
+  .login-container {
+    height: 100%;
+    width: 100%;
+    // border: 1px solid black;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+
+    .leftContainer {
+      @media (max-width: 880px) {
+        display: none;
+      }
+    }
+
+    .loginSpiral {
+      height: 190px;
+      width: 190px;
+      position: absolute;
+      top: 8%;
+      left: 2%;
+      padding: 0;
+
+      @media (max-width: 1120px) {
+        height: 190px;
+        width: 190px;
+        left: 0;
+        padding: 0;
+      }
+    }
+
+    .customLoginHead {
+      padding: 0 50px;
+      top: 35%;
+
+      @media (max-width: 1120px) {
+        padding: 0 20px;
+      }
+    }
+
+    .customLoginHead p:nth-of-type(1) {
+      font-size: 50px;
+
+      @media (max-width: 1120px) {
+        font-size: 40px;
+      }
+    }
+
+    .customLoginHead p:nth-of-type(2) {
+      font-size: 22px;
+
+      @media (max-width: 1120px) {
+        font-size: 16px;
+      }
+    }
+
+    .customLoginRights {
+      padding: 0 50px;
+      top: 95%;
+
+      @media (max-width: 1120px) {
+        padding: 0 20px;
+      }
+    }
+    .customLoginRights p {
+      font-size: 12px;
+    }
+
+    .loginBg {
+      height: 100vh;
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .row {
+      height: 100%;
+
+      .ess_form_container {
+        padding: 20px;
+        height: 100%;
+      }
+    }
+  }
+
+  .formClass {
+    border-radius: 20px !important;
+    box-shadow: 0px 0px 8px 0px #ff510026;
+    border: 1px solid #ff510059;
+    box-shadow: 200px%202.9px%203.5px%200px%20#FF510008;
+    box-shadow: 200px%205.6px%206.6px%200px%20#FF51000D;
+    box-shadow: 200px%2010px%2011.7px%200px%20#FF51000D;
+    box-shadow: 200px%2018.7px%2022px%200px%20#FF51000D;
+    box-shadow: 200px%2044.8px%2052.7px%200px%20#FF51000D;
+  }
+
+  .eyeIcon {
+    top: 15.2rem;
+    right: 2rem;
+    cursor: pointer;
+
+    @media (max-width: 750px) {
+      top: 15.1rem;
+    }
+  }
+}

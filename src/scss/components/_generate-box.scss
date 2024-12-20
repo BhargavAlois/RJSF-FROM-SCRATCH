@@ -1,0 +1,54 @@
+.generate-box {
+  color: $form-box-color;
+  display: flex;
+  padding: 0 12px;
+  justify-content: center;
+  border-radius: $border-radius-lg;
+  padding-bottom: $spacer * 4;
+  margin-top: $spacer * 3;
+  font-weight: $font-weight-extra-light;
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+
+  .generateBox-button {
+    border: none;
+    padding: 5px 2px;
+    margin: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    background-color: transparent;
+    outline: none;
+  }
+  .generateBox-button:hover {
+    outline: 1px solid $theme-color;
+  }
+
+  & .recruit-icons {
+    color: $theme-color;
+    margin: 5px 10px;
+    font-size: $font-size-lg;
+    height: 25px;
+    width: 25px;
+  }
+
+  & .icon-holder {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  .toasts-container {
+    z-index: 1;
+    right: 0 !important;
+  }
+}
+
+.generate-box::-webkit-scrollbar {
+  width: 0px !important;
+  /* Removes the scrollbar in WebKit-based browsers */
+  height: 0px !important;
+  /* Removes the horizontal scrollbar */
+}

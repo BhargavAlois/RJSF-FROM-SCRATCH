@@ -1,0 +1,43 @@
+.userProfileDropdown {
+  display: flex;
+  align-items: center;
+  padding-right: 15px;
+
+  .flag {
+    width: 30px;
+    height: 20px;
+    border-radius: 3px;
+    margin-right: 1.5rem;
+    cursor: pointer;
+  }
+
+  .profile-info {
+    display: flex;
+    align-items: center;
+    margin-right: 1.2rem;
+  }
+
+  .dropdown {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .text-orange {
+      color: $theme-color;
+      margin-right: 1.6rem;
+      font-size: small;
+      font-weight: 500;
+    }
+
+    .dropdown-toggle {
+      display: inline-flex;
+      align-items: center;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0%;
+      color: $fig-3;
+      font-weight: 900;
+    }
+  }
+}

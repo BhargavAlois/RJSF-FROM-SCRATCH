@@ -1,0 +1,218 @@
+.ess_form_container {
+  background: #fff;
+  padding: 20px;
+
+  h3 {
+    color: $fig-2;
+    font-weight: 500;
+  }
+
+  .error-detail{
+    li{
+      font-size: smaller;
+      font-style: italic;
+      text-decoration: underline;
+    }
+  }
+
+  #root {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 3;
+
+    .custom-textarea textarea {
+      width: 100%;
+      /* Adjust this value as needed */
+      /* For specific cols, you can calculate and set a fixed width */
+      /* For example: width: calc(11ch + 1rem); */
+    }
+  }
+
+  .rjsf {
+    div:has(> label) {
+      margin-bottom: 17px;
+
+      label {
+        margin-bottom: 6px;
+        font-weight: bold;
+        font-size: 1rem;
+        color: #4a5568;
+        transition: color 0.3s;
+      }
+
+      input,
+      textarea {
+        font-size: 0.8rem;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        transition:
+          border-color 0.3s,
+          box-shadow 0.3s;
+
+        &:focus {
+          border-color: #007bff;
+          box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+          outline: none;
+        }
+
+        &:hover {
+          border-color: #999;
+        }
+      }
+    }
+
+    > div:last-child {
+      //Assuming last child will be a Submit button always. (And if it's not then it's your problem not my fault)
+      padding: 10px;
+      text-align: center;
+
+      button {
+        color: #fff;
+        background: $theme-color;
+        border: $theme-color;
+      }
+    }
+
+    .glyphicon {
+      position: relative;
+      top: 1px;
+      display: inline-block;
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: 400;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    header {
+      @include header-style(1.5rem);
+    }
+
+    form {
+      label {
+        font-size: 0.85rem;
+        color: $fig-2;
+        font-weight: 500;
+      }
+      input,
+      select,
+      textarea {
+        outline: none;
+        box-shadow: none;
+        font-size: 0.85rem;
+
+        &:focus {
+          border-color: $fig-4;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+  .outerbox {
+    color: $fig-2 !important;
+    border: 2px solid $fig-5;
+    border-radius: $border-radius-lg;
+    padding: $spacer;
+    height: fit-content;
+    margin-top: 10px;
+    div {
+      margin: 0 auto;
+      width: 100%;
+    }
+  }
+
+  legend {
+    text-align: center;
+  }
+
+  .single-user-profile img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    // margin-top: 370px;
+    // margin-left: 20px;
+  }
+
+  // .single-user{
+  //   display: flex;
+  //   fle
+  // }
+
+  .back-btn {
+    max-height: 50px;
+    max-width: 50px;
+  }
+
+  //this css is for fileuploadwithpreview
+  .single-user-file-upload {
+    display: none;
+  }
+
+  .single-user-profile {
+    height: 125px;
+    width: 125px;
+    border-radius: 50%;
+    border: 1px solid rgb(56, 56, 56);
+    object-fit: cover !important;
+  }
+
+  .single-user-profile:hover {
+    cursor: pointer;
+  }
+
+  .loginTemplate {
+    width: 502px;
+    height: 692px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // border: 2px solid red;
+    padding: 5%;
+  }
+
+  .termsAndPrivacy {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: center;
+    padding: 0 20px;
+
+    @media (max-width: 1141px) {
+      padding: 0;
+    }
+  }
+
+  .forgetPassword {
+    font-size: 12px;
+    line-height: 21px;
+    padding: 0;
+  }
+
+  .primary {
+    color: #ff5100;
+  }
+
+  .primary label {
+    color: #ff5100 !important;
+  }
+
+  .secondary {
+    color: #757575;
+  }
+
+  .secondary label {
+    color: #757575 !important;
+  }
+
+  .title-m label {
+    margin-bottom: 3px !important;
+    font-size: 14px !important;
+  }
+
+  .title-m input {
+    padding: 7px !important;
+  }
+}

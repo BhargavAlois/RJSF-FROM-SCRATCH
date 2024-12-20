@@ -1,0 +1,106 @@
+.email-card {
+    width: auto;
+    height: auto;
+    max-width: 800px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    margin: 20px auto;
+    box-sizing: border-box;
+    color: #333;
+    line-height: 1.6;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .email-card-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #FF5100;
+        margin-bottom: 10px;
+    }
+
+    .email-card-info {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .email-card-info::-webkit-scrollbar {
+        width: 3px !important;
+    }
+
+    .email-card-info::-webkit-scrollbar-track {
+        background: #34495e !important;
+    }
+
+    .email-card-info::-webkit-scrollbar-thumb {
+        background-color: #f85402 !important;
+
+        &:hover {
+            background-color: #f8793a !important;
+        }
+
+        &:active {
+            background-color: #f8793a !important;
+        }
+    }
+
+    .email-card-message {
+        font-size: 16px;
+        color: #444;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .email-card-footer {
+        font-size: 12px;
+        color: #888;
+        border-top: 1px solid #ddd;
+        padding-top: 10px;
+        margin-top: 10px;
+    }
+
+    .email-card-info-block {
+        margin-bottom: 10px;
+        color: #FF5100;
+    }
+
+    .email-addresses {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .email-address {
+        background-color: #FF5100;
+        color: white;
+        border-radius: 20px;
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+}
+
+
+.email-card::-webkit-scrollbar {
+    width: 4px !important;
+}
+
+.email-card::-webkit-scrollbar-track {
+    background: #34495e !important;
+}
+
+.email-card::-webkit-scrollbar-thumb {
+    background-color: #f85402 !important;
+
+    &:hover {
+        background-color: #f8793a !important;
+    }
+
+    &:active {
+        background-color: #f8793a !important;
+    }
+}

@@ -6,148 +6,203 @@ import CustomContentTemplate from '../templates/CustomContentTemplate';
 export default function MyForm(props) {
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
-    const { schema, uiSchema, onSubmit, onChange, onSuccess, onError, formData: prefilledFormData, errorSchema } = props;
-    const templates = props.templates;
-    const templateName = props.uiSchema['ui:layout'];    
-    const MyTemplate = templates[templateName];
+    const { schema, onSubmit, onChange, onSuccess, onError, formData: prefilledFormData, errorSchema } = props;
+    const templates = props?.templates;
+    const templateName = props?.schema.uiSchema['ui:layout'];
+    var MyTemplate;
+    if (templateName) {
+        MyTemplate = templates[templateName];
+    }
     const prefilledData = prefilledFormData;
-    const fields = props.fields;
+    const fields = props?.fields;
+
+    function getDeepValue(obj, path) {
+        return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+    }
 
     const convertToSchemaFormat = (schema, data) => {
         const formattedData = {};
-      
-        Object.keys(schema.properties).forEach((fieldName) => {
-          const field = schema.properties[fieldName];
-          const fieldValue = data[fieldName];
-      
-          if (field.type === 'string' && field.format === 'date' && fieldValue) {
-            const formatString = field['ui:options']?.format || 'yyyy-MM-dd'; 
-      
-            try {
-              let parsedDate;
-              
-              if (fieldValue.includes('T') || fieldValue.includes('Z')) {
-                parsedDate = parseISO(fieldValue); 
-              } else {
-                parsedDate = new Date(fieldValue);
-              }
-      
-              formattedData[fieldName] = format(parsedDate, formatString); 
-            } catch (error) {
-              formattedData[fieldName] = fieldValue; 
+
+        Object.keys(schema.schema.properties).forEach((fieldName) => {
+            const field = schema.schema.properties[fieldName];
+            console.log("field : ", field);
+            const fieldValue = data[fieldName];
+
+            if (field.type === 'string' && field.format === 'date' && fieldValue) {
+                const formatString = field['ui:options']?.format || 'yyyy-MM-dd';
+
+                try {
+                    let parsedDate;
+
+                    if (fieldValue.includes('T') || fieldValue.includes('Z')) {
+                        parsedDate = parseISO(fieldValue);
+                    } else {
+                        parsedDate = new Date(fieldValue);
+                    }
+
+                    formattedData[fieldName] = format(parsedDate, formatString);
+                } catch (error) {
+                    formattedData[fieldName] = fieldValue;
+                }
+            } else if (field.type === 'object' && fieldName === 'dateRange') {
+                const dateRange = fieldValue || {};
+
+                formattedData[fieldName] = {
+                    startDate: dateRange.startDate ? formatDate(dateRange.startDate, field['ui:options']?.format) : '',
+                    endDate: dateRange.endDate ? formatDate(dateRange.endDate, field['ui:options']?.format) : '',
+                };
+            } else {
+                formattedData[fieldName] = fieldValue;
             }
-          } else if (field.type === 'object' && fieldName === 'dateRange') {
-            const dateRange = fieldValue || {};
-      
-            formattedData[fieldName] = {
-              startDate: dateRange.startDate ? formatDate(dateRange.startDate, field['ui:options']?.format) : '',
-              endDate: dateRange.endDate ? formatDate(dateRange.endDate, field['ui:options']?.format) : '',
-            };
-          } else {
-            formattedData[fieldName] = fieldValue;
-          }
         });
-      
+
         return formattedData;
-      };
-      
-      const formatDate = (date, formatString) => {
+    };
+
+    const formatDate = (date, formatString) => {
         try {
-          let parsedDate = date;
-      
-          if (typeof date === 'string' && (date.includes('T') || date.includes('Z'))) {
-            parsedDate = parseISO(date);
-          } else if (!(date instanceof Date)) {
-            parsedDate = new Date(date); 
-          }
-      
-          return format(parsedDate, formatString);
+            let parsedDate = date;
+
+            if (typeof date === 'string' && (date.includes('T') || date.includes('Z'))) {
+                parsedDate = parseISO(date);
+            } else if (!(date instanceof Date)) {
+                parsedDate = new Date(date);
+            }
+
+            return format(parsedDate, formatString);
         } catch (error) {
-          return date;
+            return date;
         }
-      };
+    };
+
+    const getRequiredFields = (schema) => {
+        let requiredFields = [];
+
+        // If the current schema has required fields, add them to the list
+        if (schema.properties.required) {
+            requiredFields = requiredFields.concat(schema.required);
+        }
+
+        // Recursively check for required fields in nested objects
+        Object.keys(schema.properties).forEach((fieldName) => {
+            const field = schema.properties[fieldName];
+            if (field.type === 'object' && field.properties) {
+                requiredFields = requiredFields.concat(getRequiredFields(field));
+            }
+        });
+
+        return requiredFields;
+    };
 
     const validateForm = () => {
         const formErrors = {};
 
-        schema.required?.forEach((field) => {
-            const fieldTitle = schema.properties[field]['title'];
-
-            if (field === 'dateRange') {
-                const { startDate, endDate } = formData.dateRange || {};
-                if (!startDate || !endDate) {
-                    if (!formErrors['dateRange']) formErrors['dateRange'] = [];
-                    formErrors['dateRange'].push("Start Date and End Date are required");
-                }
-            } else if (field === 'preferences' && (!formData[field] || formData[field].length === 0 || formData[field] === null)) {
-                if (!formErrors[field]) formErrors[field] = [];
-                formErrors[field].push(`${fieldTitle} is required`);
-            } else if (formData[field] === undefined || formData[field] === '') {
-                if (!formErrors[field]) formErrors[field] = [];
-                formErrors[field].push(`${fieldTitle} is required`);
+        // Helper function to validate a single field
+        const validateField = (fieldName, field, value, fieldTitle) => {
+            // Safeguard: Check if the field exists before accessing its properties
+            if (!field) {
+                console.warn(`Field '${fieldName}' is missing from the schema. Skipping validation.`);
+                return;
             }
-        });
 
-        Object.keys(formData).forEach((fieldName) => {
-            const field = schema.properties[fieldName];
-            const fieldTitle = field['title'];
+            console.log("fieldsssss ------------------", field);
+            // Check if the field is required and if it's missing from the form data
+            if (field.required && (value === undefined || value === "")) {
+                if (!formErrors[fieldName]) formErrors[fieldName] = [];
+                formErrors[fieldName].push(`${fieldTitle} is required`);
+            }
 
-            if (field?.pattern) {
+            // Check pattern for specific fields (e.g., email, phone)
+            if (field.pattern && value) {
                 const regex = new RegExp(field.pattern);
-                if (!regex.test(formData[fieldName])) {
+                if (!regex.test(value)) {
                     if (!formErrors[fieldName]) formErrors[fieldName] = [];
                     formErrors[fieldName].push(`${fieldTitle} is not in the correct format`);
-                    if (errorSchema[fieldName]?.errors)
-                    {
-                        Object.keys(errorSchema[fieldName]?.errors).map((err) => {
-                            formErrors[fieldName].push(errorSchema[fieldName]?.errors[err]);
-                        })
-                    }
                 }
             }
 
-            if (field?.minLength && formData[fieldName]?.length < field.minLength) {
+            // Check minLength
+            if (field.minLength && value?.length < field.minLength) {
                 if (!formErrors[fieldName]) formErrors[fieldName] = [];
                 formErrors[fieldName].push(`${fieldTitle} should have at least ${field.minLength} characters`);
             }
 
-            if (field?.maxLength && formData[fieldName]?.length > field.maxLength) {
+            // Check maxLength
+            if (field.maxLength && value?.length > field.maxLength) {
                 if (!formErrors[fieldName]) formErrors[fieldName] = [];
                 formErrors[fieldName].push(`${fieldTitle} should have no more than ${field.maxLength} characters`);
             }
 
-            if (field?.minimum && formData[fieldName] < field.minimum) {
+            // Check minimum value
+            if (field.minimum && value < field.minimum) {
                 if (!formErrors[fieldName]) formErrors[fieldName] = [];
                 formErrors[fieldName].push(`${fieldTitle} should be greater than or equal to ${field.minimum}`);
             }
 
-            if (field?.maximum && formData[fieldName] > field.maximum) {
+            // Check maximum value
+            if (field.maximum && value > field.maximum) {
                 if (!formErrors[fieldName]) formErrors[fieldName] = [];
                 formErrors[fieldName].push(`${fieldTitle} should be less than or equal to ${field.maximum}`);
             }
+        };
 
-            const uiOptions = uiSchema[fieldName]?.['ui:options'] || {};
+        // Get all the required fields from the schema (including nested objects)
+        const requiredFields = getRequiredFields(schema.schema);
 
-            if (uiOptions?.accept && formData[fieldName]) {
-                let fileType;
-            
-                const file = formData[fieldName];
-                
-                if (typeof file === "string" && file.startsWith("data:")) {
-                    const mimeTypeMatch = file.match(/data:(.*?);base64,/);
-                    if (mimeTypeMatch && mimeTypeMatch[1]) {
-                        fileType = mimeTypeMatch[1];
+        // Loop through all required fields and validate them
+        requiredFields.forEach((field) => {
+            const fieldSchema = schema.schema.properties[field];
+            const fieldTitle = fieldSchema?.title || field;
+            const value = getDeepValue(formData, field);
+
+            validateField(field, fieldSchema, value, fieldTitle);
+        });
+
+        // Loop through all fields in the form data for custom validations (non-required fields)
+        Object.keys(formData).forEach((fieldName) => {
+            const field = schema.schema.properties[fieldName];
+
+            // Check if field exists in the schema before continuing
+            if (!field) {
+                console.warn(`Field '${fieldName}' not found in schema. Skipping validation.`);
+                return;
+            }
+
+            const fieldTitle = field.title || fieldName;
+            const value = formData[fieldName];
+
+            // Validate nested objects recursively
+            if (field.type === 'object' && field.properties) {
+                Object.keys(field.properties).forEach((nestedFieldName) => {
+                    const nestedField = field.properties[nestedFieldName];
+                    const nestedValue = getDeepValue(formData, `${fieldName}.${nestedFieldName}`);
+                    const nestedFieldTitle = nestedField.title || nestedFieldName;
+                    validateField(`${fieldName}.${nestedFieldName}`, nestedField, nestedValue, nestedFieldTitle);
+                });
+            } else {
+                // Validate normal fields (strings, numbers, etc.)
+                validateField(fieldName, field, value, fieldTitle);
+
+                // File type validation for fields with 'ui:options.accept'
+                const uiOptions = schema.uiSchema[fieldName]?.['ui:options'] || {};
+                if (uiOptions.accept && value) {
+                    let fileType;
+
+                    if (typeof value === "string" && value.startsWith("data:")) {
+                        const mimeTypeMatch = value.match(/data:(.*?);base64,/);
+                        if (mimeTypeMatch && mimeTypeMatch[1]) {
+                            fileType = mimeTypeMatch[1];
+                        }
+                    } else if (value instanceof Blob) {
+                        fileType = value.type;
                     }
-                } else if (file instanceof Blob) {
-                    fileType = file.type;
-                }
-            
-                if (fileType && !uiOptions.accept.includes(fileType)) {
-                    if (!formErrors[fieldName]) formErrors[fieldName] = [];
-                    formErrors[fieldName].push(`${fieldTitle} must be one of the accepted file types: ${uiOptions.accept.join(', ')}`);
+
+                    if (fileType && !uiOptions.accept.includes(fileType)) {
+                        if (!formErrors[fieldName]) formErrors[fieldName] = [];
+                        formErrors[fieldName].push(`${fieldTitle} must be one of the accepted file types: ${uiOptions.accept.join(', ')}`);
+                    }
                 }
             }
-            
         });
 
         setErrors(formErrors);
@@ -184,8 +239,7 @@ export default function MyForm(props) {
                 if (onError) {
                     onError();
                 }
-                else
-                {
+                else {
                     defaultOnError();
                 }
                 return;
@@ -244,15 +298,15 @@ export default function MyForm(props) {
         }
     };
 
-    const content = <CustomContentTemplate formData={formData} schema={schema} uiSchema={uiSchema} errors={errors} fields={fields} onSubmit={handleSubmit} onError={onError} onChange={handleChange} onSuccess={onSuccess}/>;
+    const content = <CustomContentTemplate formData={formData} schema={schema} uiSchema={schema.uiSchema} errors={errors} fields={fields} onSubmit={handleSubmit} onError={onError} onChange={handleChange} onSuccess={onSuccess} />;
 
     if (!MyTemplate) {
-        return <DefaultTemplate schema={schema} uiSchema={uiSchema} content={content} onSubmit={handleSubmit}/>;
+        return <DefaultTemplate schema={schema} uiSchema={schema.uiSchema} content={content} onSubmit={handleSubmit} />;
     }
-    
+
     return (
         // <MyTemplate schema={schema} uiSchema={uiSchema} fields={fields} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors} />
-        <MyTemplate schema={schema} uiSchema={uiSchema} content={content} onSubmit={handleSubmit} />
+        <MyTemplate schema={schema} uiSchema={schema.uiSchema} content={content} onSubmit={handleSubmit} />
     );
 }
 

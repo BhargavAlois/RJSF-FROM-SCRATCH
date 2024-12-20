@@ -1,0 +1,74 @@
+.dashboard-post-card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 1% 0.5%;
+
+  .post-header {
+    padding: 0;
+
+    .post-creater {
+      text-transform: capitalize;
+      color: #ff6b27;
+      font-weight: 600;
+      font-size: large;
+    }
+
+    .post-time {
+      display: flex;
+      gap: 5px;
+      font-size: smaller;
+      font-weight: 400;
+      text-transform: lowercase;
+    }
+  }
+
+  .post-body {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border: none;
+    margin: 1% 0%;
+    padding: 0% 2%;
+
+    .post {
+      width: 100%;
+
+      img {
+        object-fit: contain;
+        object-position: center;
+      }
+    }
+  }
+
+  .icon-section {
+    padding: 1%;
+    border-top: 1px solid gainsboro;
+    border-bottom: 1px solid gainsboro;
+    display: flex;
+    flex-direction: row;
+    gap: 5%;
+
+    div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+
+      .count {
+        font-size: small;
+      }
+    }
+  }
+
+  .comment-section {
+    .comment-list {
+      max-height: 200px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    @include scrollbar(".comment-list")
+  }
+}

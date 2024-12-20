@@ -1,0 +1,12 @@
+.dragable-file-upload{
+    width: 100%;
+    border: 2px dashed $fig-10 ;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 0;
+    gap: 0.8rem;
+}

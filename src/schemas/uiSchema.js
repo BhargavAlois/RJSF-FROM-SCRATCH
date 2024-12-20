@@ -4,7 +4,7 @@ export const uiSchema = {
     "time", "datetime", "calendar", "year", "month", "day", "file",
     "actionButton", "myButton"
   ],
-  // "ui:layout": "myCustomRowTemplate",
+  "ui:layout": "myCustomRowTemplate",
   firstName: {
     "ui:widget": "text",
     "ui:classNames": "form-control",

@@ -1,0 +1,465 @@
+// Here you can add other styles
+.sidebar-nested-links {
+  font-size: smaller;
+  margin-left: 1rem;
+}
+
+.align-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.toast {
+  position: absolute;
+  top: 1%;
+  right: 0%;
+  z-index: $app-toast-zindex !important;
+
+  .success {
+    fill: rgb(4, 109, 4);
+  }
+
+  .warning {
+    fill: rgb(182, 133, 10);
+  }
+
+  .danger {
+    fill: rgb(139, 6, 6);
+  }
+
+  .error {
+    fill: rgb(139, 6, 6);
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.fs-sm {
+  font-size: small !important;
+}
+
+.fs-md {
+  font-size: medium !important;
+}
+
+.fs-smr {
+  font-size: smaller !important;
+}
+
+.date-range-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rounded-none {
+  border-radius: 0 !important;
+}
+
+.modal {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden !important;
+  -ms-overflow-style: none !important;
+  /* IE and Edge */
+  scrollbar-width: none !important;
+  /* Firefox */
+
+  .modal-dialog {
+    max-width: 90% !important;
+    max-height: 90% !important;
+    height: auto;
+    /* Optional: Set a height if needed */
+    overflow: hidden !important;
+
+    .modal-content {
+      max-width: 90vw !important;
+      max-height: 90vh !important;
+      overflow: hidden;
+
+      .modal-body {
+        overflow: auto;
+
+        img {
+          max-width: 90vw;
+          max-height: 90vh;
+        }
+      }
+
+      @include scrollbar('.modal-body');
+    }
+  }
+}
+
+.modal::-webkit-scrollbar {
+  width: 0px !important;
+  /* Removes the scrollbar in WebKit-based browsers */
+  height: 0px !important;
+  /* Removes the horizontal scrollbar */
+}
+
+.width500 {
+  width: 500px !important;
+}
+
+/* Container to align dropdown and menu to the far right */
+.dropdown-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Ensure dropdown menu is aligned with the dropdown toggle */
+.dropdown-menu-right {
+  position: absolute;
+  right: 0;
+  top: 100%;
+}
+
+.custom-dropdown-toggle {
+  border: none;
+  /* Remove border */
+  background: none;
+  /* Remove background */
+  outline: none;
+  /* Remove outline on focus */
+}
+
+.custom-dropdown-toggle::after {
+  display: none;
+  /* Hide the dropdown arrow */
+}
+
+.profile-pic {
+  height: 50px;
+  width: auto;
+}
+
+.employe-info {
+  width: 100%;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
+
+  .form-control {
+    appearance: auto;
+  }
+}
+
+.file-info strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  width: 30%;
+}
+
+#root_info {
+  display: grid;
+  grid-template-areas:
+    'title title title'
+    'profile-pic first-name emp-id'
+    'profile-pic last-name designation';
+  grid-template-columns: 1fr 1fr 1fr;
+  /* Three equal columns */
+  grid-template-rows: auto auto auto;
+  /* Adjust rows based on content */
+  gap: 10px;
+  /* Space between grid items */
+
+  
+}
+
+.form-control {
+  appearance: auto;
+}
+
+.title {
+  grid-area: title;
+  /* Title area */
+  font-weight: bold;
+  font-size: 1.5em;
+  /* Adjust title size */
+  margin-bottom: 20px;
+  /* Space below title */
+}
+
+.profile-pic {
+  grid-area: profile-pic;
+  /* Profile picture area */
+}
+
+.first-name {
+  grid-area: first-name;
+  /* First name area */
+}
+
+.emp-id {
+  grid-area: emp-id;
+  /* Employee ID area */
+}
+
+.last-name {
+  grid-area: last-name;
+  /* Last name area */
+}
+
+.designation {
+  grid-area: designation;
+  /* Designation area */
+}
+
+#root_personalInfo {
+  margin-top: 2%;
+  display: grid;
+  grid-template-areas:
+    'title1 title1 title1'
+    'gender date-of-birth blood-group'
+    'nationality phone-number address'
+    'residence residence1 residence2';
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 10px;
+}
+
+#root_personalInfo_title {
+  grid-area: title1;
+}
+
+.gender {
+  grid-area: gender;
+}
+
+.date-of-birth {
+  grid-area: date-of-birth;
+}
+
+.blood-group {
+  grid-area: blood-group;
+}
+
+.nationality {
+  grid-area: nationality;
+}
+
+.phone-number {
+  grid-area: phone-number;
+}
+
+.address {
+  grid-area: address;
+}
+
+.residence {
+  grid-area: residence;
+}
+
+#root_employeeinfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  grid-template-areas: 'title2 title2 title2';
+  gap: 10px;
+}
+
+#root_employeeinfo__title {
+  grid-area: title2;
+}
+
+.sidebar-bttom-item {
+  margin-top: auto;
+}
+
+.edit-profile fieldset {
+  display: grid !important;
+  grid-template-areas: 'profilePic profilePic profilePic';
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 10px;
+}
+
+.profilePic {
+  grid-area: profilePic;
+}
+
+.bulk-email fieldset {
+  display: block !important;
+}
+
+.bg-theme {
+  background-color: $theme-color;
+}
+
+.no-hover:hover {
+  background-color: inherit !important;
+  color: inherit !important;
+}
+
+#root__oneof_select {
+  width: fit-content;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+}
+
+#root__title {
+  font-size: 0px;
+  margin: 5px 0px;
+}
+
+div:has(> .LoginBtn) {
+  padding: 0 !important;
+  border-radius: 3px !important;
+  margin-top: 2rem;
+}
+
+.LoginBtn {
+  background-color: $theme-color;
+  border: none;
+  width: 100%;
+}
+
+.capitalize {
+  text-transform: capitalize !important;
+}
+
+.uppercase {
+  text-transform: uppercase !important;
+}
+
+.text-color-theme {
+  color: $theme-color !important;
+}
+
+.second-nav-item-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.second-nav-icon {
+  height: 30px;
+  width: 30px;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.second-nav-label {
+  font-size: 0.7rem;
+}
+
+.second-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.css-13cymwt-menu {
+  z-index: 1000 !important;
+}
+
+.smart-pagination {
+  .active {
+    .page-link {
+      background-color: $theme-color;
+      border-color: $theme-color;
+      color: white !important;
+    }
+  }
+
+  .page-item {
+    .page-link {
+      color: $theme-color;
+    }
+  }
+}
+
+.w-fit-content{
+  width: fit-content !important;
+}
+
+.w-80vw {
+  width: 80vw !important;
+}
+
+.min-w-25 {
+  min-width: 25% !important;
+  width: auto !important;
+}
+
+.min-w-50 {
+  min-width: 50% !important;
+  width: auto !important;
+}
+
+.max-w-75 {
+  max-width: 75% !important;
+  width: auto !important;
+}
+
+.max-h-25px {
+  max-height: 25px !important;
+}
+
+.h-0 {
+  height: 0 !important;
+}
+
+.w-0 {
+  width: 0 !important;
+}
+
+.w-100px {
+  width: 100px !important;
+}
+
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
+.dropdown-menu {
+  .dropdown-item {
+    &:active {
+      color: white !important;
+      background-color: $theme-color !important;
+    }
+  }
+}
+
+.rjsf-form-loader-wrapper {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 100% !important;
+  height: 200px !important;
+}
+
+.infinite-scroll-component::-webkit-scrollbar {
+  height: 0px !important;
+}
+
+//Theme based inputs
+input[type='checkbox']:checked {
+  background-color: $theme-color !important;
+  border-color: $theme-color !important;
+}
+
+.react-photo-album{
+  width: 100% !important;
+
+  .react-transform-component {
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

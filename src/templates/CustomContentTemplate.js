@@ -3,19 +3,21 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
 import { format } from 'date-fns';
-import '../index.css';
 
-const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onChange: handleChange, onSuccess, onError, onSubmit }) => {
+const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: handleChange, onSuccess, onError, onSubmit }) => {
   const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
 
-  const renderField = (field, fieldName, parentSchema = schema) => {
-    const { title, enum: enumValues } = field;
-    const uiField = uiSchema[fieldName] || {};
-    const widget = uiField["ui:widget"] || "text";
-    // const errorMessage = errors[fieldName];
-    const fieldClass = uiField["ui:classNames"];
-    // const errorMessageClass = uiField["ui:errorMessageClass"] || "text-danger";
+  function getDeepValue(obj, path) {
+    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+  }
+
+  const renderField = (field, fieldName, parentSchema = schema, fieldPath) => {
+    const { title, enum: enumValues, oneOf, format } = field;
+    fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName;
+    const uiField = getDeepValue(schema.uiSchema, fieldPath) || {};
+    const widget = uiField["ui:widget"] || format || "string";
+    const fieldClass = uiField["classNames"];
     const layoutClass = uiField["ui:layout"];
     const isColumnLayout = uiField["ui:layout"] === "column";
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
@@ -38,8 +40,10 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
           <div className="ms-3">
             {Object.keys(field.properties).map((nestedFieldName) => {
               const nestedField = field.properties[nestedFieldName];
-              const updatedParentSchema = parentSchema.properties[nestedFieldName];
-              return renderField(nestedField, `${nestedFieldName}`, updatedParentSchema);
+              const nestedUiField = uiField[nestedFieldName];
+              const updatedParentSchema = parentSchema.schema.properties[nestedFieldName];
+              const updatedParent = fieldName;
+              return renderField(nestedField, `${nestedFieldName}`, updatedParentSchema, fieldPath);
             })}
           </div>
         </div>
@@ -65,7 +69,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
           });
         }
 
-        const outputFormat = uiSchema[fieldName]?.['ui:options']?.['output'];
+        const outputFormat = schema.uiSchema[fieldName]?.['ui:options']?.['output'];
         if (outputFormat === 'base64') {
           convertToBase64(file);
         } else {
@@ -87,7 +91,6 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         try {
           formattedDate = format(date, formatString);
         } catch (error) {
-          console.error("Invalid date format", error);
           formattedDate = date.toISOString(); // Fallback to ISO format if formatting fails
         }
       } else {
@@ -116,7 +119,6 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
           handleChange(fieldName, file);
         }
       } else {
-        console.log("inside other type");
         handleChange(fieldName, e.target.value);
       }
     };
@@ -170,10 +172,10 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
               placeholder={uiField["ui:placeholder"]}
             >
               <option value="">Select an option</option>
-              {enumValues &&
-                enumValues.map((value, index) => (
-                  <option key={index} value={value}>
-                    {value}
+              {(oneOf || enumValues) &&
+                (oneOf || enumValues).map((value, index) => (
+                  <option key={index} value={value.const}>
+                    {value.title}
                   </option>
                 ))}
             </select>
@@ -227,8 +229,8 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
             <div
               className={`form-check ${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}
             >
-              {enumValues &&
-                enumValues.map((value, index) => (
+              {(oneOf || enumValues) &&
+                (oneOf || enumValues).map((value, index) => (
                   <div key={index} className="form-check">
                     <input
                       type="radio"
@@ -295,7 +297,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 minDate={new Date()}
                 endDate={formData.dateRange?.endDate}
                 placeholderText="Start Date"
-                dateFormat={uiSchema[fieldName]['ui:options']?.format}
+                dateFormat={schema.uiSchema[fieldName]['ui:options']?.format}
                 className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                 placeholder={uiField["ui:placeholder"]}
               />
@@ -307,7 +309,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
                 endDate={formData.dateRange?.endDate}
                 minDate={formData.dateRange?.startDate}
                 placeholderText="End Date"
-                dateFormat={uiSchema[fieldName]['ui:options']?.format}
+                dateFormat={schema.uiSchema[fieldName]['ui:options']?.format}
                 className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
                 placeholder={uiField["ui:placeholder"]}
               />
@@ -429,14 +431,15 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         );
 
       case "date":
+        const formatOfDate = schema.uiSchema[fieldName]?.['ui:options']?.format || "MM/dd/yyyy";
         return (
           <div key={fieldName} className={`${layoutClass} ${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
             <DatePicker
-              selected={formData[fieldName] || new Date()}
-              onChange={(date) => handleDateChange(fieldName, date, uiSchema[fieldName]['ui:options']?.format)}
+              selected={formData[fieldName]}
+              onChange={(date) => handleDateChange(fieldName, date, formatOfDate)}
               className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''} form-control`}
-              dateFormat={uiSchema[fieldName]['ui:options']?.format}
+              dateFormat={formatOfDate}
               placeholderText={uiField["ui:placeholder"]}
             />
             {errors[fieldName] && errors[fieldName].map((error, index) => (
@@ -605,7 +608,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
           </div>
         );
 
-      case "text":
+      case "string":
         return (
           <div key={fieldName} className={`${layoutClass} ${colClass} `}>
             <label className='form-label'>{title || fieldName}</label>
@@ -667,7 +670,7 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
         const CustomField = fields[widget];
         if (CustomField) {
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
-          return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={uiSchema[fieldName]["ui:placeholder"]} />;
+          return <CustomField schema={schema.schema.properties[fieldName]} uiSchema={schema.uiSchema[fieldName]} fieldName={fieldName} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={schema.uiSchema[fieldName]["ui:placeholder"]} />;
         }
         return <p className="text-danger">No such component available</p>;
     }
@@ -675,8 +678,8 @@ const CustomContentTemplate = ({ formData, uiSchema, schema, fields, errors, onC
 
   return (
     // <div className="row align-items-center justify-content-center">
-    Object.keys(schema.properties).map((fieldName) => {
-      const field = schema.properties[fieldName];
+    Object.keys(schema.schema.properties).map((fieldName) => {
+      const field = schema.schema.properties[fieldName];
       return renderField(field, fieldName);
     })
     // </div>

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import MyForm from './components/MyForm';
+// import { schema } from './schemas/altSchema4';
+// import { uiSchema } from './schemas/altUiSchema4';
 import { schema } from './schemas/schema';
-import { uiSchema } from './schemas/uiSchema';
 import { errorSchema } from './schemas/errorSchema';
 import MainTemplate from './templates/MainTemplate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
-import MyPasswordWidget from './fields/MyPasswordWidget';
-import CustomFileWidget from './fields/CustomFileWidget';
+// import './scss/style.scss'
+import * as customFields from './fields/fields';
 
 function App() {
   const [formData, setFormData] = useState({});
@@ -83,11 +84,23 @@ function App() {
     myCustomRowTemplate: MainTemplate
   }
 
-  const customFields = {
-    myPasswordWidget : MyPasswordWidget,
-    customFileWidget : CustomFileWidget
+  const fields = {
+    myPasswordWidget : customFields.MyPasswordWidget,
+    customFileWidget : customFields.CustomFileWidget
   }
 
+  // const customFields = {
+  //   BodyField: customFields.JoditEditorField,
+  //   AutoComplete: customFields.AutoCompleteField,
+  //   ProfileImage: customFields.FileUploadWithPreview,
+  //   link: customFields.DownloadWidget,
+  //   CustomFile: customFields.FileUpload,
+  //   newpoll: customFields.PollComponent,
+  //   CustomPassword: customFields.PasswordWidget,
+  //   CustomGenPassword: customFields.PasswordGenWidget,
+  //   DatePickerWidget: customFields.DatePickerWidget,
+  //   CustomPhoneNumber: customFields.PhoneNumberWidget,
+  // }
   const handleFormSubmit = (data) => {
     setFormData(data);
     console.log("data : ", data);
@@ -108,9 +121,9 @@ function App() {
   return (
       <div className="d-flex flex-column justify-content-center align-items-center align-middle">
         <MyForm schema={schema}
-          uiSchema={uiSchema}
+          // uiSchema={uiSchema}
           templates={templates}
-          fields={customFields}
+          fields={fields}
           onSubmit={handleFormSubmit}
           onChange={handleOnChange}
           onSuccess={handleOnSuccess}

@@ -1,0 +1,397 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+// If you want to override variables do it here
+@import 'variables';
+@import './components/components';
+
+// Import styles
+@import '@coreui/coreui/scss/coreui';
+@import '@coreui/chartjs/scss/coreui-chartjs';
+@import './components/pdfviewer.scss';
+@import './components/Login/login';
+@import './components/dashboard/dashboard.scss';
+@import './components/generate-box';
+@import './components/CarouselWithLayout/carousel_with_layout.scss';
+@import './views/memories';
+@import './views/incentive';
+@import './components/Widgets/eventTable.scss';
+@import './components/Buttons/buttons.scss';
+
+// Vendors
+@import 'vendors/simplebar';
+
+// Custom styles for this theme
+@import 'theme';
+
+// If you want to add custom CSS you can put it here
+@import 'custom';
+
+//Third-party/External packages styles
+@import "react-photo-album/rows.css";
+@import "react-photo-album/masonry.css";
+@import "yet-another-react-lightbox/styles.css";
+@import "yet-another-react-lightbox/styles.css";
+@import "yet-another-react-lightbox/plugins/counter.css";
+@import "yet-another-react-lightbox/plugins/thumbnails.css";
+@import "yet-another-react-lightbox/plugins/captions.css";
+@import "yet-another-react-lightbox/plugins/thumbnails.css";
+@import 'react-querybuilder/dist/query-builder.scss';
+
+// ALL REQUIRED SCROLLBAR
+@include scrollbar(".table-responsive");
+@include scrollbar(".fc-scroller", 2px);
+@include scrollbar('.list-unstyled', 2px);
+
+.yarl__container {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+.yarl__thumbnails_container{
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  .yarl__thumbnails_vignette{
+    background: none !important;
+  }
+}
+
+.card-body {
+  padding: 0;
+
+  div {
+    // width: 100%;
+
+    .fw-semibold {
+      width: 100%;
+    }
+  }
+}
+
+.onhover-ul{
+  &:hover{
+    text-decoration: underline !important;
+  }
+}
+
+.bg-app-theme {
+  background-color: $theme-color !important;
+}
+
+.list-unstyled {
+  max-height: 250px;
+  overflow: auto;
+}
+
+.clan-card-container {
+  display: flex;
+  gap: 0.7rem;
+  width: 100%;
+  height: 140px;
+  align-items: center;
+  padding: 10px;
+  transition: 0.4s;
+  cursor: pointer;
+  position: relative;
+
+  .position {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: black;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  .card-img {
+    height: 80px;
+    width: 80px;
+
+    img {
+      height: 80px;
+      width: 80px;
+    }
+  }
+
+  .card-text {
+    display: flex;
+    flex-direction: column;
+
+    .header {
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 700;
+      background: none;
+
+      --cui-header-padding-x: 0rem;
+      --cui-header-padding-y: 0rem;
+    }
+
+    .subheader {
+      font-size: 14px;
+    }
+  }
+}
+
+.clan-card-container:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.memories {
+  .file-container {
+    height: 10rem;
+    width: 10rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+
+    &:hover {
+      scale: 1.1;
+      cursor: pointer;
+
+      .filename {
+        text-decoration: underline;
+      }
+    }
+
+    &:active {
+      scale: 0.9;
+      cursor: grab;
+      cursor: -webkit-grab;
+      cursor: -moz-grab;
+      cursor: -ms-grab;
+      cursor: -o-grab;
+    }
+
+    .icon {
+      height: 60%;
+      width: 60%;
+    }
+
+    .filename {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      text-align: center;
+      text-transform: capitalize;
+    }
+  }
+}
+
+.card-selected {
+  box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+}
+
+.logo-card {
+  position: relative;
+  cursor: pointer;
+  background-color: white !important;
+
+  input[type='checkbox'] {
+    position: absolute;
+    right: 1.5rem;
+    top: 5%;
+  }
+
+  span {
+    position: absolute;
+    right: 3%;
+    top: 5%;
+  }
+}
+
+.bsk-download {
+  cursor: pointer;
+  position: absolute;
+  right: 1%;
+  top: 2%;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.alert-container {
+  position: fixed;
+  top: 10px;
+  right: 5px;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  min-height: 130px;
+  width: 300px;
+  background: $white;
+  padding: 15px 15px 0 15px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px -3px gray;
+
+  .upper-section {
+    display: flex;
+    justify-content: space-between;
+
+    p {
+      color: $black;
+      font-weight: bold;
+      margin-top: 3px;
+    }
+
+    .icon {
+      cursor: pointer;
+      fill: $black;
+    }
+  }
+
+  hr {
+    margin: 0;
+    border-top: 1px solid gray;
+  }
+
+  .lower-section {
+    display: flex;
+    align-items: center;
+    margin: auto 0;
+
+    p {
+      margin: 0 0 4px 0;
+    }
+  }
+}
+
+.nav-logo {
+  height: 60px;
+  width: 120px;
+  aspect-ratio: 16/9;
+  position: absolute;
+}
+
+.sidebar-navigation {
+  z-index: $app-container-zindex !important;
+}
+
+.sidebar-navigation:not(:hover) {
+  z-index: $app-container-zindex !important;
+
+  .nav-logo-toggle {
+    height: 35px;
+    width: 70px;
+    aspect-ratio: 16/9;
+    position: absolute;
+  }
+
+  // .nav-logo-parent {
+  //   padding-right: 10px;
+  // }
+}
+
+.app-header {
+  z-index: $app-header-zindex !important;
+}
+
+.avatar-img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.app-container {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  z-index: $app-container-zindex;
+
+  @include scrollbar(".app-content-wrapper", 0);
+
+  .app-content-wrapper {
+    width: $app-content-width;
+    height: calc(100vh - 115px);
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .app-body-container {
+      height: 100%;
+      width: 100%;
+      padding: 1%;
+      display: flex;
+      flex-direction: column;
+
+      .app-modal {
+        z-index: $app-popup-zindex !important;
+      }
+    }
+  }
+
+  .secondary-sidebar-navigation {
+    width: $secondary-sidebar-width;
+    z-index: $app-secondary-sidebar-zindex !important;
+    margin-top: 60px;
+    margin-bottom: 50px;
+    box-shadow:
+      rgba(0, 0, 0, 0.12) 0px 1px 3px,
+      rgba(0, 0, 0, 0.24) 0px 1px 2px;
+
+    .sidebar-nav {
+      gap: 20px !important;
+      padding-top: 30% !important;
+    }
+
+    .sidebar-nav::-webkit-scrollbar {
+      width: 2px;
+    }
+
+    .sidebar-nav::-webkit-scrollbar-track {
+      background: #34495e;
+    }
+
+    .sidebar-nav::-webkit-scrollbar-thumb {
+      background-color: #f85402;
+    }
+
+    .sidebar-nav::-webkit-scrollbar-thumb:hover {
+      background-color: #f8793a;
+    }
+
+    .sidebar-nav::-webkit-scrollbar-thumb:active {
+      background-color: #f8793a;
+    }
+
+    .sidebar-footer {
+      gap: 20px !important;
+    }
+  }
+}
+
+.nav-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-searchbar {
+  &.bg-dark {
+    border-radius: 14px;
+    .searchbar-input {
+      background-color: #343a40; // Darker input background
+      color: #f8f9fa; // Light text color
+
+      &::placeholder{
+        color: whitesmoke;
+      }
+    }
+
+    .iconBox {
+      background-color: #343a40; // Dark background for icon box
+      color: #f8f9fa; // Light icon color
+    }
+  }
+
+  .iconBox {
+    background-color: white; // Default icon background color
+    transition: border-color 0.2s ease;
+  }
+
+  .searchbar-input {
+    transition: border-color 0.2s ease;
+  }
+}
