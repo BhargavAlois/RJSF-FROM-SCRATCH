@@ -16,48 +16,138 @@ export default function MyForm(props) {
     const prefilledData = prefilledFormData;
     const fields = props?.fields;
 
-    function getDeepValue(obj, path) {
-        return path.split('.').reduce((acc, part) => acc && acc[part], obj);
-    }
+    // const convertToSchemaFormat = (schema, data) => {
+    //     const formattedData = {};
+    
+    //     // Check if schema and properties are defined
+    //     if (!schema.schema || !schema.schema.properties) {
+    //         console.error("Schema or schema.properties is undefined", schema);
+    //         return formattedData;  // Return an empty object if properties are missing
+    //     }
+    
+    //     // Loop through all properties in the schema
+    //     Object.keys(schema.schema.properties).forEach((fieldName) => {
+    //         const field = schema.schema.properties[fieldName];
+    //         const fieldValue = data ? data[fieldName] : undefined;
+    
+    //         console.log("field name : ", fieldName);
+            
+    //         // Check if field has properties and if it's an object type
+    //         if (field.type === 'string' && field.format === 'date' && fieldValue) {
+    //             const formatString = field['ui:options']?.format || 'yyyy-MM-dd';
+    //             try {
+    //                 let parsedDate;
+    
+    //                 // Handle ISO date strings or standard date formats
+    //                 if (fieldValue.includes('T') || fieldValue.includes('Z')) {
+    //                     parsedDate = parseISO(fieldValue);
+    //                 } else {
+    //                     parsedDate = new Date(fieldValue);
+    //                 }
+    
+    //                 formattedData[fieldName] = format(parsedDate, formatString);
+    //             } catch (error) {
+    //                 formattedData[fieldName] = fieldValue; // If there's an error, return the raw value
+    //             }
+    //         } 
+    //         // If the field is a nested object, handle it recursively
+    //         else if (field.type === 'object' && field.properties) {
+    //             formattedData[fieldName] = convertToSchemaFormat(field, fieldValue || {});  // Recursively handle nested objects
+    //         } 
+    //         // If it's a simple field, just assign the value
+    //         else {
+    //             formattedData[fieldName] = fieldValue;
+    //         }
+    //     });
+    
+    //     return formattedData;
+    // };
 
     const convertToSchemaFormat = (schema, data) => {
         const formattedData = {};
-
-        Object.keys(schema.schema.properties).forEach((fieldName) => {
-            const field = schema.schema.properties[fieldName];
-            console.log("field : ", field);
-            const fieldValue = data[fieldName];
-
-            if (field.type === 'string' && field.format === 'date' && fieldValue) {
-                const formatString = field['ui:options']?.format || 'yyyy-MM-dd';
-
-                try {
-                    let parsedDate;
-
-                    if (fieldValue.includes('T') || fieldValue.includes('Z')) {
-                        parsedDate = parseISO(fieldValue);
+    
+        // Helper function to process nested objects
+        const processProperties = (properties, data, parentPath = '') => {
+            Object.keys(properties).forEach((fieldName) => {
+                const fieldSchema = properties[fieldName];
+                const fieldValue = data?.[fieldName];
+                console.log("field Name : ", fieldName);
+                const fullPath = parentPath ? `${fieldName}` : fieldName;
+    
+                // If the field is an object, recursively process its properties
+                if (fieldSchema.type === 'object' && fieldSchema.properties) {
+                    formattedData[fullPath] = processProperties(fieldSchema.properties, fieldValue, fullPath);
+                } else {
+                    // For simple fields, handle specific cases (e.g., date formatting)
+                    if (fieldSchema.type === 'string' && fieldSchema.format === 'date' && fieldValue) {
+                        const formatString = fieldSchema['ui:options']?.format || 'yyyy-MM-dd';
+                        try {
+                            let parsedDate;
+                            if (fieldValue.includes('T') || fieldValue.includes('Z')) {
+                                parsedDate = parseISO(fieldValue);
+                            } else {
+                                parsedDate = new Date(fieldValue);
+                            }
+                            formattedData[fullPath] = format(parsedDate, formatString);
+                        } catch (error) {
+                            formattedData[fullPath] = fieldValue;
+                        }
+                    } else if (fieldName === 'dateRange' && fieldSchema.type === 'object') {
+                        // Handle special case for `dateRange` object field
+                        const dateRange = fieldValue || {};
+                        formattedData[fullPath] = {
+                            startDate: dateRange.startDate ? formatDate(dateRange.startDate, fieldSchema['ui:options']?.format) : '',
+                            endDate: dateRange.endDate ? formatDate(dateRange.endDate, fieldSchema['ui:options']?.format) : '',
+                        };
                     } else {
-                        parsedDate = new Date(fieldValue);
+                        // Default handling for other fields
+                        formattedData[fullPath] = fieldValue;
                     }
-
-                    formattedData[fieldName] = format(parsedDate, formatString);
-                } catch (error) {
-                    formattedData[fieldName] = fieldValue;
                 }
-            } else if (field.type === 'object' && fieldName === 'dateRange') {
-                const dateRange = fieldValue || {};
-
-                formattedData[fieldName] = {
-                    startDate: dateRange.startDate ? formatDate(dateRange.startDate, field['ui:options']?.format) : '',
-                    endDate: dateRange.endDate ? formatDate(dateRange.endDate, field['ui:options']?.format) : '',
-                };
-            } else {
-                formattedData[fieldName] = fieldValue;
-            }
-        });
-
-        return formattedData;
+            });
+            return formattedData;
+        };
+    
+        // Process the top-level schema properties
+        return processProperties(schema.schema.properties, data);
     };
+
+
+
+    //Code working with displaying errors
+    // const convertToSchemaFormat = (schema, data) => {
+    //     const formattedData = {};
+
+    //     Object.keys(schema.schema.properties).forEach((fieldName) => {
+    //         const field = schema.schema.properties[fieldName];
+    //         const fieldValue = data[fieldName];
+
+    //         if (field.type === 'string' && field.format === 'date' && fieldValue) {
+    //             const formatString = field['ui:options']?.format || 'yyyy-MM-dd';
+    //             try {
+    //                 let parsedDate;
+    //                 if (fieldValue.includes('T') || fieldValue.includes('Z')) {
+    //                     parsedDate = parseISO(fieldValue);
+    //                 } else {
+    //                     parsedDate = new Date(fieldValue);
+    //                 }
+    //                 formattedData[fieldName] = format(parsedDate, formatString);
+    //             } catch (error) {
+    //                 formattedData[fieldName] = fieldValue;
+    //             }
+    //         } else if (field.type === 'object' && fieldName === 'dateRange') {
+    //             const dateRange = fieldValue || {};
+    //             formattedData[fieldName] = {
+    //                 startDate: dateRange.startDate ? formatDate(dateRange.startDate, field['ui:options']?.format) : '',
+    //                 endDate: dateRange.endDate ? formatDate(dateRange.endDate, field['ui:options']?.format) : '',
+    //             };
+    //         } else {
+    //             formattedData[fieldName] = fieldValue;
+    //         }
+    //     });
+
+    //     return formattedData;
+    // };
 
     const formatDate = (date, formatString) => {
         try {
@@ -78,134 +168,138 @@ export default function MyForm(props) {
     const getRequiredFields = (schema) => {
         let requiredFields = [];
 
-        // If the current schema has required fields, add them to the list
-        if (schema.properties.required) {
+        if (schema.required) {
             requiredFields = requiredFields.concat(schema.required);
         }
 
-        // Recursively check for required fields in nested objects
         Object.keys(schema.properties).forEach((fieldName) => {
             const field = schema.properties[fieldName];
+
             if (field.type === 'object' && field.properties) {
-                requiredFields = requiredFields.concat(getRequiredFields(field));
+                // console.log("Searching required field : ", field);
+                const nestedRequiredFields = getRequiredFields(field);
+                nestedRequiredFields.forEach(nestedField => {
+                    // console.log("nested : ", nestedField);
+                    // console.log("fieldName : ", fieldName);
+                    requiredFields.push(`${nestedField}`);
+                });
             }
         });
 
+        // console.log("Required fields : ", requiredFields);
         return requiredFields;
     };
 
+    let fieldPath;
+
     const validateForm = () => {
+        // console.log("form data : ", formData);
         const formErrors = {};
 
-        // Helper function to validate a single field
-        const validateField = (fieldName, field, value, fieldTitle) => {
-            // Safeguard: Check if the field exists before accessing its properties
-            if (!field) {
-                console.warn(`Field '${fieldName}' is missing from the schema. Skipping validation.`);
-                return;
-            }
-
-            console.log("fieldsssss ------------------", field);
-            // Check if the field is required and if it's missing from the form data
-            if (field.required && (value === undefined || value === "")) {
-                if (!formErrors[fieldName]) formErrors[fieldName] = [];
-                formErrors[fieldName].push(`${fieldTitle} is required`);
-            }
-
-            // Check pattern for specific fields (e.g., email, phone)
-            if (field.pattern && value) {
-                const regex = new RegExp(field.pattern);
-                if (!regex.test(value)) {
-                    if (!formErrors[fieldName]) formErrors[fieldName] = [];
-                    formErrors[fieldName].push(`${fieldTitle} is not in the correct format`);
+        // Helper function to validate single field
+        const validateField = (fieldName, fieldSchema, value, parentPath = '') => {
+            // console.log("value inside validate field : ", value);
+            const fullPath = parentPath ? `${parentPath}.${fieldName}` : fieldName;
+            const fieldTitle = fieldSchema.title || fieldName;
+            const errors = [];
+            // console.log("fieldSchema : ", fieldSchema);
+            // console.log(`field schema from validate fields for ${fieldName} : ${fieldSchema} and value is ${value}`);
+            // Required field validation
+            if (fieldSchema.required || (getRequiredFields(schema.schema) || []).includes(fieldName)) {
+                if (value === undefined || value === "" || value === null) {
+                    // console.log("Inside required validation");
+                    errors.push(`${fieldTitle} is required`);
                 }
             }
 
-            // Check minLength
-            if (field.minLength && value?.length < field.minLength) {
-                if (!formErrors[fieldName]) formErrors[fieldName] = [];
-                formErrors[fieldName].push(`${fieldTitle} should have at least ${field.minLength} characters`);
+            // String validations
+            if (value && fieldSchema.type === 'string') {
+                // Pattern validation
+                if (fieldSchema.pattern) {
+                    const regex = new RegExp(fieldSchema.pattern);
+                    if (!regex.test(value)) {
+                        errors.push(`${fieldTitle} is not in the correct format`);
+                    }
+                }
+
+                // Length validations
+                if (fieldSchema.minLength && value.length < fieldSchema.minLength) {
+                    console.log("Inside minlength");
+                    errors.push(`${fieldTitle} should have at least ${fieldSchema.minLength} characters`);
+                }
+                if (fieldSchema.maxLength && value.length > fieldSchema.maxLength) {
+                    errors.push(`${fieldTitle} should have no more than ${fieldSchema.maxLength} characters`);
+                }
+
+                // Date validation
+                if (fieldSchema.format === 'date' && value) {
+                    const date = new Date(value);
+                    if (isNaN(date.getTime())) {
+                        errors.push(`${fieldTitle} must be a valid date`);
+                    }
+                    if (fieldSchema.minimum && new Date(value) < new Date(fieldSchema.minimum)) {
+                        errors.push(`${fieldTitle} must be after ${fieldSchema.minimum}`);
+                    }
+                    if (fieldSchema.maximum && new Date(value) > new Date(fieldSchema.maximum)) {
+                        errors.push(`${fieldTitle} must be before ${fieldSchema.maximum}`);
+                    }
+                }
             }
 
-            // Check maxLength
-            if (field.maxLength && value?.length > field.maxLength) {
-                if (!formErrors[fieldName]) formErrors[fieldName] = [];
-                formErrors[fieldName].push(`${fieldTitle} should have no more than ${field.maxLength} characters`);
+            // Number validations
+            if (value && fieldSchema.type === 'number') {
+                if (fieldSchema.minimum !== undefined && value < fieldSchema.minimum) {
+                    errors.push(`${fieldTitle} must be greater than or equal to ${fieldSchema.minimum}`);
+                }
+                if (fieldSchema.maximum !== undefined && value > fieldSchema.maximum) {
+                    errors.push(`${fieldTitle} must be less than or equal to ${fieldSchema.maximum}`);
+                }
             }
 
-            // Check minimum value
-            if (field.minimum && value < field.minimum) {
-                if (!formErrors[fieldName]) formErrors[fieldName] = [];
-                formErrors[fieldName].push(`${fieldTitle} should be greater than or equal to ${field.minimum}`);
+            // File validations
+            const uiOptions = schema.uiSchema[fieldName]?.['ui:options'] || {};
+            if (uiOptions.accept && value) {
+                let fileType;
+                if (typeof value === "string" && value.startsWith("data:")) {
+                    const mimeTypeMatch = value.match(/data:(.*?);base64,/);
+                    fileType = mimeTypeMatch?.[1];
+                } else if (value instanceof Blob) {
+                    fileType = value.type;
+                }
+                if (fileType && !uiOptions.accept.includes(fileType)) {
+                    errors.push(`${fieldTitle} must be one of the accepted file types: ${uiOptions.accept.join(', ')}`);
+                }
             }
 
-            // Check maximum value
-            if (field.maximum && value > field.maximum) {
-                if (!formErrors[fieldName]) formErrors[fieldName] = [];
-                formErrors[fieldName].push(`${fieldTitle} should be less than or equal to ${field.maximum}`);
+            if (errors.length > 0) {
+                formErrors[fullPath] = errors;
             }
         };
 
-        // Get all the required fields from the schema (including nested objects)
-        const requiredFields = getRequiredFields(schema.schema);
-
-        // Loop through all required fields and validate them
-        requiredFields.forEach((field) => {
-            const fieldSchema = schema.schema.properties[field];
-            const fieldTitle = fieldSchema?.title || field;
-            const value = getDeepValue(formData, field);
-
-            validateField(field, fieldSchema, value, fieldTitle);
-        });
-
-        // Loop through all fields in the form data for custom validations (non-required fields)
-        Object.keys(formData).forEach((fieldName) => {
-            const field = schema.schema.properties[fieldName];
-
-            // Check if field exists in the schema before continuing
-            if (!field) {
-                console.warn(`Field '${fieldName}' not found in schema. Skipping validation.`);
-                return;
-            }
-
-            const fieldTitle = field.title || fieldName;
-            const value = formData[fieldName];
-
-            // Validate nested objects recursively
-            if (field.type === 'object' && field.properties) {
-                Object.keys(field.properties).forEach((nestedFieldName) => {
-                    const nestedField = field.properties[nestedFieldName];
-                    const nestedValue = getDeepValue(formData, `${fieldName}.${nestedFieldName}`);
-                    const nestedFieldTitle = nestedField.title || nestedFieldName;
-                    validateField(`${fieldName}.${nestedFieldName}`, nestedField, nestedValue, nestedFieldTitle);
-                });
-            } else {
-                // Validate normal fields (strings, numbers, etc.)
-                validateField(fieldName, field, value, fieldTitle);
-
-                // File type validation for fields with 'ui:options.accept'
-                const uiOptions = schema.uiSchema[fieldName]?.['ui:options'] || {};
-                if (uiOptions.accept && value) {
-                    let fileType;
-
-                    if (typeof value === "string" && value.startsWith("data:")) {
-                        const mimeTypeMatch = value.match(/data:(.*?);base64,/);
-                        if (mimeTypeMatch && mimeTypeMatch[1]) {
-                            fileType = mimeTypeMatch[1];
-                        }
-                    } else if (value instanceof Blob) {
-                        fileType = value.type;
-                    }
-
-                    if (fileType && !uiOptions.accept.includes(fileType)) {
-                        if (!formErrors[fieldName]) formErrors[fieldName] = [];
-                        formErrors[fieldName].push(`${fieldTitle} must be one of the accepted file types: ${uiOptions.accept.join(', ')}`);
-                    }
+        // Recursive function to handle nested objects
+        const validateObject = (objectSchema, parentPath = '') => {
+            Object.entries(objectSchema.properties || {}).forEach(([fieldName, fieldSchema]) => {
+                const value = formData?.[fieldName];
+                console.log(`${fieldName} : ${value}`);
+                // console.log("Data : ", data);
+                // console.log("fieldSchema : ", fieldSchema);
+                // console.log("value : ", value);
+                if (fieldSchema.type === 'object') {
+                    validateObject(fieldSchema, value, parentPath ? `${parentPath}.${fieldName}` : fieldName);
+                } else {
+                    validateField(fieldName, fieldSchema, value, parentPath);
                 }
-            }
-        });
+            });
+        };
 
+        // Start validation from root schema
+        validateObject(schema.schema);
+
+        // Set errors in state
         setErrors(formErrors);
+
+        console.log("form errors : ", formErrors);
+
         return Object.keys(formErrors).length === 0;
     };
 
@@ -224,6 +318,7 @@ export default function MyForm(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log("Form data : ", formData);
         if (onSubmit) {
             if (validateForm()) {
                 if (onSuccess) {
@@ -276,13 +371,14 @@ export default function MyForm(props) {
     // };
 
     useEffect(() => {
-        const initialFormData = convertToSchemaFormat(schema, prefilledData);
-        setFormData(initialFormData);
+        if (prefilledData) {
+            const initialFormData = convertToSchemaFormat(schema, prefilledData);
+            setFormData(initialFormData);
+        }
     }, [prefilledData, schema]);
 
     const handleChange = (fieldName, value) => {
         // const options = uiSchema[fieldName]['ui:options'];
-        console.log("value : ", value);
         setFormData((prevData) => ({
             ...prevData,
             [fieldName]: value

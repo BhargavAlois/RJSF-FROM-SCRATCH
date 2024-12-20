@@ -98,7 +98,7 @@ export const schema = {
       },
       employeeinfo: {
         type: 'object',
-        title: 'Employee Information',
+        title: 'Employee Information', 
         properties: {
           email: {
             type: 'string',
@@ -174,14 +174,14 @@ export const schema = {
         },
       },
       firstName: {
-        "ui:layout": "row",
-        "ui:col": 6,
+        // "ui:layout": "row",
+        // "ui:col": 6,
         classNames: 'first-name',
         'ui:placeholder': 'Enter First Name',
       },
       lastName: {
-        "ui:layout": "row",
-        "ui:col": 6,
+        // "ui:layout": "row",
+        // "ui:col": 6,
         classNames: 'last-name',
         'ui:placeholder': 'Enter Last Name',
       },

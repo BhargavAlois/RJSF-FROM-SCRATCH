@@ -40,9 +40,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
           <div className="ms-3">
             {Object.keys(field.properties).map((nestedFieldName) => {
               const nestedField = field.properties[nestedFieldName];
-              const nestedUiField = uiField[nestedFieldName];
               const updatedParentSchema = parentSchema.schema.properties[nestedFieldName];
-              const updatedParent = fieldName;
               return renderField(nestedField, `${nestedFieldName}`, updatedParentSchema, fieldPath);
             })}
           </div>
