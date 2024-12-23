@@ -65,6 +65,12 @@ export default function MyForm(props) {
 
     const convertToSchemaFormat = (schema, data) => {
         const formattedData = {};
+
+        Object.keys(prefilledData).map((fieldName) => {
+            formData[fieldName] = prefilledData[fieldName];
+        })
+
+        console.log("Form data : ", formData);
     
         // Helper function to process nested objects
         const processProperties = (properties, data, parentPath = '') => {
@@ -105,6 +111,8 @@ export default function MyForm(props) {
                     }
                 }
             });
+
+            console.log("Formatted data : ", formattedData);
             return formattedData;
         };
     
@@ -186,7 +194,7 @@ export default function MyForm(props) {
             }
         });
 
-        // console.log("Required fields : ", requiredFields);
+        console.log("Required fields : ", requiredFields);
         return requiredFields;
     };
 
@@ -370,12 +378,12 @@ export default function MyForm(props) {
     //     return initialData;
     // };
 
-    useEffect(() => {
-        if (prefilledData) {
-            const initialFormData = convertToSchemaFormat(schema, prefilledData);
-            setFormData(initialFormData);
-        }
-    }, [prefilledData, schema]);
+    // useEffect(() => {
+    //     if (prefilledData) {
+    //         const initialFormData = convertToSchemaFormat(schema, prefilledData);
+    //         setFormData(initialFormData);
+    //     }
+    // }, [prefilledData, schema]);
 
     const handleChange = (fieldName, value) => {
         // const options = uiSchema[fieldName]['ui:options'];

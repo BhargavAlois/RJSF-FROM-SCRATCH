@@ -15,7 +15,7 @@ export const schema = {
           },
           firstName: {
             type: 'string',
-            title: 'First Name',
+            title: 'First Name'
           },
           lastName: {
             type: 'string',
