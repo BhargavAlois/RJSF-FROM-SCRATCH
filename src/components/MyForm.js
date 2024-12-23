@@ -70,7 +70,7 @@ export default function MyForm(props) {
             formData[fieldName] = prefilledData[fieldName];
         })
 
-        console.log("Form data : ", formData);
+        // console.log("Form data : ", formData);
     
         // Helper function to process nested objects
         const processProperties = (properties, data, parentPath = '') => {
