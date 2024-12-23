@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 const PhoneNumberWidget = (props) => {
     const { value = '', onChange } = props;
 
+    console.log("value received : ", value);
     const countryOptions = [
         { code: "+91", label: "🇮🇳 (+91)" },
         { code: "+1", label: "🇺🇸 (+1)" },
@@ -23,13 +24,15 @@ const PhoneNumberWidget = (props) => {
     const phoneNumber = isCountryCodeValid ? valueParts.slice(1).join(' ') : value;
 
     const handleCountryChange = (e) => {
-        const newCountryCode = e.target.value;
-        onChange(`${newCountryCode} ${phoneNumber}`);
+        // const newCountryCode = e.target.value;
+        // onChange(`${newCountryCode} ${phoneNumber}`);
+        onChange(e, 'countryCode');
     };
 
     const handlePhoneNumberChange = (e) => {
-        const newPhoneNumber = e.target.value;
-        onChange(`${countryCode} ${newPhoneNumber}`);
+        // const newPhoneNumber = e.target.value;
+        // onChange(`${countryCode} ${newPhoneNumber}`);
+        onChange(e, 'phoneNumber');
     };
 
     return (
@@ -39,8 +42,9 @@ const PhoneNumberWidget = (props) => {
                 <select
                     className="form-select"
                     style={{ maxWidth: "4.4rem" }}
+                    name="countryCode"
                     value={countryCode}
-                    onChange={handleCountryChange}
+                    onChange={onChange}
                 >
                     {countryOptions.map((option) => (
                         <option key={option.code} value={option.code}>
@@ -53,12 +57,16 @@ const PhoneNumberWidget = (props) => {
                     type="tel"
                     className="form-control"
                     placeholder="Enter phone number"
+                    name="phoneNumber"
                     value={phoneNumber}
-                    onChange={handlePhoneNumberChange}
+                    onChange={onChange}
                     pattern="^[0-9]{6,14}$"
                     title="Enter a valid phone number"
                 />
             </div>
+            {props.errors && props.errors.map((error, index) => (
+              <p key={index} className='text-danger m-0'>{error}</p>
+            ))}
         </div>
     );
 };

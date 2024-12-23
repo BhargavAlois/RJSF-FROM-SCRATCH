@@ -24,7 +24,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
           if (key === currentFieldName) {
             return value;
           }
-          
+
           // If the field is an object, recurse into it
           if (value.type === 'object') {
             const result = findField(value, currentFieldName);
@@ -32,11 +32,11 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
           }
         }
       }
-      
+
       // If the field is not found, return null
       return null;
     };
-    
+
     return findField(schema, fieldName);
   };
 
@@ -44,10 +44,11 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
     // console.log("field : ", field);
     const { title, enum: enumValues, oneOf, format } = field;
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName;
+    console.log("fieldName : ", fieldName);
     const uiField = getDeepValue(schema.uiSchema, fieldPath) || {};
     // console.log(`uiField for : ${fieldName}`, uiField);
+    const fieldClass = `form-control ${uiField["classNames"]}`;
     const widget = uiField["ui:widget"] || format || "string";
-    const fieldClass = uiField["classNames"];
     const layoutClass = uiField["ui:layout"];
     const isColumnLayout = uiField["ui:layout"] === "column";
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
@@ -135,23 +136,30 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
     };
 
     const handleDefaultFieldChange = (e) => {
-      const inputType = e.target?.files ? 'file' : 'other';
-
-      console.log("input type : ", inputType);
-
-      if (inputType === 'file') {
-        const outputFormat = uiField['ui:options']['output'];
-        const file = e.target.files[0];
-
-        if (outputFormat === 'base64') {
-          convertToBase64(file);
+      // if (f_name) {
+      //   console.log("inside f_name");
+      //   if (e.target?.files) {
+      //     handleChange(f_name, e.target.files[0]);
+      //   }
+      //   else {
+      //     handleChange(f_name, e.target.value);
+      //   }
+      // }
+        const inputType = e.target?.files ? 'file' : 'other';
+        console.log("input type : ", inputType);
+        if (inputType === 'file') {
+          const outputFormat = uiField['ui:options']['output'];
+          const file = e.target.files[0];
+          if (outputFormat === 'base64') {
+            convertToBase64(file);
+          } else {
+            handleChange(fieldName, file);
+          }
         } else {
-          handleChange(fieldName, file);
+          console.log("Inside default handle");
+          handleChange(e.target.name, e.target.value);
         }
-      } else {
-        console.log("Inside default handle");
-        handleChange(fieldName, e.target.value);
-      }
+      
     };
 
     switch (widget) {
@@ -701,7 +709,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
         const CustomField = fields[widget];
         if (CustomField) {
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
-          return <CustomField schema={field} uiSchema={uiField} fieldName={fieldName} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={schema.uiSchema[fieldName]?.["ui:placeholder"]} />;
+          return <CustomField schema={field} uiSchema={uiField} fieldName={fieldName} value={formData[fieldName]} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={uiField?.["ui:placeholder"]} />;
         }
         return <p className="text-danger">No such component available</p>;
     }

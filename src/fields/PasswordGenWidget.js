@@ -49,7 +49,8 @@ const PasswordGenWidget = (props) => {
     }, [props.value]);
 
     return (
-        <div className="input-group mb-3">
+        <div>
+        <div className="input-group">
             <input
                 type={showPassword ? 'text' : 'password'}
                 className="form-control"
@@ -84,6 +85,10 @@ const PasswordGenWidget = (props) => {
             >
                 Generate
             </button>
+        </div>
+        {props.errors && props.errors.map((error, index) => (
+              <p key={index} className='text-danger m-0'>{error}</p>
+            ))}
         </div>
     );
 };

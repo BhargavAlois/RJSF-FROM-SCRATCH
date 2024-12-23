@@ -75,7 +75,9 @@ const DatePickerWidget = (props) => {
         min={minDate}
         max={maxDate}
       />
-      {error && <div className="error" style={{ color: 'red' }}>{error}</div>}
+      {props.errors && props.errors.map((error, index) => (
+              <p key={index} className='text-danger m-0'>{error}</p>
+            ))}
     </div>
   );
 };

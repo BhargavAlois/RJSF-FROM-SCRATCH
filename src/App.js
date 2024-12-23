@@ -100,8 +100,8 @@ function App() {
     CustomGenPassword: customFields.PasswordGenWidget,
     DatePickerWidget: customFields.DatePickerWidget,
     CustomPhoneNumber: customFields.PhoneNumberWidget,
-    //   myPasswordWidget : customFields.MyPasswordWidget,
-  //   customFileWidget : customFields.CustomFileWidget
+    myPasswordWidget : customFields.MyPasswordWidget,
+    customFileWidget : customFields.CustomFileWidget
   }
   const handleFormSubmit = (data) => {
     setFormData(data);

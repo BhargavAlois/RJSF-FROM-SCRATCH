@@ -304,9 +304,6 @@ class EssSubmitHandlers {
 
       }
 
-
-
-
       const res = await store.dispatch(uploadBuzz(db_upload))
       // .then(()=>{dispatch(getLatestBuzz({page}))});
       return db_upload

@@ -8,11 +8,11 @@ export const schema = {
         type: 'object',
         title: 'Employee Information',
         properties: {
-          profilePic: {
-            type: 'string',
-            format: 'data-url',
-            title: 'Profile Image Upload',
-          },
+          // profilePic: {
+          //   type: 'string',
+          //   format: 'data-url',
+          //   title: 'Profile Image Upload',
+          // },
           firstName: {
             type: 'string',
             title: 'First Name'
@@ -204,7 +204,7 @@ export const schema = {
       },
       dateOfBirth: {
         classNames: 'date-of-birth',
-        // 'ui:widget': 'DatePickerWidget',
+        'ui:widget': 'DatePickerWidget',
       },
       bloodGroup: {
         classNames: 'blood-group',

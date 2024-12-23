@@ -9,6 +9,7 @@ const PasswordWidget = (props) => {
     };
 
     const handleChange = (e) => {
+        console.log("password widget : ", e);
         props.onChange(e.target.value);
     };
 
@@ -19,7 +20,7 @@ const PasswordWidget = (props) => {
                 className="form-control"
                 placeholder={props.placeholder}
                 value={props.value || ''}
-                onChange={props.onChange}
+                onChange={handleChange}
                 onBlur={props.onBlur}
                 onFocus={props.onFocus}
                 required={props.required}
@@ -37,6 +38,9 @@ const PasswordWidget = (props) => {
             >
                 {showPassword ? <FaEye /> : <FaRegEyeSlash />}
             </button>
+            {props.errors && props.errors.map((error, index) => (
+              <p key={index} className='text-danger m-0'>{error}</p>
+            ))}
         </div>
     );
 };

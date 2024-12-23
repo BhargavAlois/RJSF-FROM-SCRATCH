@@ -31,7 +31,6 @@ const FileUpload = ({ ...props }) => {
             setFiles(prev => [...prev, fileBlob[0]]);
         }
 
-
         // if (props.value === undefined && files.length > 0) {
         //     fileInputRef.current.value = '';
         //     setFiles([]);
