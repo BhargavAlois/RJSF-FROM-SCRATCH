@@ -227,6 +227,7 @@ export const schema = {
       residence: {
         classNames: 'residence',
         'ui:placeholder': 'Select Residence',
+        'ui:widget': 'select'
       },
     },
     employeeinfo: {

@@ -1,0 +1,2 @@
+department,shift,shiftTiming,empId,email,password,firstName,lastName,dateOfJoining,dateOfBirth,designation,gender,bloodGroup,nationality,phoneNumber,address,confirmationDate,employmentType,reportTo
+Labs,IND,9:00 AM - 6:00 PM,12345,sample.user@aloisstaffing.com,password1,Sample ,User,02/12/2023,10/12/2003,Corporate Recruiter,male,O+,indian,9845786523,9th Floor C-square,05/05/2024,Full time,kartik.gupta@aloissolutions.com

@@ -7,7 +7,7 @@ import { errorSchema } from './schemas/errorSchema';
 import MainTemplate from './templates/MainTemplate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
-// import './scss/style.scss'
+import './scss/style.scss';
 import * as customFields from './fields/fields';
 
 function App() {
@@ -84,23 +84,25 @@ function App() {
     myCustomRowTemplate: MainTemplate
   }
 
-  const fields = {
-    myPasswordWidget : customFields.MyPasswordWidget,
-    customFileWidget : customFields.CustomFileWidget
-  }
-
-  // const customFields = {
-  //   BodyField: customFields.JoditEditorField,
-  //   AutoComplete: customFields.AutoCompleteField,
-  //   ProfileImage: customFields.FileUploadWithPreview,
-  //   link: customFields.DownloadWidget,
-  //   CustomFile: customFields.FileUpload,
-  //   newpoll: customFields.PollComponent,
-  //   CustomPassword: customFields.PasswordWidget,
-  //   CustomGenPassword: customFields.PasswordGenWidget,
-  //   DatePickerWidget: customFields.DatePickerWidget,
-  //   CustomPhoneNumber: customFields.PhoneNumberWidget,
+  // const fields = {
+  //   myPasswordWidget : customFields.MyPasswordWidget,
+  //   customFileWidget : customFields.CustomFileWidget
   // }
+
+  const fields = {
+    BodyField: customFields.JoditEditorField,
+    AutoComplete: customFields.AutoCompleteField,
+    ProfileImage: customFields.FileUploadWithPreview,
+    link: customFields.DownloadWidget,
+    CustomFile: customFields.FileUpload,
+    newpoll: customFields.PollComponent,
+    CustomPassword: customFields.PasswordWidget,
+    CustomGenPassword: customFields.PasswordGenWidget,
+    DatePickerWidget: customFields.DatePickerWidget,
+    CustomPhoneNumber: customFields.PhoneNumberWidget,
+    //   myPasswordWidget : customFields.MyPasswordWidget,
+  //   customFileWidget : customFields.CustomFileWidget
+  }
   const handleFormSubmit = (data) => {
     setFormData(data);
     console.log("data : ", data);

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
+
 import { format } from 'date-fns';
 
 const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: handleChange, onSuccess, onError, onSubmit }) => {
@@ -12,10 +13,39 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   }
 
+  const getFieldSchemaByName = (schema, fieldName) => {
+    // Recursive function to find the field by its name
+    const findField = (currentSchema, currentFieldName) => {
+      // If the current schema is an object with properties, check each property
+      if (currentSchema.type === 'object' && currentSchema.properties) {
+        // Iterate through all properties to find the one that matches currentFieldName
+        for (const [key, value] of Object.entries(currentSchema.properties)) {
+          // If the key matches the field name, return the field
+          if (key === currentFieldName) {
+            return value;
+          }
+          
+          // If the field is an object, recurse into it
+          if (value.type === 'object') {
+            const result = findField(value, currentFieldName);
+            if (result) return result;  // Return the field if found in nested object
+          }
+        }
+      }
+      
+      // If the field is not found, return null
+      return null;
+    };
+    
+    return findField(schema, fieldName);
+  };
+
   const renderField = (field, fieldName, parentSchema = schema, fieldPath) => {
+    // console.log("field : ", field);
     const { title, enum: enumValues, oneOf, format } = field;
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName;
     const uiField = getDeepValue(schema.uiSchema, fieldPath) || {};
+    // console.log(`uiField for : ${fieldName}`, uiField);
     const widget = uiField["ui:widget"] || format || "string";
     const fieldClass = uiField["classNames"];
     const layoutClass = uiField["ui:layout"];
@@ -107,6 +137,8 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
     const handleDefaultFieldChange = (e) => {
       const inputType = e.target?.files ? 'file' : 'other';
 
+      console.log("input type : ", inputType);
+
       if (inputType === 'file') {
         const outputFormat = uiField['ui:options']['output'];
         const file = e.target.files[0];
@@ -117,6 +149,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
           handleChange(fieldName, file);
         }
       } else {
+        console.log("Inside default handle");
         handleChange(fieldName, e.target.value);
       }
     };
@@ -668,7 +701,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
         const CustomField = fields[widget];
         if (CustomField) {
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
-          return <CustomField schema={schema.schema.properties[fieldName]} uiSchema={schema.uiSchema[fieldName]} fieldName={fieldName} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={schema.uiSchema[fieldName]["ui:placeholder"]} />;
+          return <CustomField schema={field} uiSchema={uiField} fieldName={fieldName} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={schema.uiSchema[fieldName]?.["ui:placeholder"]} />;
         }
         return <p className="text-danger">No such component available</p>;
     }

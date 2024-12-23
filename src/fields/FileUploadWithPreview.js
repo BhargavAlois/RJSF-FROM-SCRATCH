@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { fileOrUrlToBase64, isValidUrl } from '../../../libs/commanActions';
+import { fileOrUrlToBase64, isValidUrl } from '../libs/commanActions';
 import { CButton } from '@coreui/react';
 
 const FileUploadWithPreview = ({ onChange, value, options }) => {
@@ -62,7 +62,7 @@ const FileUploadWithPreview = ({ onChange, value, options }) => {
   return (
     <div className="fileupload-preview d-flex align-items-center">
       <img
-        src={previewUrl || import.meta.env.VITE_DEFAULT_PROFILE_PIC}
+        src={previewUrl}
         alt="Profile preview"
         className="single-user-profile"
         onClick={handleChangePicture}
@@ -94,7 +94,7 @@ const FileUploadWithPreview = ({ onChange, value, options }) => {
       <input
         type="file"
         capture="user"
-        onChange={handleFileChange}
+        onChange={onChange}
         ref={fileInputRef}
         style={{ display: 'none' }}
         accept={options?.accept?.join(',') || 'image/*'}

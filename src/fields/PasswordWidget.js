@@ -19,7 +19,7 @@ const PasswordWidget = (props) => {
                 className="form-control"
                 placeholder={props.placeholder}
                 value={props.value || ''}
-                onChange={handleChange}
+                onChange={props.onChange}
                 onBlur={props.onBlur}
                 onFocus={props.onFocus}
                 required={props.required}

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Upload, Plus } from 'lucide-react';
 import { CButton, CCol, CRow } from '@coreui/react';
-import { fileOrUrlToBase64, getFileInfo, isValidUrl, base64ArrayToFiles } from '../../../libs/commanActions';
+import { fileOrUrlToBase64, getFileInfo, isValidUrl, base64ArrayToFiles } from '../libs/commanActions';
 
 const FileUpload = ({ ...props }) => {
     const [files, setFiles] = useState([]);
