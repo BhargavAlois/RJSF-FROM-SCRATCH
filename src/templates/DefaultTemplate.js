@@ -8,12 +8,12 @@ export default function MainTemplate(props) {
         <div className="d-flex flex-column" style={{ maxWidth: "60%", width: "60%" }}>
             <header className="text-center mb-4">
                 <h3>{schema.title || 'Default title'}</h3>
-                <p>{schema.description || 'This is default description of form'}</p>
+                <p style={{fontSize: '15px', fontStyle: 'normal', fontWeight: 'normal'}}>{schema.description || 'This is default description of form'}</p>
             </header>
 
             <form
                 onSubmit={onSubmit}
-                className="d-flex flex-column align-items-center align-middle justify-content-center p-5 border border-dark border-opacity-25 rounded-4 shadow bg-white needs-validation"
+                className="d-flex flex-column align-items-center justify-content-center p-5 border border-dark border-opacity-25 rounded-4 shadow bg-white needs-validation"
                 style={{ overflow: 'auto' }}
             >
                 {content}

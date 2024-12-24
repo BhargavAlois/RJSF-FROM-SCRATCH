@@ -51,7 +51,8 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
     const widget = uiField["ui:widget"] || format || "string";
     const layoutClass = uiField["ui:layout"];
     const isColumnLayout = uiField["ui:layout"] === "column";
-    const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
+    const colClass = layoutClass ? (uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12") : '';
+    console.log("column class : ", colClass);
 
     const convertToBase64 = (file) => {
       // Convert file to Base64
@@ -65,16 +66,14 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
     if (field.type === 'object' && field.properties) {
       return (
-        <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+        <div className={`row`}>
           <h5 className="mt-3">{title || fieldName}</h5>
-          <p>{field?.description}</p>
-          <div className="ms-3">
-            {Object.keys(field.properties).map((nestedFieldName) => {
-              const nestedField = field.properties[nestedFieldName];
-              const updatedParentSchema = parentSchema.schema.properties[nestedFieldName];
-              return renderField(nestedField, `${nestedFieldName}`, updatedParentSchema, fieldPath);
-            })}
-          </div>
+          <p style={{ size: '5px' }}>{field?.description}</p>
+          {Object.keys(field.properties).map((nestedFieldName) => {
+            const nestedField = field.properties[nestedFieldName];
+            const updatedParentSchema = parentSchema.schema.properties[nestedFieldName];
+            return renderField(nestedField, `${nestedFieldName}`, updatedParentSchema, fieldPath);
+          })}
         </div>
       );
     }
@@ -145,27 +144,27 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
       //     handleChange(f_name, e.target.value);
       //   }
       // }
-        const inputType = e.target?.files ? 'file' : 'other';
-        console.log("input type : ", inputType);
-        if (inputType === 'file') {
-          const outputFormat = uiField['ui:options']['output'];
-          const file = e.target.files[0];
-          if (outputFormat === 'base64') {
-            convertToBase64(file);
-          } else {
-            handleChange(fieldName, file);
-          }
+      const inputType = e.target?.files ? 'file' : 'other';
+      console.log("input type : ", inputType);
+      if (inputType === 'file') {
+        const outputFormat = uiField['ui:options']['output'];
+        const file = e.target.files[0];
+        if (outputFormat === 'base64') {
+          convertToBase64(file);
         } else {
-          console.log("Inside default handle");
-          handleChange(e.target.name, e.target.value);
+          handleChange(fieldName, file);
         }
-      
+      } else {
+        console.log("Inside default handle");
+        handleChange(e.target.name, e.target.value);
+      }
+
     };
 
     switch (widget) {
       case "password":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className='form-label'>{title || fieldName}</label>
             <input
               type="password"
@@ -183,7 +182,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "email":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className='form-label'>{title || fieldName}</label>
             <input
               type="text"
@@ -201,7 +200,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "select":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
             <select
               name={fieldName}
@@ -263,7 +262,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "radio":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
             <div
               className={`form-check ${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}
@@ -297,7 +296,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
         const rangeValue = formData[fieldName] || defaultValue;
 
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass}`}>
+          <div key={fieldName} className={`${colClass}`}>
             <label className="form-label">{title || fieldName}</label>
             <input
               type="range"
@@ -325,7 +324,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "daterange":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className='form-label'>{title || fieldName}</label>
             <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
               <DatePicker
@@ -397,7 +396,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
         const isMDY = dateFormat === "MDY";
 
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
             <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
               {isYMD && (
@@ -472,7 +471,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
       case "date":
         const formatOfDate = schema.uiSchema[fieldName]?.['ui:options']?.format || "MM/dd/yyyy";
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
             <DatePicker
               selected={formData[fieldName]}
@@ -490,7 +489,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "progress":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
             <div className="progress" style={{ height: "30px" }}>
               <div
@@ -512,7 +511,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "time":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title}</label>
             <input
               type="time"
@@ -529,7 +528,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "datetime":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title}</label>
             <input
               type="datetime-local"
@@ -546,7 +545,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "calendar":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title}</label>
             <input
               type="date"
@@ -563,7 +562,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "year":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title}</label>
             <input
               type="number"
@@ -582,7 +581,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "month":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title}</label>
             <input
               type="month"
@@ -599,7 +598,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "day":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title}</label>
             <input
               type="date"
@@ -615,7 +614,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "file":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title}</label>
             <input
               type="file"
@@ -647,9 +646,9 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
           </div>
         );
 
-      case "string":
+      case "string" || "text":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className='form-label'>{title || fieldName}</label>
             <input
               type="text"
@@ -667,7 +666,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "updown":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className='form-label'>{title || fieldName}</label>
             <input
               type="number"
@@ -685,7 +684,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "textarea":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className='form-label'>{title || fieldName}</label>
             <textarea
               type="textarea"
@@ -716,12 +715,12 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
   };
 
   return (
-    // <div className="row align-items-center justify-content-center">
-    Object.keys(schema.schema.properties).map((fieldName) => {
+    <div className="row">
+    {Object.keys(schema.schema.properties).map((fieldName) => {
       const field = schema.schema.properties[fieldName];
       return renderField(field, fieldName);
-    })
-    // </div>
+    })}
+    </div>
   )
 };
 

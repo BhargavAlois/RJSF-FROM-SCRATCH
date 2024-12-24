@@ -54,6 +54,7 @@ const PasswordGenWidget = (props) => {
             <input
                 type={showPassword ? 'text' : 'password'}
                 className="form-control"
+                name="passwordGenerator"
                 placeholder={props.placeholder}
                 value={generatedPassword || ''}
                 onChange={handleChange}

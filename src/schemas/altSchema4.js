@@ -156,7 +156,7 @@ export const schema = {
   uiSchema: {
     hideTitle: true,
     info: {
-      classNames: 'employe-info',
+      classNames: 'employe-info', 
       profilePic: {
         'ui:widget': 'ProfileImage',
         'ui:options': {
@@ -174,18 +174,20 @@ export const schema = {
         },
       },
       firstName: {
-        // "ui:layout": "row",
-        // "ui:col": 6,
+        "ui:layout": "row",
+        "ui:col": 4,
         classNames: 'first-name',
         'ui:placeholder': 'Enter First Name',
       },
       lastName: {
-        // "ui:layout": "row",
-        // "ui:col": 6,
+        "ui:layout": "row",
+        "ui:col": 4,
         classNames: 'last-name',
         'ui:placeholder': 'Enter Last Name',
       },
       empId: {
+        "ui:layout": "row",
+        "ui:col": 4,
         classNames: 'emp-id',
         'ui:placeholder': 'Enter Employee ID',
       },

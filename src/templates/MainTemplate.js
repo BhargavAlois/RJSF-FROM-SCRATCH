@@ -13,7 +13,7 @@ export default function MainTemplate(props) {
 
             <form
                 onSubmit={onSubmit}
-                className="d-flex flex-column align-items-center align-middle justify-content-center p-5 border border-dark border-opacity-25 rounded-4 shadow"
+                className="d-flex flex-column align-items-center p-5 border border-dark border-opacity-25 rounded-4 shadow"
                 style={{ overflow: 'auto' }}
             >
                 {content}
