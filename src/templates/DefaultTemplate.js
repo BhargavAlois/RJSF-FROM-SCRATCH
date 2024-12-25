@@ -17,7 +17,7 @@ export default function MainTemplate(props) {
                 style={{ overflow: 'auto' }}
             >
                 {content}
-                <Button
+                {/* <Button
                     variant="contained"
                     className="mt-3"
                     color="primary"
@@ -31,7 +31,8 @@ export default function MainTemplate(props) {
                     }}
                     onMouseEnter={(e) => e.target.style.backgroundColor = '#0056b3'} 
                     onMouseLeave={(e) => e.target.style.backgroundColor = '#1976d2'} 
-                >Submit</Button>
+                >Submit</Button> */}
+                <button type='submit' className="primaryButton">Submit</button>
             </form>
 
             <footer className="mt-4 text-center">
