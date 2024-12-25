@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { fileOrUrlToBase64, isValidUrl } from '../libs/commanActions';
 import { CButton } from '@coreui/react';
 
-const FileUploadWithPreview = ({ onChange, value, options, errors }) => {
+const FileUploadWithPreview = ({ onChange, value, options }) => {
   const fileInputRef = useRef(null);
   const [previewUrl, setPreviewUrl] = useState(value);
 
@@ -66,7 +66,6 @@ const FileUploadWithPreview = ({ onChange, value, options, errors }) => {
         alt="Profile preview"
         className="single-user-profile"
         onClick={handleChangePicture}
-        name="profile"
         style={{ width: '130px', height: '130px', marginRight: '10px', cursor: 'pointer' }}
       />
 
@@ -94,9 +93,8 @@ const FileUploadWithPreview = ({ onChange, value, options, errors }) => {
 
       <input
         type="file"
-        name="profile"
         capture="user"
-        onChange={onChange}
+        onChange={handleFileChange}
         ref={fileInputRef}
         style={{ display: 'none' }}
         accept={options?.accept?.join(',') || 'image/*'}

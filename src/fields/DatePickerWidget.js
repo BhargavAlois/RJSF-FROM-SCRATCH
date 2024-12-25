@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const DatePickerWidget = (props) => {
-  const { value, onChange, schema } = props;
+  const { title, value, onChange, schema } = props;
 
   const [error, setError] = useState('');
   const [minDate, setMinDate] = useState(schema.min ? schema.min : undefined);
@@ -74,9 +74,7 @@ const DatePickerWidget = (props) => {
         min={minDate}
         max={maxDate}
       />
-      {props.errors && props.errors.map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
-            ))}
+      
     </div>
   );
 };

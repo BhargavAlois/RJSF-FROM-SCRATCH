@@ -8,11 +8,11 @@ export const schema = {
         type: 'object',
         title: 'Employee Information',
         properties: {
-          // profilePic: {
-          //   type: 'string',
-          //   format: 'data-url',
-          //   title: 'Profile Image Upload',
-          // },
+          profilePic: {
+            type: 'string',
+            format: 'data-url',
+            title: 'Profile Image Upload',
+          },
           firstName: {
             type: 'string',
             title: 'First Name'
@@ -45,12 +45,12 @@ export const schema = {
               { const: 'other', title: 'Other' },
             ],
           },
-          dateOfBirth: {
-            type: 'string',
-            format: 'date',
-            title: 'Date Of Birth',
-            dateType: 'dateOfBirth',
-          },
+          // dateOfBirth: {
+          //   type: 'string',
+          //   format: 'date',
+          //   title: 'Date Of Birth',
+          //   dateType: 'dateOfBirth',
+          // },
           bloodGroup: {
             type: 'string',
             title: 'Blood Group',
@@ -110,16 +110,16 @@ export const schema = {
             type: 'string',
             title: 'Password',
           },
-          dateOfJoining: {
-            type: 'string',
-            format: 'date',
-            title: 'Date Of Joining',
-            dateType: 'dateOfJoining',
-          },
-          // employeementtype: {
+          // dateOfJoining: {
           //   type: 'string',
-          //   title: 'employeement type'
+          //   format: 'date',
+          //   title: 'Date Of Joining',
+          //   dateType: 'dateOfJoining',
           // },
+          employeementtype: {
+            type: 'string',
+            title: 'employeement type'
+          },
           department: {
             title: 'Department',
             type: 'string',
@@ -148,6 +148,7 @@ export const schema = {
           'reportTo',
           'shiftTiming',
           'shift',
+          'employeementtype'
         ],
       },
     },
@@ -203,10 +204,10 @@ export const schema = {
         'ui:placeholder': 'Select Gender',
         'ui:widget': 'select'
       },
-      dateOfBirth: {
-        classNames: 'date-of-birth',
-        'ui:widget': 'DatePickerWidget',
-      },
+      // dateOfBirth: {
+      //   classNames: 'date-of-birth',
+      //   'ui:widget': 'DatePickerWidget',
+      // },
       bloodGroup: {
         classNames: 'blood-group',
         'ui:placeholder': 'Select Blood Group',
@@ -240,10 +241,17 @@ export const schema = {
       password: {
         'ui:placeholder': 'Enter Password',
         'ui:widget': 'CustomGenPassword',
+        'pattern_message': [
+          'Contains at least one uppercase letter (A-Z).',
+          'Contains at least one lowercase letter (a-z).',
+          'Contains at least one numeric digit (0-9).',
+          'Contains at least one special character (e.g., !, @, #, $, %, &).',
+          'Has a length between 8 and 15 characters.',
+        ],
       },
-      dateOfJoining: {
-        'ui:widget': 'DatePickerWidget',
-      },
+      // dateOfJoining: {
+      //   'ui:widget': 'DatePickerWidget',
+      // },
       department: {
         'ui:placeholder': 'Select Department',
       },

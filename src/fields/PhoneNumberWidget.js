@@ -24,15 +24,15 @@ const PhoneNumberWidget = (props) => {
     const phoneNumber = isCountryCodeValid ? valueParts.slice(1).join(' ') : value;
 
     const handleCountryChange = (e) => {
-        // const newCountryCode = e.target.value;
-        // onChange(`${newCountryCode} ${phoneNumber}`);
-        onChange(e, 'countryCode');
+        const newCountryCode = e.target.value;
+        onChange(`${newCountryCode} ${phoneNumber}`);
+        // onChange(e, 'countryCode');
     };
 
     const handlePhoneNumberChange = (e) => {
-        // const newPhoneNumber = e.target.value;
-        // onChange(`${countryCode} ${newPhoneNumber}`);
-        onChange(e, 'phoneNumber');
+        const newPhoneNumber = e.target.value;
+        onChange(`${countryCode} ${newPhoneNumber}`);
+        // onChange(e, 'phoneNumber');
     };
 
     return (
@@ -44,7 +44,7 @@ const PhoneNumberWidget = (props) => {
                     style={{ maxWidth: "4.4rem" }}
                     name="countryCode"
                     value={countryCode}
-                    onChange={onChange}
+                    onChange={handleCountryChange}
                 >
                     {countryOptions.map((option) => (
                         <option key={option.code} value={option.code}>
@@ -59,7 +59,7 @@ const PhoneNumberWidget = (props) => {
                     placeholder="Enter phone number"
                     name="phoneNumber"
                     value={phoneNumber}
-                    onChange={onChange}
+                    onChange={handlePhoneNumberChange}
                     pattern="^[0-9]{6,14}$"
                     title="Enter a valid phone number"
                 />

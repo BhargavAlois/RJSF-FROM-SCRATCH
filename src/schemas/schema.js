@@ -293,7 +293,7 @@ export const schema = {
       "ui:layout": "row",
     },
     passwordWidget: {
-      "ui:widget": "myPasswordWidget",
+      "ui:widget": "CustomGenPassword",
       "classNames": "form-control",
       "ui:placeholder": "Enter password"
     },

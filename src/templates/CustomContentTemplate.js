@@ -13,32 +13,32 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   }
 
-  const getFieldSchemaByName = (schema, fieldName) => {
-    // Recursive function to find the field by its name
-    const findField = (currentSchema, currentFieldName) => {
-      // If the current schema is an object with properties, check each property
-      if (currentSchema.type === 'object' && currentSchema.properties) {
-        // Iterate through all properties to find the one that matches currentFieldName
-        for (const [key, value] of Object.entries(currentSchema.properties)) {
-          // If the key matches the field name, return the field
-          if (key === currentFieldName) {
-            return value;
-          }
+  // const getFieldSchemaByName = (schema, fieldName) => {
+  //   // Recursive function to find the field by its name
+  //   const findField = (currentSchema, currentFieldName) => {
+  //     // If the current schema is an object with properties, check each property
+  //     if (currentSchema.type === 'object' && currentSchema.properties) {
+  //       // Iterate through all properties to find the one that matches currentFieldName
+  //       for (const [key, value] of Object.entries(currentSchema.properties)) {
+  //         // If the key matches the field name, return the field
+  //         if (key === currentFieldName) {
+  //           return value;
+  //         }
 
-          // If the field is an object, recurse into it
-          if (value.type === 'object') {
-            const result = findField(value, currentFieldName);
-            if (result) return result;  // Return the field if found in nested object
-          }
-        }
-      }
+  //         // If the field is an object, recurse into it
+  //         if (value.type === 'object') {
+  //           const result = findField(value, currentFieldName);
+  //           if (result) return result;  // Return the field if found in nested object
+  //         }
+  //       }
+  //     }
 
-      // If the field is not found, return null
-      return null;
-    };
+  //     // If the field is not found, return null
+  //     return null;
+  //   };
 
-    return findField(schema, fieldName);
-  };
+  //   return findField(schema, fieldName);
+  // };
 
   const renderField = (field, fieldName, parentSchema = schema, fieldPath) => {
     // console.log("field : ", field);
@@ -46,10 +46,10 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName;
     console.log("fieldName : ", fieldName);
     const uiField = getDeepValue(schema.uiSchema, fieldPath) || {};
-    // console.log(`uiField for : ${fieldName}`, uiField);
     const fieldClass = `form-control ${uiField["classNames"]}`;
     const widget = uiField["ui:widget"] || format || "string";
     const layoutClass = uiField["ui:layout"];
+    console.log(`layout class for : ${fieldName}`, layoutClass);
     const isColumnLayout = uiField["ui:layout"] === "column";
     const colClass = (uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12");
     console.log("column class : ", colClass);
@@ -66,7 +66,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
     if (field.type === 'object' && field.properties) {
       return (
-        <div className={`row`}>
+        <div className={`row ${uiField?.classNames}`}>
           <h5 className="mt-3">{title || fieldName}</h5>
           <p style={{ size: '5px' }}>{field?.description}</p>
           {Object.keys(field.properties).map((nestedFieldName) => {
@@ -97,7 +97,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
           });
         }
 
-        const outputFormat = schema.uiSchema[fieldName]?.['ui:options']?.['output'];
+        const outputFormat = uiField?.['ui:options']?.['output'];
         if (outputFormat === 'base64') {
           convertToBase64(file);
         } else {
@@ -134,32 +134,40 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
       handleChange(fieldName, updatedDate);
     };
 
-    const handleDefaultFieldChange = (e) => {
-      // if (f_name) {
-      //   console.log("inside f_name");
-      //   if (e.target?.files) {
-      //     handleChange(f_name, e.target.files[0]);
-      //   }
-      //   else {
-      //     handleChange(f_name, e.target.value);
-      //   }
-      // }
-      const inputType = e.target?.files ? 'file' : 'other';
-      console.log("input type : ", inputType);
-      if (inputType === 'file') {
-        const outputFormat = uiField['ui:options']['output'];
-        const file = e.target.files[0];
-        if (outputFormat === 'base64') {
-          convertToBase64(file);
-        } else {
-          handleChange(fieldName, file);
-        }
-      } else {
-        console.log("Inside default handle");
-        handleChange(e.target.name, e.target.value);
-      }
+    // const handleDefaultFieldChange = (e) => {
+    //   // if (f_name) {
+    //   //   console.log("inside f_name");
+    //   //   if (e.target?.files) {
+    //   //     handleChange(f_name, e.target.files[0]);
+    //   //   }
+    //   //   else {
+    //   //     handleChange(f_name, e.target.value);
+    //   //   }
+    //   // }
+    //   const inputType = e.target?.files ? 'file' : 'other';
+    //   console.log("input type : ", inputType);
+    //   if (inputType === 'file') {
+    //     const outputFormat = uiField['ui:options']['output'];
+    //     const file = e.target.files[0];
+    //     if (outputFormat === 'base64') {
+    //       convertToBase64(file);
+    //     } else {
+    //       handleChange(fieldName, file);
+    //     }
+    //   } else {
+    //     console.log("Inside default handle");
+    //     handleChange(e.target.name, e.target.value);
+    //   }
 
-    };
+    // };
+
+
+
+    //Implementation of handleDefaultFieldChange where only target value is accepted as parameter
+    const handleDefaultFieldChange = (value) => {
+      console.log(`Change in default field : ${fieldName}`, value);
+      handleChange(fieldName, value);
+    }
 
     switch (widget) {
       case "password":
@@ -708,7 +716,13 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
         const CustomField = fields[widget];
         if (CustomField) {
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
-          return <CustomField schema={field} uiSchema={uiField} fieldName={fieldName} value={formData[fieldName]} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={uiField?.["ui:placeholder"]} />;
+          return (<div>
+            <label>{field?.title}</label>
+            <CustomField schema={field} uiSchema={uiField} fieldName={fieldName} value={formData[fieldName]} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={uiField?.["ui:placeholder"]} />
+            {errors[fieldName] && errors[fieldName].map((error, index) => (
+              <p key={index} className='text-danger m-0'>{error}</p>
+            ))}
+            </div>);
         }
         return <p className="text-danger">No such component available</p>;
     }

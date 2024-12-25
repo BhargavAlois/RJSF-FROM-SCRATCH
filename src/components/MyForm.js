@@ -227,6 +227,7 @@ export default function MyForm(props) {
                     const regex = new RegExp(fieldSchema.pattern);
                     if (!regex.test(value)) {
                         errors.push(`${fieldTitle} is not in the correct format`);
+                        
                     }
                 }
 
