@@ -66,7 +66,8 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
     if (field.type === 'object' && field.properties) {
       return (
-        <div className={`row ${uiField?.classNames}`}>
+        // <div className={`row ${uiField?.classNames}`}>
+        <>
           <h5 className="mt-3">{title || fieldName}</h5>
           <p style={{ size: '5px' }}>{field?.description}</p>
           {Object.keys(field.properties).map((nestedFieldName) => {
@@ -74,7 +75,8 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
             const updatedParentSchema = parentSchema.schema.properties[nestedFieldName];
             return renderField(nestedField, `${nestedFieldName}`, updatedParentSchema, fieldPath);
           })}
-        </div>
+          </>
+        /* </div> */
       );
     }
 
@@ -622,7 +624,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "file":
         return (
-          <div key={fieldName} className={`${colClass} `}>
+          <div key={fieldName} className={`${colClass}`}>
             <label className="form-label">{title}</label>
             <input
               type="file"
@@ -734,7 +736,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
       const field = schema.schema.properties[fieldName];
       return renderField(field, fieldName);
     })}
-    </div>
+    </div>  
   )
 };
 

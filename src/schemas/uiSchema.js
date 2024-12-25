@@ -25,7 +25,6 @@ export const uiSchema = {
     "ui:layout": "row",
     // "ui:col": 6
     "ui:placeholder": "Enter your email"
-
   },
   password: {
     "ui:widget": "password",

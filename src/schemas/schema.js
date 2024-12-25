@@ -237,7 +237,10 @@ export const schema = {
       // "ui:widget": "text",
       "classNames": "form-control",
       "ui:layout": "row",
-      "ui:placeholder": "Enter phone number"
+      "ui:placeholder": "Enter phone number",
+      "pattern_message": [
+        "Phone number in format XXX-XXX-XXXX"
+      ]
     },
     time: {
       "ui:widget": "time",
