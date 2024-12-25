@@ -3,7 +3,6 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -29,5 +28,16 @@ code {
   position: relative;
   color: red;
   font-size: 0.875rem;
+}
+
+.btn-orange {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+}
+
+.btn-orange:hover {
+  background-color: #e64a19;
 }
 
