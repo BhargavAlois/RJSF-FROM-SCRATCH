@@ -51,7 +51,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
     const widget = uiField["ui:widget"] || format || "string";
     const layoutClass = uiField["ui:layout"];
     const isColumnLayout = uiField["ui:layout"] === "column";
-    const colClass = layoutClass ? (uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12") : '';
+    const colClass = (uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12");
     console.log("column class : ", colClass);
 
     const convertToBase64 = (file) => {
@@ -226,7 +226,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
       case "checkboxes":
         return (
-          <div key={fieldName} className={`${layoutClass} ${colClass} `}>
+          <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
             <div
               className={`form-check ${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}

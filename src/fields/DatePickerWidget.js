@@ -17,7 +17,6 @@ const DatePickerWidget = (props) => {
     return `${year}-${month}-${day}`;
   }
 
-
   const formatDate = () => {
     const date = new Date();
     const year = date.getFullYear();
