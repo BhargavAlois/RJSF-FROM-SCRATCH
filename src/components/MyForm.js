@@ -227,7 +227,14 @@ export default function MyForm(props) {
                     const regex = new RegExp(fieldSchema.pattern);
                     if (!regex.test(value)) {
                         errors.push(`${fieldTitle} is not in the correct format`);
-                        
+                        const fieldUiSchema = schema.uiSchema[fieldName];
+                        if(fieldUiSchema.pattern_message && Array.isArray(fieldUiSchema.pattern_message))
+                        {
+                            errors.push(...fieldUiSchema.pattern_message);
+                        }
+                     else {
+                        errors.push(`${fieldTitle} is not in the correct format`);
+                    }
                     }
                 }
 
