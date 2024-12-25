@@ -64,9 +64,6 @@ const PhoneNumberWidget = (props) => {
                     title="Enter a valid phone number"
                 />
             </div>
-            {props.errors && props.errors.map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
-            ))}
         </div>
     );
 };
