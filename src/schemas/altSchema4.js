@@ -220,7 +220,7 @@ export const schema = {
       phoneNumber: {
         'ui:widget': 'CustomPhoneNumber',
         classNames: 'phone-number',
-        pattern_message: 'Invalid phone number',
+        pattern_message: ['Invalid phone number'],
       },
       address: {
         classNames: 'address',
@@ -236,7 +236,7 @@ export const schema = {
       classNames: 'employe-info',
       email: {
         'ui:placeholder': 'Enter Email',
-        pattern_message: 'Invalid email address',
+        pattern_message: ['Invalid email address'],
       },
       password: {
         'ui:placeholder': 'Enter Password',
