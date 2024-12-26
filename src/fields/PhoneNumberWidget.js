@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 const PhoneNumberWidget = (props) => {
     const { value = '', onChange } = props;
 
-    console.log("value received : ", value);
     const countryOptions = [
         { code: "+91", label: "🇮🇳 (+91)" },
         { code: "+1", label: "🇺🇸 (+1)" },

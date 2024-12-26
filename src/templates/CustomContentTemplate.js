@@ -44,15 +44,15 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
     // console.log("field : ", field);
     const { title, enum: enumValues, oneOf, format } = field;
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName;
-    console.log("fieldName : ", fieldName);
+    // console.log("fieldName : ", fieldName);
     const uiField = getDeepValue(schema.uiSchema, fieldPath) || {};
     const fieldClass = `form-control ${uiField["classNames"]}`;
     const widget = uiField["ui:widget"] || format || "string";
     const layoutClass = uiField["ui:layout"];
-    console.log(`layout class for : ${fieldName}`, layoutClass);
+    // console.log(`layout class for : ${fieldName}`, layoutClass);
     const isColumnLayout = uiField["ui:layout"] === "column";
     const colClass = (uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12");
-    console.log("column class : ", colClass);
+    // console.log("column class : ", colClass);
 
     const convertToBase64 = (file) => {
       // Convert file to Base64
