@@ -62,7 +62,7 @@ const FileUploadWithPreview = ({ onChange, value, options }) => {
   return (
     <div className="fileupload-preview d-flex align-items-center">
       <img
-        src={previewUrl}
+        src={previewUrl || "https://t3.ftcdn.net/jpg/05/53/79/60/360_F_553796090_XHrE6R9jwmBJUMo9HKl41hyHJ5gqt9oz.jpg" }
         alt="Profile preview"
         className="single-user-profile"
         onClick={handleChangePicture}

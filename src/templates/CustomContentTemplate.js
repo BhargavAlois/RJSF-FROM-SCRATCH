@@ -3,42 +3,51 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "../widgets/ButtonWidget";
 
-import { format } from 'date-fns';
+import { format } from "date-fns";
 
-const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: handleChange, onSuccess, onError, onSubmit }) => {
+const CustomContentTemplate = ({
+  formData,
+  schema,
+  fields,
+  errors,
+  onChange: handleChange,
+  onSuccess,
+  onError,
+  onSubmit,
+}) => {
   const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
 
   function getDeepValue(obj, path) {
-    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+    return path.split(".").reduce((acc, part) => acc && acc[part], obj);
   }
 
-  // const getFieldSchemaByName = (schema, fieldName) => {
-  //   // Recursive function to find the field by its name
-  //   const findField = (currentSchema, currentFieldName) => {
-  //     // If the current schema is an object with properties, check each property
-  //     if (currentSchema.type === 'object' && currentSchema.properties) {
-  //       // Iterate through all properties to find the one that matches currentFieldName
-  //       for (const [key, value] of Object.entries(currentSchema.properties)) {
-  //         // If the key matches the field name, return the field
-  //         if (key === currentFieldName) {
-  //           return value;
-  //         }
+  const getFieldSchemaByName = (schema, fieldName) => {
+    // Recursive function to find the field by its name
+    const findField = (currentSchema, currentFieldName) => {
+      // If the current schema is an object with properties, check each property
+      if (currentSchema.type === "object" && currentSchema.properties) {
+        // Iterate through all properties to find the one that matches currentFieldName
+        for (const [key, value] of Object.entries(currentSchema.properties)) {
+          // If the key matches the field name, return the field
+          if (key === currentFieldName) {
+            return value;
+          }
 
-  //         // If the field is an object, recurse into it
-  //         if (value.type === 'object') {
-  //           const result = findField(value, currentFieldName);
-  //           if (result) return result;  // Return the field if found in nested object
-  //         }
-  //       }
-  //     }
+          // If the field is an object, recurse into it
+          if (value.type === "object") {
+            const result = findField(value, currentFieldName);
+            if (result) return result; // Return the field if found in nested object
+          }
+        }
+      }
 
-  //     // If the field is not found, return null
-  //     return null;
-  //   };
+      // If the field is not found, return null
+      return null;
+    };
 
-  //   return findField(schema, fieldName);
-  // };
+    return findField(schema, fieldName);
+  };
 
   const renderField = (field, fieldName, parentSchema = schema, fieldPath) => {
     // console.log("field : ", field);
@@ -51,7 +60,7 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
     const layoutClass = uiField["ui:layout"];
     // console.log(`layout class for : ${fieldName}`, layoutClass);
     const isColumnLayout = uiField["ui:layout"] === "column";
-    const colClass = (uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12");
+    const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
     // console.log("column class : ", colClass);
 
     const convertToBase64 = (file) => {
@@ -62,20 +71,26 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
         handleChange(fieldName, base64File); // Pass the Base64 string to the handler
       };
       reader.readAsDataURL(file);
-    }
+    };
 
-    if (field.type === 'object' && field.properties) {
+    if (field.type === "object" && field.properties) {
       return (
         // <div className={`row ${uiField?.classNames}`}>
         <>
           <h5 className="mt-3">{title || fieldName}</h5>
-          <p style={{ size: '5px' }}>{field?.description}</p>
+          <p style={{ size: "5px" }}>{field?.description}</p>
           {Object.keys(field.properties).map((nestedFieldName) => {
             const nestedField = field.properties[nestedFieldName];
-            const updatedParentSchema = parentSchema.schema.properties[nestedFieldName];
-            return renderField(nestedField, `${nestedFieldName}`, updatedParentSchema, fieldPath);
+            const updatedParentSchema =
+              parentSchema.schema.properties[nestedFieldName];
+            return renderField(
+              nestedField,
+              `${nestedFieldName}`,
+              updatedParentSchema,
+              fieldPath
+            );
           })}
-          </>
+        </>
         /* </div> */
       );
     }
@@ -99,8 +114,8 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
           });
         }
 
-        const outputFormat = uiField?.['ui:options']?.['output'];
-        if (outputFormat === 'base64') {
+        const outputFormat = uiField?.["ui:options"]?.["output"];
+        if (outputFormat === "base64") {
           convertToBase64(file);
         } else {
           handleChange(fieldName, file);
@@ -163,48 +178,56 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
 
     // };
 
-
-
     //Implementation of handleDefaultFieldChange where only target value is accepted as parameter
     const handleDefaultFieldChange = (value) => {
       console.log(`Change in default field : ${fieldName}`, value);
       handleChange(fieldName, value);
-    }
+    };
 
     switch (widget) {
       case "password":
         return (
           <div key={fieldName} className={`${colClass} `}>
-            <label className='form-label'>{title || fieldName}</label>
+            <label className="form-label">{title || fieldName}</label>
             <input
               type="password"
               name={fieldName}
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               placeholder={uiField["ui:placeholder"]}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
       case "email":
         return (
           <div key={fieldName} className={`${colClass} `}>
-            <label className='form-label'>{title || fieldName}</label>
+            <label className="form-label">{title || fieldName}</label>
             <input
               type="text"
               name={fieldName}
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               placeholder={uiField["ui:placeholder"]}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -214,7 +237,9 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
             <label className="form-label">{title || fieldName}</label>
             <select
               name={fieldName}
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               placeholder={uiField["ui:placeholder"]}
@@ -227,10 +252,12 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
                   </option>
                 ))}
             </select>
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
-
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -239,15 +266,23 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
           <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
             <div
-              className={`form-check ${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}
+              className={`form-check ${
+                isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
+              }`}
               style={{ overflow: "hidden" }}
             >
               {field.items.enum &&
                 field.items.enum.map((value, index) => (
-                  <div key={index} className="form-check" style={{ flexBasis: "20%" }}>
+                  <div
+                    key={index}
+                    className="form-check"
+                    style={{ flexBasis: "20%" }}
+                  >
                     <input
                       type="checkbox"
-                      className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+                      className={`${fieldClass} ${
+                        errors[fieldName] ? "is-invalid" : ""
+                      }`}
                       name={fieldName}
                       value={value}
                       checked={formData[fieldName]?.includes(value)}
@@ -255,8 +290,8 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
                         const updatedValues = e.target.checked
                           ? [...(formData[fieldName] || []), value]
                           : (formData[fieldName] || []).filter(
-                            (val) => val !== value
-                          );
+                              (val) => val !== value
+                            );
                         handleChange(fieldName, updatedValues);
                       }}
                     />
@@ -264,9 +299,12 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
                   </div>
                 ))}
             </div>
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -275,14 +313,18 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
           <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
             <div
-              className={`form-check ${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}
+              className={`form-check ${
+                isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
+              }`}
             >
               {(oneOf || enumValues) &&
                 (oneOf || enumValues).map((value, index) => (
                   <div key={index} className="form-check">
                     <input
                       type="radio"
-                      className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+                      className={`${fieldClass} ${
+                        errors[fieldName] ? "is-invalid" : ""
+                      }`}
                       name={fieldName}
                       value={value}
                       checked={formData[fieldName] === value}
@@ -292,17 +334,22 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
                   </div>
                 ))}
             </div>
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
-
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
       case "range":
         const min = field.minimum || 0;
         const max = field.maximum || 100;
-        const defaultValue = (field.default !== undefined && field.default !== null) ? field.default : min;
+        const defaultValue =
+          field.default !== undefined && field.default !== null
+            ? field.default
+            : min;
         const rangeValue = formData[fieldName] || defaultValue;
 
         return (
@@ -311,7 +358,9 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
             <input
               type="range"
               name={fieldName}
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
               value={rangeValue}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               min={min}
@@ -325,7 +374,9 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
             {errors[fieldName] && (
               <div className="invalid-feedback">
                 {errors[fieldName].map((error, index) => (
-                  <p key={index} className="m-0">{error}</p>
+                  <p key={index} className="m-0">
+                    {error}
+                  </p>
                 ))}
               </div>
             )}
@@ -335,37 +386,57 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
       case "daterange":
         return (
           <div key={fieldName} className={`${colClass} `}>
-            <label className='form-label'>{title || fieldName}</label>
-            <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
+            <label className="form-label">{title || fieldName}</label>
+            <div
+              className={`${
+                isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
+              }`}
+            >
               <DatePicker
                 selected={formData.dateRange?.startDate || new Date()}
-                onChange={(date) => handleChange("dateRange", { ...formData.dateRange, startDate: date })}
+                onChange={(date) =>
+                  handleChange("dateRange", {
+                    ...formData.dateRange,
+                    startDate: date,
+                  })
+                }
                 selectsStart
                 startDate={formData.dateRange?.startDate}
                 minDate={new Date()}
                 endDate={formData.dateRange?.endDate}
                 placeholderText="Start Date"
-                dateFormat={schema.uiSchema[fieldName]['ui:options']?.format}
-                className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+                dateFormat={schema.uiSchema[fieldName]["ui:options"]?.format}
+                className={`${fieldClass} ${
+                  errors[fieldName] ? "is-invalid" : ""
+                }`}
                 placeholder={uiField["ui:placeholder"]}
               />
               <DatePicker
                 selected={formData.dateRange?.endDate || new Date()}
-                onChange={(date) => handleChange("dateRange", { ...formData.dateRange, endDate: date })}
+                onChange={(date) =>
+                  handleChange("dateRange", {
+                    ...formData.dateRange,
+                    endDate: date,
+                  })
+                }
                 selectsEnd
                 startDate={formData.dateRange?.startDate}
                 endDate={formData.dateRange?.endDate}
                 minDate={formData.dateRange?.startDate}
                 placeholderText="End Date"
-                dateFormat={schema.uiSchema[fieldName]['ui:options']?.format}
-                className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+                dateFormat={schema.uiSchema[fieldName]["ui:options"]?.format}
+                className={`${fieldClass} ${
+                  errors[fieldName] ? "is-invalid" : ""
+                }`}
                 placeholder={uiField["ui:placeholder"]}
               />
             </div>
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
-
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -375,7 +446,18 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
         const endYear = yearsRange ? yearsRange[1] : 2100;
 
         const months = [
-          "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
         ];
 
         const getDaysInMonth = (month, year) => {
@@ -390,16 +472,26 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
         ));
         const yearOptions = [];
         for (let i = startYear; i <= endYear; i++) {
-          yearOptions.push(<option key={i} value={i}>{i}</option>);
+          yearOptions.push(
+            <option key={i} value={i}>
+              {i}
+            </option>
+          );
         }
 
-        const selectedYear = formData[fieldName]?.year || new Date().getFullYear();
-        const selectedMonth = formData[fieldName]?.month || new Date().getMonth() + 1;
+        const selectedYear =
+          formData[fieldName]?.year || new Date().getFullYear();
+        const selectedMonth =
+          formData[fieldName]?.month || new Date().getMonth() + 1;
         const selectedDay = formData[fieldName]?.day || new Date().getDate();
         const daysInMonth = getDaysInMonth(selectedMonth, selectedYear);
 
         for (let i = 1; i <= daysInMonth; i++) {
-          dayOptions.push(<option key={i} value={i}>{i}</option>);
+          dayOptions.push(
+            <option key={i} value={i}>
+              {i}
+            </option>
+          );
         }
 
         const isYMD = dateFormat === "YMD";
@@ -408,32 +500,48 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
         return (
           <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
-            <div className={`${isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"}`}>
+            <div
+              className={`${
+                isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
+              }`}
+            >
               {isYMD && (
                 <>
                   <select
                     name={`${fieldName}_year`}
-                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+                    className={`${fieldClass} ${
+                      errors[fieldName] ? "is-invalid" : ""
+                    }`}
                     value={selectedYear}
-                    onChange={(e) => handleChangeDatePart("year", e.target.value)}
+                    onChange={(e) =>
+                      handleChangeDatePart("year", e.target.value)
+                    }
                   >
                     <option value="">Year</option>
                     {yearOptions}
                   </select>
                   <select
                     name={`${fieldName}_month`}
-                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+                    className={`${fieldClass} ${
+                      errors[fieldName] ? "is-invalid" : ""
+                    }`}
                     value={selectedMonth}
-                    onChange={(e) => handleChangeDatePart("month", e.target.value)}
+                    onChange={(e) =>
+                      handleChangeDatePart("month", e.target.value)
+                    }
                   >
                     <option value="">Month</option>
                     {monthOptions}
                   </select>
                   <select
                     name={`${fieldName}_day`}
-                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+                    className={`${fieldClass} ${
+                      errors[fieldName] ? "is-invalid" : ""
+                    }`}
                     value={selectedDay}
-                    onChange={(e) => handleChangeDatePart("day", e.target.value)}
+                    onChange={(e) =>
+                      handleChangeDatePart("day", e.target.value)
+                    }
                   >
                     <option value="">Day</option>
                     {dayOptions}
@@ -444,27 +552,39 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
                 <>
                   <select
                     name={`${fieldName}_month`}
-                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+                    className={`${fieldClass} ${
+                      errors[fieldName] ? "is-invalid" : ""
+                    }`}
                     value={selectedMonth}
-                    onChange={(e) => handleChangeDatePart("month", e.target.value)}
+                    onChange={(e) =>
+                      handleChangeDatePart("month", e.target.value)
+                    }
                   >
                     <option value="">Month</option>
                     {monthOptions}
                   </select>
                   <select
                     name={`${fieldName}_day`}
-                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+                    className={`${fieldClass} ${
+                      errors[fieldName] ? "is-invalid" : ""
+                    }`}
                     value={selectedDay}
-                    onChange={(e) => handleChangeDatePart("day", e.target.value)}
+                    onChange={(e) =>
+                      handleChangeDatePart("day", e.target.value)
+                    }
                   >
                     <option value="">Day</option>
                     {dayOptions}
                   </select>
                   <select
                     name={`${fieldName}_year`}
-                    className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+                    className={`${fieldClass} ${
+                      errors[fieldName] ? "is-invalid" : ""
+                    }`}
                     value={selectedYear}
-                    onChange={(e) => handleChangeDatePart("year", e.target.value)}
+                    onChange={(e) =>
+                      handleChangeDatePart("year", e.target.value)
+                    }
                   >
                     <option value="">Year</option>
                     {yearOptions}
@@ -472,28 +592,38 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
                 </>
               )}
             </div>
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className="text-danger">{error}</p>
-            ))}
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="text-danger">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
       case "date":
-        const formatOfDate = schema.uiSchema[fieldName]?.['ui:options']?.format || "MM/dd/yyyy";
+        const formatOfDate =
+          schema.uiSchema[fieldName]?.["ui:options"]?.format || "MM/dd/yyyy";
         return (
           <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
             <DatePicker
               selected={formData[fieldName]}
-              onChange={(date) => handleDateChange(fieldName, date, formatOfDate)}
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''} form-control`}
+              onChange={(date) =>
+                handleDateChange(fieldName, date, formatOfDate)
+              }
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              } form-control`}
               dateFormat={formatOfDate}
               placeholderText={uiField["ui:placeholder"]}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
-
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -505,7 +635,10 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
               <div
                 className="progress-bar"
                 role="progressbar"
-                style={{ width: `${field?.default}%`, backgroundColor: "#007bff" }}
+                style={{
+                  width: `${field?.default}%`,
+                  backgroundColor: "#007bff",
+                }}
                 aria-valuenow={field?.default || 0}
                 aria-valuemin="0"
                 aria-valuemax="100"
@@ -513,9 +646,12 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
                 {field?.default || 0}%
               </div>
             </div>
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className="text-danger mb-0">{error}</p>
-            ))}
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="text-danger mb-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -525,14 +661,19 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
             <label className="form-label">{title}</label>
             <input
               type="time"
-              value={formData[fieldName] || ''}
+              value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
               placeholder={uiField["ui:placeholder"]}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -542,14 +683,18 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
             <label className="form-label">{title}</label>
             <input
               type="datetime-local"
-              value={formData[fieldName] || ''}
+              value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
-
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -559,14 +704,18 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
             <label className="form-label">{title}</label>
             <input
               type="date"
-              value={formData[fieldName] || ''}
+              value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
-
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -576,16 +725,20 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
             <label className="form-label">{title}</label>
             <input
               type="number"
-              value={formData[fieldName] || ''}
+              value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               min="1900"
               max="2100"
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
-
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -595,14 +748,18 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
             <label className="form-label">{title}</label>
             <input
               type="month"
-              value={formData[fieldName] || ''}
+              value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
-
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -612,13 +769,18 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
             <label className="form-label">{title}</label>
             <input
               type="date"
-              value={formData[fieldName] || ''}
+              value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
@@ -629,115 +791,196 @@ const CustomContentTemplate = ({ formData, schema, fields, errors, onChange: han
             <input
               type="file"
               onChange={(e) => handleFileChange(fieldName, e)}
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
             />
 
-            {(formData[fieldName] && typeof formData[fieldName] === 'string' && formData[fieldName].startsWith('data:') || preview) && (
+            {((formData[fieldName] &&
+              typeof formData[fieldName] === "string" &&
+              formData[fieldName].startsWith("data:")) ||
+              preview) && (
               <div className="mt-2">
                 <img
                   src={preview || formData[fieldName]}
                   alt="Preview"
-                  style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "cover" }}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "200px",
+                    objectFit: "cover",
+                  }}
                 />
               </div>
             )}
 
             {fileDetails && (
               <div className="mt-2">
-                <p><strong>File Name:</strong> {fileDetails.name}</p>
-                <p><strong>File Type:</strong> {fileDetails.type}</p>
-                <p><strong>File Size:</strong> {Math.round(fileDetails.size / 1024)} KB</p>
+                <p>
+                  <strong>File Name:</strong> {fileDetails.name}
+                </p>
+                <p>
+                  <strong>File Type:</strong> {fileDetails.type}
+                </p>
+                <p>
+                  <strong>File Size:</strong>{" "}
+                  {Math.round(fileDetails.size / 1024)} KB
+                </p>
               </div>
             )}
 
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
       case "string" || "text":
         return (
           <div key={fieldName} className={`${colClass} `}>
-            <label className='form-label'>{title || fieldName}</label>
+            <label className="form-label">{title || fieldName}</label>
             <input
               type="text"
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
               name={fieldName}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               placeholder={uiField["ui:placeholder"]}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
       case "updown":
         return (
           <div key={fieldName} className={`${colClass} `}>
-            <label className='form-label'>{title || fieldName}</label>
+            <label className="form-label">{title || fieldName}</label>
             <input
               type="number"
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
               name={fieldName}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               placeholder={uiField["ui:placeholder"]}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
       case "textarea":
         return (
           <div key={fieldName} className={`${colClass} `}>
-            <label className='form-label'>{title || fieldName}</label>
+            <label className="form-label">{title || fieldName}</label>
             <textarea
               type="textarea"
-              className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+              className={`${fieldClass} ${
+                errors[fieldName] ? "is-invalid" : ""
+              }`}
               name={fieldName}
               value={formData[fieldName] || ""}
               onChange={(e) => handleChange(fieldName, e.target.value)}
               placeholder={uiField["ui:placeholder"]}
             />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='invalid-feedback m-0'>{error}</p>
-            ))}
+            {errors[fieldName] &&
+              errors[fieldName].map((error, index) => (
+                <p key={index} className="invalid-feedback m-0">
+                  {error}
+                </p>
+              ))}
           </div>
         );
 
-
       case "button":
-        return (<Button uiField={uiField} />);
+        return <Button uiField={uiField} />;
 
       default:
         const CustomField = fields[widget];
         if (CustomField) {
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
-          return (<div>
-            <label>{field?.title}</label>
-            <CustomField schema={field} uiSchema={uiField} fieldName={fieldName} value={formData[fieldName]} onChange={handleDefaultFieldChange} errors={errors[fieldName]} placeholder={uiField?.["ui:placeholder"]} />
-            {errors[fieldName] && errors[fieldName].map((error, index) => (
-              <p key={index} className='text-danger m-0'>{error}</p>
-            ))}
-            </div>);
+          return (
+            <div>
+              <label>{field?.title}</label>
+              <CustomField
+                schema={field}
+                uiSchema={uiField}
+                fieldName={fieldName}
+                value={formData[fieldName]}
+                onChange={handleDefaultFieldChange}
+                errors={errors[fieldName]}
+                placeholder={uiField?.["ui:placeholder"]}
+              />
+              {errors[fieldName] &&
+                errors[fieldName].map((error, index) => (
+                  <p key={index} className="text-danger m-0">
+                    {error}
+                  </p>
+                ))}
+            </div>
+          );
         }
         return <p className="text-danger">No such component available</p>;
     }
   };
 
+  const renderSections = () => {
+    const layout = schema.uiSchema.layout || [];
+    return layout.map((section, index) => {
+      const { title, classNames, fields } = section;
+      return (
+        <div key={index} className={`${classNames}`}>
+          {title && <h5>{title}</h5>}
+          {fields.map((fieldPathOrSection, fieldIndex) => {
+            if (typeof fieldPathOrSection === 'string') {
+              const fieldName = fieldPathOrSection.split('.').pop();
+              const field = getFieldSchemaByName(schema.schema, fieldName);
+              if (field) {
+                return renderField(field, fieldPathOrSection);
+              }
+            } else if (typeof fieldPathOrSection === 'object' && fieldPathOrSection.type === 'section') {
+              return (
+                <div key={fieldIndex} className={`${fieldPathOrSection.classNames}`}>
+                  {fieldPathOrSection.title && <h6>{fieldPathOrSection.title}</h6>}
+                  {fieldPathOrSection.fields.map((nestedField) => {
+                    const nestedFieldName = nestedField.split('.').pop();
+                    const nestedFieldSchema = getFieldSchemaByName(schema.schema, nestedFieldName);
+                    return nestedFieldSchema ? renderField(nestedFieldSchema, nestedField) : null;
+                  })}
+                </div>
+              );
+            }
+            console.warn(`Unknown field type: ${fieldPathOrSection}`);
+          })}
+        </div>
+      );
+    });
+  };
+
   return (
-    <div className="row">
-    {Object.keys(schema.schema.properties).map((fieldName) => {
-      const field = schema.schema.properties[fieldName];
-      return renderField(field, fieldName);
-    })}
-    </div>  
-  )
+    <div className="w-100">
+      {/* {Object.keys(schema.schema.properties).map((fieldName) => {
+        const field = schema.schema.properties[fieldName];
+        return renderField(field, fieldName);
+      })} */}
+
+      {renderSections()}
+    </div>
+  );
 };
 
 export default CustomContentTemplate;
