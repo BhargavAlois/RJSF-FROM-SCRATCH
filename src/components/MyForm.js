@@ -283,7 +283,14 @@ export default function MyForm(props) {
           const regex = new RegExp(fieldSchema.pattern);
           if (!regex.test(value)) {
             const fieldUiSchema = getFieldUiSchema(fieldName, schema.uiSchema);
-            errors.push(`${fieldTitle} is not in the correct format`);
+            if (
+              fieldUiSchema.pattern_message &&
+              Array.isArray(fieldUiSchema.pattern_message)
+            ) {
+              errors.push(...fieldUiSchema?.pattern_message);
+            } else {
+              errors.push(`${fieldTitle} is not in the correct format`);
+            }
           }
         }
 
@@ -354,15 +361,7 @@ export default function MyForm(props) {
         }
       }
 
-      const fieldUiSchema = getFieldUiSchema(fieldName, schema.uiSchema);
-
       if (errors.length > 0) {
-        if (
-            fieldUiSchema?.pattern_message &&
-            Array.isArray(fieldUiSchema.pattern_message)
-          ) {
-            errors.push(...fieldUiSchema.pattern_message);
-          }
         formErrors[fullPath] = errors;
       }
     };
