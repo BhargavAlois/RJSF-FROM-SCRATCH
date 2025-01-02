@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { format } from "date-fns";
 import * as formFields from '../formFields/InputFieldsExports';
 
-const CustomContentTemplate = ({
+export const ContentTemplate = ({
   formData,
   schemaModel,
   fields,
@@ -252,4 +252,3 @@ const CustomContentTemplate = ({
   );
 };
 
-export default CustomContentTemplate;
