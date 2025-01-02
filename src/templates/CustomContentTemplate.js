@@ -1,25 +1,6 @@
 import React, { useState } from "react";
 import { format } from "date-fns";
-import PasswordInput from "../formFields/PasswordInput";
-import EmailInput from "../formFields/EmailInput";
-import TextInput from "../formFields/TextInput";
-import AltDateInput from "../formFields/AltDateInput";
-import FileInput from "../formFields/FileInput";
-import ButtonInput from "../formFields/ButtonInput";
-import CalendarInput from "../formFields/CalendarInput";
-import CheckboxInput from "../formFields/CheckboxInput";
-import DateInput from "../formFields/DateInput";
-import DateRangeInput from "../formFields/DateRangeInput";
-import DateTimeInput from "../formFields/DateTimeInput";
-import DayInput from "../formFields/DayInput";
-import MonthInput from "../formFields/MonthInput";
-import ProgressInput from "../formFields/ProgressInput";
-import RadioInput from "../formFields/RadioInput";
-import RangeInput from "../formFields/RangeInput";
-import SelectInput from "../formFields/SelectInput";
-import TimeInput from "../formFields/TimeInput";
-import UpDownInput from "../formFields/UpDownInput";
-import YearInput from "../formFields/YearInput";
+import * as formFields from '../formFields/InputFieldsExports';
 
 const CustomContentTemplate = ({
   formData,
@@ -37,7 +18,7 @@ const CustomContentTemplate = ({
   const getDeepValue = (obj, path) => {
     return path.split(".").reduce((acc, part) => acc && acc[part], obj);
   };
-  
+
   const getFieldSchemaByName = (schemaModel, fieldName) => {
     // Recursive function to find the field by its name
     const findField = (currentSchema, currentFieldName) => {
@@ -136,27 +117,27 @@ const CustomContentTemplate = ({
     };
 
     const inputFields = {
-      string: TextInput,
-      text: TextInput,
+      string: formFields.TextInput,
+      text: formFields.TextInput,
       // 'alt-date': AltDateInput,
-      password: PasswordInput,
-      email: EmailInput,
-      file: FileInput,
-      button: ButtonInput,
-      calendar: CalendarInput,
-      checkboxes: CheckboxInput,
-      date: DateInput,
-      daterange: DateRangeInput,
-      datetime: DateTimeInput,
-      day: DayInput,
-      month: MonthInput,
-      progress: ProgressInput,
-      radio: RadioInput,
-      range: RangeInput,
-      select: SelectInput,
-      time: TimeInput,
-      updown: UpDownInput,
-      year: YearInput,
+      password: formFields.PasswordInput,
+      email: formFields.EmailInput,
+      file: formFields.FileInput,
+      button: formFields.ButtonInput,
+      calendar: formFields.CalendarInput,
+      checkboxes: formFields.CheckboxInput,
+      date: formFields.DateInput,
+      daterange: formFields.DateRangeInput,
+      datetime: formFields.DateTimeInput,
+      day: formFields.DayInput,
+      month: formFields.MonthInput,
+      progress: formFields.ProgressInput,
+      radio: formFields.RadioInput,
+      range: formFields.RangeInput,
+      select: formFields.SelectInput,
+      time: formFields.TimeInput,
+      updown: formFields.UpDownInput,
+      year: formFields.YearInput,
     };
 
     const Component = inputFields[widget];

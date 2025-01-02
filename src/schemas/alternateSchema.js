@@ -159,21 +159,21 @@ export const schemaModel = {
     layout: [
       {
         type: "section",
-        title: 'Employee Information',
-    classNames: 'd-flex flex-row align-items-start', // Makes all items in a single row
-    fields: [
-      'info.profilePic', // First column
-      {
-        type: 'section', // Second column (firstName and lastName)
-        classNames: 'd-flex flex-column', // Column layout for the fields
-        fields: ['info.firstName', 'info.lastName'],
-      },
-      {
-        type: 'section', // Third column (empId and designation)
-        classNames: 'd-flex flex-column', // Column layout for the fields
-        fields: ['info.empId', 'info.designation'],
-      },
-    ],
+        title: "Employee Information",
+        classNames: "d-flex flex-column", // Makes all items in a single row
+        fields: [
+          "info.profilePic", // First column
+          {
+            type: "section", // Second column (firstName and lastName)
+            classNames: "d-flex flex-row", // Column layout for the fields
+            fields: ["info.firstName", "info.lastName"],
+          },
+          {
+            type: "section", // Third column (empId and designation)
+            classNames: "d-flex flex-row", // Column layout for the fields
+            fields: ["info.empId", "info.designation"],
+          },
+        ],
       },
       {
         type: "section",
@@ -223,22 +223,25 @@ export const schemaModel = {
       },
       firstName: {
         // "ui:layout": "row",
-        // "ui:col": 6,
+        "ui:col": 6,
         classNames: "first-name",
         "ui:placeholder": "Enter First Name",
       },
       lastName: {
         // "ui:layout": "row",
-        // "ui:col": 6,
+        "ui:col": 6,
         classNames: "last-name",
         "ui:placeholder": "Enter Last Name",
       },
       empId: {
         // "ui:layout": "row",
+        "ui:col": 6,
         classNames: "emp-id",
         "ui:placeholder": "Enter Employee ID",
       },
       designation: {
+        "ui:col": 6,
+
         classNames: "designation",
         "ui:placeholder": "Enter Designation",
       },
@@ -296,8 +299,8 @@ export const schemaModel = {
           "Has a length between 8 and 15 characters.",
         ],
       },
-      employeementtype:{
-        "ui:placeholder": "Enter employeement type"
+      employeementtype: {
+        "ui:placeholder": "Enter employeement type",
       },
       // dateOfJoining: {
       //   'ui:widget': 'DatePickerWidget',
