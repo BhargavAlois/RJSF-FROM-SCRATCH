@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DefaultTemplate from "../templates/DefaultTemplate";
 import { format, parseISO } from "date-fns";
-import CustomContentTemplate from "../templates/CustomContentTemplate";
+import ContentTemplate from "../templates/ContentTemplate";
 
 export default function MyForm(props) {
   const [formData, setFormData] = useState({});
@@ -492,7 +492,7 @@ export default function MyForm(props) {
   };
 
   const content = (
-    <CustomContentTemplate
+    <ContentTemplate
       formData={formData}
       schemaModel={schemaModel}
       uiSchema={schemaModel.uiSchema}
@@ -508,7 +508,7 @@ export default function MyForm(props) {
   if (!MyTemplate) {
     return (
       <DefaultTemplate
-        schemaModel={schemaModel}
+        schema={schemaModel}
         uiSchema={schemaModel.uiSchema}
         content={content}
         onSubmit={handleSubmit}
@@ -519,7 +519,7 @@ export default function MyForm(props) {
   return (
     // <MyTemplate schema={schema} uiSchema={uiSchema} fields={fields} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors} />
     <MyTemplate
-      schemaModel={schemaModel}
+      schema={schemaModel}
       uiSchema={schemaModel.uiSchema}
       content={content}
       onSubmit={handleSubmit}

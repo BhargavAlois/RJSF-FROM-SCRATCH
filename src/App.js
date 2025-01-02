@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MyForm from './components/MyForm';
 // import { schema } from './schemas/schema';
 import { schemaModel } from './schemas/alternateSchema';
-import MainTemplate from './templates/MainTemplate';
+import CustomTemplate from './templates/CustomTemplate';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import './scss/style.scss';
@@ -12,7 +12,7 @@ function App() {
   const [formData, setFormData] = useState({});
 
   const templates = {
-    myCustomRowTemplate: MainTemplate
+    myCustomRowTemplate: CustomTemplate
   }
 
   const fields = {

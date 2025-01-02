@@ -2,18 +2,18 @@ import React from 'react';
 import Button from '@mui/material/Button';
 
 export default function MainTemplate(props) {
-    const { schemaModel, content, onSubmit } = props;
+    const { schema, content, onSubmit } = props;
 
     return (
         <div className="d-flex flex-column" style={{ maxWidth: "60%", width: "60%" }}>
             <header className="text-center mb-4">
-                <h3>{schemaModel.title || 'Default title'}</h3>
-                <p style={{fontSize: '15px', fontStyle: 'normal', fontWeight: 'normal'}}>{schemaModel.description || 'This is default description of form'}</p>
+                <h3>{schema.title || 'Default title'}</h3>
+                <p style={{fontSize: '15px', fontStyle: 'normal', fontWeight: 'normal'}}>{schema.description}</p>
             </header>
 
             <form
                 onSubmit={onSubmit}
-                className="bg-light d-flex flex-column align-items-center justify-content-center p-5 border border-dark border-opacity-25 rounded-4 shadow needs-validation"
+                className="w-100 bg-light d-flex flex-column align-items-center justify-content-center p-5 border border-dark border-opacity-25 rounded-4 shadow needs-validation"
                 style={{ overflow: 'auto' }}
             >
                 {content}
@@ -36,7 +36,7 @@ export default function MainTemplate(props) {
             </form>
 
             <footer className="mt-4 text-center">
-                {schemaModel.footerContent}
+                {schema.footerContent}
             </footer>
         </div>
     );

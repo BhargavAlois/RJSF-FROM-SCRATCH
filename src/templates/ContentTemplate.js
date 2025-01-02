@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { format } from "date-fns";
 import * as formFields from '../formFields/InputFieldsExports';
 
-export const ContentTemplate = ({
+export default function ContentTemplate({
   formData,
   schemaModel,
   fields,
@@ -11,7 +11,7 @@ export const ContentTemplate = ({
   onSuccess,
   onError,
   onSubmit,
-}) => {
+}) {
   const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
 
@@ -246,9 +246,9 @@ export const ContentTemplate = ({
   };
 
   return (
-    <div className="w-100">
-      {renderSections()}
-    </div>
+    // <div className="w-100">
+    // </div>
+      renderSections()
   );
 };
 
