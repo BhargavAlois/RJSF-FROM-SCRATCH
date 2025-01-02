@@ -7,7 +7,7 @@ import { format } from "date-fns";
 
 const CustomContentTemplate = ({
   formData,
-  schema,
+  schemaModel,
   fields,
   errors,
   onChange: handleChange,
@@ -18,11 +18,16 @@ const CustomContentTemplate = ({
   const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
 
-  function getDeepValue(obj, path) {
+  const getDeepValue = (obj, path) => {
     return path.split(".").reduce((acc, part) => acc && acc[part], obj);
   }
 
-  const getFieldSchemaByName = (schema, fieldName) => {
+  const normalizeFieldName = (fieldName) => {
+    const parts = fieldName.split('.');
+    return parts[parts.length - 1]; // Return the last part of the path
+  };
+
+  const getFieldSchemaByName = (schemaModel, fieldName) => {
     // Recursive function to find the field by its name
     const findField = (currentSchema, currentFieldName) => {
       // If the current schema is an object with properties, check each property
@@ -46,21 +51,26 @@ const CustomContentTemplate = ({
       return null;
     };
 
-    return findField(schema, fieldName);
+    return findField(schemaModel, fieldName);
   };
 
-  const renderField = (field, fieldName, parentSchema = schema, fieldPath) => {
+  const renderField = (field, fieldName, parentSchema = schemaModel, fieldPath) => {
     // console.log("field : ", field);
     const { title, enum: enumValues, oneOf, format } = field;
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName;
-    // console.log("fieldName : ", fieldName);
-    const uiField = getDeepValue(schema.uiSchema, fieldPath) || {};
+    console.log("fieldName : ", fieldName);
+    const uiField = getDeepValue(schemaModel.uiSchema, fieldPath) || {};
+    // console.log("UI FIELD : ", uiField);
     const fieldClass = `form-control ${uiField["classNames"]}`;
     const widget = uiField["ui:widget"] || format || "string";
+    // console.log("Widget : ", widget);
     const layoutClass = uiField["ui:layout"];
     // console.log(`layout class for : ${fieldName}`, layoutClass);
     const isColumnLayout = uiField["ui:layout"] === "column";
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
+
+    // const normalizedFieldName = normalizeFieldName(fieldName);
+    // console.log("Normalized field name : ", normalizedFieldName);
     // console.log("column class : ", colClass);
 
     const convertToBase64 = (file) => {
@@ -405,7 +415,7 @@ const CustomContentTemplate = ({
                 minDate={new Date()}
                 endDate={formData.dateRange?.endDate}
                 placeholderText="Start Date"
-                dateFormat={schema.uiSchema[fieldName]["ui:options"]?.format}
+                dateFormat={schemaModel.uiSchema[fieldName]["ui:options"]?.format}
                 className={`${fieldClass} ${
                   errors[fieldName] ? "is-invalid" : ""
                 }`}
@@ -424,7 +434,7 @@ const CustomContentTemplate = ({
                 endDate={formData.dateRange?.endDate}
                 minDate={formData.dateRange?.startDate}
                 placeholderText="End Date"
-                dateFormat={schema.uiSchema[fieldName]["ui:options"]?.format}
+                dateFormat={schemaModel.uiSchema[fieldName]["ui:options"]?.format}
                 className={`${fieldClass} ${
                   errors[fieldName] ? "is-invalid" : ""
                 }`}
@@ -603,7 +613,7 @@ const CustomContentTemplate = ({
 
       case "date":
         const formatOfDate =
-          schema.uiSchema[fieldName]?.["ui:options"]?.format || "MM/dd/yyyy";
+        schemaModel.uiSchema[fieldName]?.["ui:options"]?.format || "MM/dd/yyyy";
         return (
           <div key={fieldName} className={`${colClass} `}>
             <label className="form-label">{title || fieldName}</label>
@@ -939,7 +949,16 @@ const CustomContentTemplate = ({
   };
 
   const renderSections = () => {
-    const layout = schema.uiSchema.layout || [];
+    const layout = schemaModel.uiSchema.layout || [];
+
+    if (!layout || layout.length === 0) {
+      // Fallback to normal rendering when layout is not provided
+      return Object.keys(schemaModel.schema.properties || {}).map((fieldName, index) => {
+        const field = getFieldSchemaByName(schemaModel.schema, fieldName);
+        return field ? renderField(field, fieldName) : null;
+      });
+    }
+    
     return layout.map((section, index) => {
       const { title, classNames, fields } = section;
       return (
@@ -948,7 +967,7 @@ const CustomContentTemplate = ({
           {fields.map((fieldPathOrSection, fieldIndex) => {
             if (typeof fieldPathOrSection === 'string') {
               const fieldName = fieldPathOrSection.split('.').pop();
-              const field = getFieldSchemaByName(schema.schema, fieldName);
+              const field = getFieldSchemaByName(schemaModel.schema, fieldName);
               if (field) {
                 return renderField(field, fieldPathOrSection);
               }
@@ -958,7 +977,7 @@ const CustomContentTemplate = ({
                   {fieldPathOrSection.title && <h6>{fieldPathOrSection.title}</h6>}
                   {fieldPathOrSection.fields.map((nestedField) => {
                     const nestedFieldName = nestedField.split('.').pop();
-                    const nestedFieldSchema = getFieldSchemaByName(schema.schema, nestedFieldName);
+                    const nestedFieldSchema = getFieldSchemaByName(schemaModel.schema, nestedFieldName);
                     return nestedFieldSchema ? renderField(nestedFieldSchema, nestedField) : null;
                   })}
                 </div>

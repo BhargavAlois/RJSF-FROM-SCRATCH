@@ -2,13 +2,13 @@ import React from 'react';
 import Button from '@mui/material/Button';
 
 export default function MainTemplate(props) {
-    const { schema, content, onSubmit } = props;
+    const { schemaModel, content, onSubmit } = props;
 
     return (
         <div className="d-flex flex-column" style={{ maxWidth: "60%", width: "60%" }}>
             <header className="text-center mb-4">
-                <h3>{schema.title || 'Default title'}</h3>
-                <p style={{fontSize: '15px', fontStyle: 'normal', fontWeight: 'normal'}}>{schema.description || 'This is default description of form'}</p>
+                <h3>{schemaModel.title || 'Default title'}</h3>
+                <p style={{fontSize: '15px', fontStyle: 'normal', fontWeight: 'normal'}}>{schemaModel.description || 'This is default description of form'}</p>
             </header>
 
             <form
@@ -36,7 +36,7 @@ export default function MainTemplate(props) {
             </form>
 
             <footer className="mt-4 text-center">
-                {schema.footerContent}
+                {schemaModel.footerContent}
             </footer>
         </div>
     );

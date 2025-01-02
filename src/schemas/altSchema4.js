@@ -1,4 +1,4 @@
-export const schema = {
+export const schemaModel = {
   name: "singleuser",
   title: "Single User",
   schema: {
@@ -295,6 +295,9 @@ export const schema = {
           "Contains at least one special character (e.g., !, @, #, $, %, &).",
           "Has a length between 8 and 15 characters.",
         ],
+      },
+      employeementtype:{
+        "ui:placeholder": "Enter employeement type"
       },
       // dateOfJoining: {
       //   'ui:widget': 'DatePickerWidget',

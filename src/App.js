@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MyForm from './components/MyForm';
 // import { schema } from './schemas/schema';
-import { schema } from './schemas/altSchema4';
+import { schemaModel } from './schemas/altSchema4';
 // import {schema} from './schemas/layoutTest';
 // import { uiSchema } from './schemas/altUiSchema4';
 import { errorSchema } from './schemas/errorSchema';
@@ -123,7 +123,7 @@ function App() {
 
   return (
       <div className="d-flex flex-column justify-content-center align-items-center align-middle">
-        <MyForm schema={schema}
+        <MyForm schemaModel={schemaModel}
           // uiSchema={uiSchema}
           templates={templates}
           fields={fields}

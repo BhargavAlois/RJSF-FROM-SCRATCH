@@ -7,7 +7,7 @@ export default function MyForm(props) {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const {
-    schema,
+    schemaModel,
     onSubmit,
     onChange,
     onSuccess,
@@ -16,7 +16,7 @@ export default function MyForm(props) {
     errorSchema,
   } = props;
   const templates = props?.templates;
-  const templateName = props?.schema.uiSchema["ui:layout"];
+  const templateName = props?.schemaModel.uiSchema["ui:layout"];
   var MyTemplate;
   if (templateName) {
     MyTemplate = templates[templateName];
@@ -71,14 +71,14 @@ export default function MyForm(props) {
   //     return formattedData;
   // };
 
-  const convertToSchemaFormat = (schema, data) => {
+  const convertToSchemaFormat = (schemaModel, data) => {
     const formattedData = {};
 
     Object.keys(prefilledData).map((fieldName) => {
       formData[fieldName] = prefilledData[fieldName];
     });
 
-    // console.log("Form data : ", formData);
+    console.log("Form data : ", formData);
 
     // Helper function to process nested objects
     const processProperties = (properties, data, parentPath = "") => {
@@ -147,7 +147,7 @@ export default function MyForm(props) {
     };
 
     // Process the top-level schema properties
-    return processProperties(schema.schema.properties, data);
+    return processProperties(schemaModel.schema.properties, data);
   };
 
   //Code working with displaying errors
@@ -204,15 +204,15 @@ export default function MyForm(props) {
     }
   };
 
-  const getRequiredFields = (schema) => {
+  const getRequiredFields = (schemaModel) => {
     let requiredFields = [];
 
-    if (schema.required) {
-      requiredFields = requiredFields.concat(schema.required);
+    if (schemaModel.required) {
+      requiredFields = requiredFields.concat(schemaModel.required);
     }
 
-    Object.keys(schema.properties).forEach((fieldName) => {
-      const field = schema.properties[fieldName];
+    Object.keys(schemaModel.properties).forEach((fieldName) => {
+      const field = schemaModel.properties[fieldName];
 
       if (field.type === "object" && field.properties) {
         // console.log("Searching required field : ", field);
@@ -225,7 +225,6 @@ export default function MyForm(props) {
       }
     });
 
-    console.log("Required fields : ", requiredFields);
     return requiredFields;
   };
 
@@ -259,8 +258,9 @@ export default function MyForm(props) {
 
     // Helper function to validate single field
     const validateField = (fieldName, fieldSchema, value, parentPath = "") => {
-      // console.log("value inside validate field : ", value);
+      console.log("value inside validate field : ", value);
       const fullPath = parentPath ? `${parentPath}.${fieldName}` : fieldName;
+      console.log("Full path : ", fullPath);
       const fieldTitle = fieldSchema.title || fieldName;
       const errors = [];
       // console.log("fieldSchema : ", fieldSchema);
@@ -268,7 +268,7 @@ export default function MyForm(props) {
       // Required field validation
       if (
         fieldSchema.required ||
-        (getRequiredFields(schema.schema) || []).includes(fieldName)
+        (getRequiredFields(schemaModel.schema) || []).includes(fieldName)
       ) {
         if (value === undefined || value === "" || value === null) {
           // console.log("Inside required validation");
@@ -282,15 +282,11 @@ export default function MyForm(props) {
         if (fieldSchema.pattern) {
           const regex = new RegExp(fieldSchema.pattern);
           if (!regex.test(value)) {
-            const fieldUiSchema = getFieldUiSchema(fieldName, schema.uiSchema);
-            if (
-              fieldUiSchema.pattern_message &&
-              Array.isArray(fieldUiSchema.pattern_message)
-            ) {
-              errors.push(...fieldUiSchema?.pattern_message);
-            } else {
-              errors.push(`${fieldTitle} is not in the correct format`);
-            }
+            const fieldUiSchema = getFieldUiSchema(
+              fieldName,
+              schemaModel.uiSchema
+            );
+            errors.push(`${fieldTitle} is not in the correct format`);
           }
         }
 
@@ -343,7 +339,7 @@ export default function MyForm(props) {
       }
 
       // File validations
-      const uiOptions = schema.uiSchema[fieldName]?.["ui:options"] || {};
+      const uiOptions = schemaModel.uiSchema[fieldName]?.["ui:options"] || {};
       if (uiOptions.accept && value) {
         let fileType;
         if (typeof value === "string" && value.startsWith("data:")) {
@@ -361,27 +357,36 @@ export default function MyForm(props) {
         }
       }
 
+      const fieldUiSchema = getFieldUiSchema(fieldName, schemaModel.uiSchema);
       if (errors.length > 0) {
+        if (
+          fieldUiSchema?.pattern_message &&
+          Array.isArray(fieldUiSchema.pattern_message)
+        ) {
+          errors.push(...fieldUiSchema.pattern_message);
+        }
         formErrors[fullPath] = errors;
       }
+
+      console.log("Errors from myform : ", formErrors[fullPath]);
     };
 
     // Recursive function to handle nested objects
     const validateObject = (objectSchema, parentPath = "") => {
       Object.entries(objectSchema.properties || {}).forEach(
         ([fieldName, fieldSchema]) => {
-          const value = formData?.[fieldName];
-          console.log(`${fieldName} : ${value}`);
-          // console.log("Data : ", data);
-          // console.log("fieldSchema : ", fieldSchema);
-          // console.log("value : ", value);
+          const fullPath = parentPath
+            ? `${parentPath}.${fieldName}`
+            : fieldName; // Construct the full path
+          const value = formData?.[fullPath]; // Use the full path to access the value
+
+          console.log(`${fullPath} : ${value}`);
+
           if (fieldSchema.type === "object") {
-            validateObject(
-              fieldSchema,
-              value,
-              parentPath ? `${parentPath}.${fieldName}` : fieldName
-            );
+            // Recursively validate nested objects
+            validateObject(fieldSchema, fullPath);
           } else {
+            // Validate individual fields
             validateField(fieldName, fieldSchema, value, parentPath);
           }
         }
@@ -389,13 +394,11 @@ export default function MyForm(props) {
     };
 
     // Start validation from root schema
-    validateObject(schema.schema);
+    validateObject(schemaModel.schema);
 
     // Set errors in state
     setErrors(formErrors);
-
-    console.log("form errors : ", formErrors);
-
+    console.log("Form errors : ", formErrors);
     return Object.keys(formErrors).length === 0;
   };
 
@@ -472,6 +475,7 @@ export default function MyForm(props) {
 
   const handleChange = (fieldName, value) => {
     // const options = uiSchema[fieldName]['ui:options'];
+    console.log("Change in field : ", fieldName);
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: value,
@@ -490,8 +494,8 @@ export default function MyForm(props) {
   const content = (
     <CustomContentTemplate
       formData={formData}
-      schema={schema}
-      uiSchema={schema.uiSchema}
+      schemaModel={schemaModel}
+      uiSchema={schemaModel.uiSchema}
       errors={errors}
       fields={fields}
       onSubmit={handleSubmit}
@@ -504,8 +508,8 @@ export default function MyForm(props) {
   if (!MyTemplate) {
     return (
       <DefaultTemplate
-        schema={schema}
-        uiSchema={schema.uiSchema}
+        schemaModel={schemaModel}
+        uiSchema={schemaModel.uiSchema}
         content={content}
         onSubmit={handleSubmit}
       />
@@ -515,8 +519,8 @@ export default function MyForm(props) {
   return (
     // <MyTemplate schema={schema} uiSchema={uiSchema} fields={fields} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors} />
     <MyTemplate
-      schema={schema}
-      uiSchema={schema.uiSchema}
+      schemaModel={schemaModel}
+      uiSchema={schemaModel.uiSchema}
       content={content}
       onSubmit={handleSubmit}
     />
