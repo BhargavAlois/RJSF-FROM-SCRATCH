@@ -7,7 +7,7 @@ export default function MyForm(props) {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const {
-    schemaModel,
+    schema,
     onSubmit,
     onChange,
     onSuccess,
@@ -15,8 +15,10 @@ export default function MyForm(props) {
     formData: prefilledFormData,
     errorSchema,
   } = props;
+  console.log("-----------------", schema);
   const templates = props?.templates;
-  const templateName = props?.schemaModel.uiSchema["template"];
+  console.log("ui schema : ", schema.uiSchema);
+  const templateName = schema?.uiSchema?.["template"];
   var MyTemplate;
   if (templateName) {
     MyTemplate = templates[templateName];
@@ -71,7 +73,7 @@ export default function MyForm(props) {
   //     return formattedData;
   // };
 
-  const convertToSchemaFormat = (schemaModel, data) => {
+  const convertToSchemaFormat = (schema, data) => {
     const formattedData = {};
 
     Object.keys(prefilledData).map((fieldName) => {
@@ -147,7 +149,7 @@ export default function MyForm(props) {
     };
 
     // Process the top-level schema properties
-    return processProperties(schemaModel.schema.properties, data);
+    return processProperties(schema.schema.properties, data);
   };
 
   //Code working with displaying errors
@@ -204,15 +206,15 @@ export default function MyForm(props) {
     }
   };
 
-  const getRequiredFields = (schemaModel) => {
+  const getRequiredFields = (schema) => {
     let requiredFields = [];
 
-    if (schemaModel.required) {
-      requiredFields = requiredFields.concat(schemaModel.required);
+    if (schema.required) {
+      requiredFields = requiredFields.concat(schema.required);
     }
 
-    Object.keys(schemaModel.properties).forEach((fieldName) => {
-      const field = schemaModel.properties[fieldName];
+    Object.keys(schema.properties).forEach((fieldName) => {
+      const field = schema.properties[fieldName];
 
       if (field.type === "object" && field.properties) {
         // console.log("Searching required field : ", field);
@@ -268,7 +270,7 @@ export default function MyForm(props) {
       // Required field validation
       if (
         fieldSchema.required ||
-        (getRequiredFields(schemaModel.schema) || []).includes(fieldName)
+        (getRequiredFields(schema.schema) || []).includes(fieldName)
       ) {
         if (value === undefined || value === "" || value === null) {
           // console.log("Inside required validation");
@@ -284,7 +286,7 @@ export default function MyForm(props) {
           if (!regex.test(value)) {
             const fieldUiSchema = getFieldUiSchema(
               fieldName,
-              schemaModel.uiSchema
+              schema.uiSchema
             );
             errors.push(`${fieldTitle} is not in the correct format`);
           }
@@ -339,7 +341,7 @@ export default function MyForm(props) {
       }
 
       // File validations
-      const uiOptions = schemaModel.uiSchema[fieldName]?.["ui:options"] || {};
+      const uiOptions = schema.uiSchema[fieldName]?.["ui:options"] || {};
       if (uiOptions.accept && value) {
         let fileType;
         if (typeof value === "string" && value.startsWith("data:")) {
@@ -357,7 +359,7 @@ export default function MyForm(props) {
         }
       }
 
-      const fieldUiSchema = getFieldUiSchema(fieldName, schemaModel.uiSchema);
+      const fieldUiSchema = getFieldUiSchema(fieldName, schema.uiSchema);
       if (errors.length > 0) {
         if (
           fieldUiSchema?.pattern_message &&
@@ -394,7 +396,7 @@ export default function MyForm(props) {
     };
 
     // Start validation from root schema
-    validateObject(schemaModel.schema);
+    validateObject(schema.schema);
 
     // Set errors in state
     setErrors(formErrors);
@@ -494,8 +496,8 @@ export default function MyForm(props) {
   const content = (
     <ContentTemplate
       formData={formData}
-      schemaModel={schemaModel}
-      uiSchema={schemaModel.uiSchema}
+      schema={schema}
+      uiSchema={schema.uiSchema}
       errors={errors}
       fields={fields}
       onSubmit={handleSubmit}
@@ -508,8 +510,8 @@ export default function MyForm(props) {
   if (!MyTemplate) {
     return (
       <DefaultTemplate
-        schema={schemaModel}
-        uiSchema={schemaModel.uiSchema}
+        schema={schema}
+        uiSchema={schema.uiSchema}
         content={content}
         onSubmit={handleSubmit}
       />
@@ -519,8 +521,8 @@ export default function MyForm(props) {
   return (
     // <MyTemplate schema={schema} uiSchema={uiSchema} fields={fields} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors} />
     <MyTemplate
-      schema={schemaModel}
-      uiSchema={schemaModel.uiSchema}
+      schema={schema}
+      uiSchema={schema.uiSchema}
       content={content}
       onSubmit={handleSubmit}
     />

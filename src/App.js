@@ -11,6 +11,8 @@ import * as customFields from "./fields/fields";
 function App() {
   const [formData, setFormData] = useState({});
 
+  console.log("schema ", schemaModel);
+
   const templates = {
     myCustomRowTemplate: CustomTemplate,
   };
@@ -50,7 +52,7 @@ function App() {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center align-middle">
       <MyForm
-        schemaModel={schemaModel}
+        schema={schemaModel}
         // uiSchema={uiSchema}
         templates={templates}
         fields={fields}

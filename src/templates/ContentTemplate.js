@@ -4,7 +4,7 @@ import * as formFields from '../formFields/InputFieldsExports';
 
 export default function ContentTemplate({
   formData,
-  schemaModel,
+  schema,
   fields,
   errors,
   onChange: handleChange,
@@ -19,7 +19,7 @@ export default function ContentTemplate({
     return path.split(".").reduce((acc, part) => acc && acc[part], obj);
   };
 
-  const getFieldSchemaByName = (schemaModel, fieldName) => {
+  const getFieldSchemaByName = (schema, fieldName) => {
     // Recursive function to find the field by its name
     const findField = (currentSchema, currentFieldName) => {
       // If the current schema is an object with properties, check each property
@@ -42,19 +42,19 @@ export default function ContentTemplate({
       return null;
     };
 
-    return findField(schemaModel, fieldName);
+    return findField(schema, fieldName);
   };
 
   const renderField = (
     field,
     fieldName,
-    parentSchema = schemaModel,
+    parentSchema = schema,
     fieldPath
   ) => {
     const { title, enum: enumValues, oneOf, format } = field;
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName;
     console.log("fieldName : ", fieldName);
-    const uiField = getDeepValue(schemaModel.uiSchema, fieldPath) || {};
+    const uiField = getDeepValue(schema.uiSchema, fieldPath) || {};
     const fieldClass = `form-control ${uiField["classNames"]}`;
     const widget = uiField["ui:widget"] || format || "string";
     const layoutClass = uiField["ui:layout"];
@@ -144,7 +144,7 @@ export default function ContentTemplate({
     if (Component) {
       return (
         <Component
-          schemaModel={schemaModel}
+          schema={schema}
           formData={formData}
           field={field}
           uiField={uiField}
@@ -189,13 +189,13 @@ export default function ContentTemplate({
   };
 
   const renderSections = () => {
-    const layout = schemaModel.uiSchema.layout || [];
+    const layout = schema.uiSchema.layout || [];
 
     if (!layout || layout.length === 0) {
       // Fallback to normal rendering when layout is not provided
-      return Object.keys(schemaModel.schema.properties || {}).map(
+      return Object.keys(schema.schema.properties || {}).map(
         (fieldName, index) => {
-          const field = getFieldSchemaByName(schemaModel.schema, fieldName);
+          const field = getFieldSchemaByName(schema.schema, fieldName);
           return field ? renderField(field, fieldName) : null;
         }
       );
@@ -209,7 +209,7 @@ export default function ContentTemplate({
           {fields.map((fieldPathOrSection, fieldIndex) => {
             if (typeof fieldPathOrSection === "string") {
               const fieldName = fieldPathOrSection.split(".").pop();
-              const field = getFieldSchemaByName(schemaModel.schema, fieldName);
+              const field = getFieldSchemaByName(schema.schema, fieldName);
               if (field) {
                 return renderField(field, fieldPathOrSection);
               }
@@ -228,7 +228,7 @@ export default function ContentTemplate({
                   {fieldPathOrSection.fields.map((nestedField) => {
                     const nestedFieldName = nestedField.split(".").pop();
                     const nestedFieldSchema = getFieldSchemaByName(
-                      schemaModel.schema,
+                      schema.schema,
                       nestedFieldName
                     );
                     return nestedFieldSchema

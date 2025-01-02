@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function DateRangeInput(props) {
-  const {schemaModel, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+  const {schema, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
   const isColumnLayout = uiField["ui:layout"] === "column";
 
   return (
@@ -27,7 +27,7 @@ export default function DateRangeInput(props) {
           minDate={new Date()}
           endDate={formData.dateRange?.endDate}
           placeholderText="Start Date"
-          dateFormat={schemaModel.uiSchema[fieldName]["ui:options"]?.format}
+          dateFormat={schema.uiSchema[fieldName]["ui:options"]?.format}
           className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
           placeholder={uiField["ui:placeholder"]}
         />
@@ -44,7 +44,7 @@ export default function DateRangeInput(props) {
           endDate={formData.dateRange?.endDate}
           minDate={formData.dateRange?.startDate}
           placeholderText="End Date"
-          dateFormat={schemaModel.uiSchema[fieldName]["ui:options"]?.format}
+          dateFormat={schema.uiSchema[fieldName]["ui:options"]?.format}
           className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
           placeholder={uiField["ui:placeholder"]}
         />

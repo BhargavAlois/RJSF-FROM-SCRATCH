@@ -4,9 +4,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import {format} from 'date-fns';
 
 export default function DateInput(props) {
-  const {schemaModel, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+  const {schema, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
   const formatOfDate =
-    schemaModel.uiSchema[fieldName]?.["ui:options"]?.format || "MM/dd/yyyy";
+    schema.uiSchema[fieldName]?.["ui:options"]?.format || "MM/dd/yyyy";
 
     const handleDateChange = (fieldName, date, formatString) => {
         let formattedDate;
