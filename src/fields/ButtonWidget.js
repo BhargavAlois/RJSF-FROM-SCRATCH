@@ -4,7 +4,7 @@ const ButtonWidget = (props) => {
     const field = props.uiField;
     const value = field['ui:options']['value'];
     const onClick = field['ui:options']['onClick'];
-    const btnClass = field['ui:classNames'];
+    const btnClass = field['classNames'];
 
     return (
         <div className='text-center'>
