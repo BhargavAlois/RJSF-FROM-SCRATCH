@@ -1,4 +1,4 @@
-export const schema = {
+export const schemaModel = {
   type: "object",
   title: "My Custom Form",
   description: "A simple form example.",
@@ -170,6 +170,16 @@ export const schema = {
       "time", "datetime", "calendar", "year", "month", "day", "file",
       "actionButton", "myButton"
     ],
+    "layout": [{
+    type: "section",
+    classNames: "d-flex flex-row",
+    fields: ["firstName", "lastName"],
+  }, {
+    type: "section",
+    fields: ["email", "password", "phoneNumber", "role", "preferences", "dateRange", "date",
+      "time", "datetime", "calendar", "year", "month", "day", "file",
+      "actionButton", "myButton"]
+  }],
     // "ui:layout": "myCustomRowTemplate",
     firstName: {
       // "ui:widget": "text",

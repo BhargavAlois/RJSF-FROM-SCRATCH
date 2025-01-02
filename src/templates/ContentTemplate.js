@@ -204,7 +204,7 @@ export default function ContentTemplate({
     return layout.map((section, index) => {
       const { title, classNames, fields } = section;
       return (
-        <div key={index} className={`${classNames}`}>
+        <div key={index} className={`${classNames} w-100`}>
           {title && <h5>{title}</h5>}
           {fields.map((fieldPathOrSection, fieldIndex) => {
             if (typeof fieldPathOrSection === "string") {
