@@ -1,9 +1,25 @@
 import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Button from "../widgets/ButtonWidget";
-
 import { format } from "date-fns";
+import PasswordInput from "../formFields/PasswordInput";
+import EmailInput from "../formFields/EmailInput";
+import TextInput from "../formFields/TextInput";
+import AltDateInput from "../formFields/AltDateInput";
+import FileInput from "../formFields/FileInput";
+import ButtonInput from "../formFields/ButtonInput";
+import CalendarInput from "../formFields/CalendarInput";
+import CheckboxInput from "../formFields/CheckboxInput";
+import DateInput from "../formFields/DateInput";
+import DateRangeInput from "../formFields/DateRangeInput";
+import DateTimeInput from "../formFields/DateTimeInput";
+import DayInput from "../formFields/DayInput";
+import MonthInput from "../formFields/MonthInput";
+import ProgressInput from "../formFields/ProgressInput";
+import RadioInput from "../formFields/RadioInput";
+import RangeInput from "../formFields/RangeInput";
+import SelectInput from "../formFields/SelectInput";
+import TimeInput from "../formFields/TimeInput";
+import UpDownInput from "../formFields/UpDownInput";
+import YearInput from "../formFields/YearInput";
 
 const CustomContentTemplate = ({
   formData,
@@ -20,13 +36,8 @@ const CustomContentTemplate = ({
 
   const getDeepValue = (obj, path) => {
     return path.split(".").reduce((acc, part) => acc && acc[part], obj);
-  }
-
-  const normalizeFieldName = (fieldName) => {
-    const parts = fieldName.split('.');
-    return parts[parts.length - 1]; // Return the last part of the path
   };
-
+  
   const getFieldSchemaByName = (schemaModel, fieldName) => {
     // Recursive function to find the field by its name
     const findField = (currentSchema, currentFieldName) => {
@@ -46,7 +57,6 @@ const CustomContentTemplate = ({
           }
         }
       }
-
       // If the field is not found, return null
       return null;
     };
@@ -54,34 +64,21 @@ const CustomContentTemplate = ({
     return findField(schemaModel, fieldName);
   };
 
-  const renderField = (field, fieldName, parentSchema = schemaModel, fieldPath) => {
-    // console.log("field : ", field);
+  const renderField = (
+    field,
+    fieldName,
+    parentSchema = schemaModel,
+    fieldPath
+  ) => {
     const { title, enum: enumValues, oneOf, format } = field;
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName;
     console.log("fieldName : ", fieldName);
     const uiField = getDeepValue(schemaModel.uiSchema, fieldPath) || {};
-    // console.log("UI FIELD : ", uiField);
     const fieldClass = `form-control ${uiField["classNames"]}`;
     const widget = uiField["ui:widget"] || format || "string";
-    // console.log("Widget : ", widget);
     const layoutClass = uiField["ui:layout"];
-    // console.log(`layout class for : ${fieldName}`, layoutClass);
     const isColumnLayout = uiField["ui:layout"] === "column";
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
-
-    // const normalizedFieldName = normalizeFieldName(fieldName);
-    // console.log("Normalized field name : ", normalizedFieldName);
-    // console.log("column class : ", colClass);
-
-    const convertToBase64 = (file) => {
-      // Convert file to Base64
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64File = reader.result; // This will be a Base64 encoded string
-        handleChange(fieldName, base64File); // Pass the Base64 string to the handler
-      };
-      reader.readAsDataURL(file);
-    };
 
     if (field.type === "object" && field.properties) {
       return (
@@ -104,62 +101,6 @@ const CustomContentTemplate = ({
         /* </div> */
       );
     }
-
-    const handleFileChange = (fieldName, e) => {
-      const file = e.target.files[0];
-      setPreview();
-      setFileDetails();
-
-      if (file) {
-        if (file.type.startsWith("image/")) {
-          const objectUrl = URL.createObjectURL(file);
-          setPreview(objectUrl);
-          setFileDetails(null);
-        } else {
-          setPreview(null);
-          setFileDetails({
-            name: file.name,
-            type: file.type,
-            size: file.size,
-          });
-        }
-
-        const outputFormat = uiField?.["ui:options"]?.["output"];
-        if (outputFormat === "base64") {
-          convertToBase64(file);
-        } else {
-          handleChange(fieldName, file);
-        }
-      }
-    };
-
-    const handleDateChange = (fieldName, date, formatString) => {
-      let formattedDate;
-
-      // Use the current date if the selected date is invalid
-      if (!date || isNaN(date.getTime())) {
-        date = new Date(); // Fallback to current date
-      }
-
-      // Format the date as per the provided formatString
-      if (formatString) {
-        try {
-          formattedDate = format(date, formatString);
-        } catch (error) {
-          formattedDate = date.toISOString(); // Fallback to ISO format if formatting fails
-        }
-      } else {
-        formattedDate = new Date(date).toISOString(); // Default to ISO format
-      }
-
-      handleChange(fieldName, formattedDate);
-    };
-
-    const handleChangeDatePart = (part, value) => {
-      const updatedDate = { ...formData[fieldName] };
-      updatedDate[part] = value;
-      handleChange(fieldName, updatedDate);
-    };
 
     // const handleDefaultFieldChange = (e) => {
     //   // if (f_name) {
@@ -194,733 +135,50 @@ const CustomContentTemplate = ({
       handleChange(fieldName, value);
     };
 
-    switch (widget) {
-      case "password":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <input
-              type="password"
-              name={fieldName}
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              placeholder={uiField["ui:placeholder"]}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
+    const inputFields = {
+      string: TextInput,
+      text: TextInput,
+      // 'alt-date': AltDateInput,
+      password: PasswordInput,
+      email: EmailInput,
+      file: FileInput,
+      button: ButtonInput,
+      calendar: CalendarInput,
+      checkboxes: CheckboxInput,
+      date: DateInput,
+      daterange: DateRangeInput,
+      datetime: DateTimeInput,
+      day: DayInput,
+      month: MonthInput,
+      progress: ProgressInput,
+      radio: RadioInput,
+      range: RangeInput,
+      select: SelectInput,
+      time: TimeInput,
+      updown: UpDownInput,
+      year: YearInput,
+    };
 
-      case "email":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <input
-              type="text"
-              name={fieldName}
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              placeholder={uiField["ui:placeholder"]}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "select":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <select
-              name={fieldName}
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              placeholder={uiField["ui:placeholder"]}
-            >
-              <option value="">Select an option</option>
-              {(oneOf || enumValues) &&
-                (oneOf || enumValues).map((value, index) => (
-                  <option key={index} value={value.const}>
-                    {value.title}
-                  </option>
-                ))}
-            </select>
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "checkboxes":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <div
-              className={`form-check ${
-                isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
-              }`}
-              style={{ overflow: "hidden" }}
-            >
-              {field.items.enum &&
-                field.items.enum.map((value, index) => (
-                  <div
-                    key={index}
-                    className="form-check"
-                    style={{ flexBasis: "20%" }}
-                  >
-                    <input
-                      type="checkbox"
-                      className={`${fieldClass} ${
-                        errors[fieldName] ? "is-invalid" : ""
-                      }`}
-                      name={fieldName}
-                      value={value}
-                      checked={formData[fieldName]?.includes(value)}
-                      onChange={(e) => {
-                        const updatedValues = e.target.checked
-                          ? [...(formData[fieldName] || []), value]
-                          : (formData[fieldName] || []).filter(
-                              (val) => val !== value
-                            );
-                        handleChange(fieldName, updatedValues);
-                      }}
-                    />
-                    <label className="form-check-label">{value}</label>
-                  </div>
-                ))}
-            </div>
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "radio":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <div
-              className={`form-check ${
-                isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
-              }`}
-            >
-              {(oneOf || enumValues) &&
-                (oneOf || enumValues).map((value, index) => (
-                  <div key={index} className="form-check">
-                    <input
-                      type="radio"
-                      className={`${fieldClass} ${
-                        errors[fieldName] ? "is-invalid" : ""
-                      }`}
-                      name={fieldName}
-                      value={value}
-                      checked={formData[fieldName] === value}
-                      onChange={() => handleChange(fieldName, value)}
-                    />
-                    <label className="form-check-label">{value}</label>
-                  </div>
-                ))}
-            </div>
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "range":
-        const min = field.minimum || 0;
-        const max = field.maximum || 100;
-        const defaultValue =
-          field.default !== undefined && field.default !== null
-            ? field.default
-            : min;
-        const rangeValue = formData[fieldName] || defaultValue;
-
-        return (
-          <div key={fieldName} className={`${colClass}`}>
-            <label className="form-label">{title || fieldName}</label>
-            <input
-              type="range"
-              name={fieldName}
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-              value={rangeValue}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              min={min}
-              max={max}
-              step="1"
-              placeholder={uiField["ui:placeholder"]}
-            />
-            <div className="range-value">
-              <span>{rangeValue}</span>
-            </div>
-            {errors[fieldName] && (
-              <div className="invalid-feedback">
-                {errors[fieldName].map((error, index) => (
-                  <p key={index} className="m-0">
-                    {error}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-
-      case "daterange":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <div
-              className={`${
-                isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
-              }`}
-            >
-              <DatePicker
-                selected={formData.dateRange?.startDate || new Date()}
-                onChange={(date) =>
-                  handleChange("dateRange", {
-                    ...formData.dateRange,
-                    startDate: date,
-                  })
-                }
-                selectsStart
-                startDate={formData.dateRange?.startDate}
-                minDate={new Date()}
-                endDate={formData.dateRange?.endDate}
-                placeholderText="Start Date"
-                dateFormat={schemaModel.uiSchema[fieldName]["ui:options"]?.format}
-                className={`${fieldClass} ${
-                  errors[fieldName] ? "is-invalid" : ""
-                }`}
-                placeholder={uiField["ui:placeholder"]}
-              />
-              <DatePicker
-                selected={formData.dateRange?.endDate || new Date()}
-                onChange={(date) =>
-                  handleChange("dateRange", {
-                    ...formData.dateRange,
-                    endDate: date,
-                  })
-                }
-                selectsEnd
-                startDate={formData.dateRange?.startDate}
-                endDate={formData.dateRange?.endDate}
-                minDate={formData.dateRange?.startDate}
-                placeholderText="End Date"
-                dateFormat={schemaModel.uiSchema[fieldName]["ui:options"]?.format}
-                className={`${fieldClass} ${
-                  errors[fieldName] ? "is-invalid" : ""
-                }`}
-                placeholder={uiField["ui:placeholder"]}
-              />
-            </div>
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "alt-date":
-        const { yearsRange, format: dateFormat } = uiField["ui:options"] || {};
-        const startYear = yearsRange ? yearsRange[0] : 1900;
-        const endYear = yearsRange ? yearsRange[1] : 2100;
-
-        const months = [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
-        ];
-
-        const getDaysInMonth = (month, year) => {
-          return new Date(year, month, 0).getDate();
-        };
-
-        const dayOptions = [];
-        const monthOptions = months.map((month, index) => (
-          <option key={index} value={index + 1}>
-            {month}
-          </option>
-        ));
-        const yearOptions = [];
-        for (let i = startYear; i <= endYear; i++) {
-          yearOptions.push(
-            <option key={i} value={i}>
-              {i}
-            </option>
-          );
-        }
-
-        const selectedYear =
-          formData[fieldName]?.year || new Date().getFullYear();
-        const selectedMonth =
-          formData[fieldName]?.month || new Date().getMonth() + 1;
-        const selectedDay = formData[fieldName]?.day || new Date().getDate();
-        const daysInMonth = getDaysInMonth(selectedMonth, selectedYear);
-
-        for (let i = 1; i <= daysInMonth; i++) {
-          dayOptions.push(
-            <option key={i} value={i}>
-              {i}
-            </option>
-          );
-        }
-
-        const isYMD = dateFormat === "YMD";
-        const isMDY = dateFormat === "MDY";
-
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <div
-              className={`${
-                isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
-              }`}
-            >
-              {isYMD && (
-                <>
-                  <select
-                    name={`${fieldName}_year`}
-                    className={`${fieldClass} ${
-                      errors[fieldName] ? "is-invalid" : ""
-                    }`}
-                    value={selectedYear}
-                    onChange={(e) =>
-                      handleChangeDatePart("year", e.target.value)
-                    }
-                  >
-                    <option value="">Year</option>
-                    {yearOptions}
-                  </select>
-                  <select
-                    name={`${fieldName}_month`}
-                    className={`${fieldClass} ${
-                      errors[fieldName] ? "is-invalid" : ""
-                    }`}
-                    value={selectedMonth}
-                    onChange={(e) =>
-                      handleChangeDatePart("month", e.target.value)
-                    }
-                  >
-                    <option value="">Month</option>
-                    {monthOptions}
-                  </select>
-                  <select
-                    name={`${fieldName}_day`}
-                    className={`${fieldClass} ${
-                      errors[fieldName] ? "is-invalid" : ""
-                    }`}
-                    value={selectedDay}
-                    onChange={(e) =>
-                      handleChangeDatePart("day", e.target.value)
-                    }
-                  >
-                    <option value="">Day</option>
-                    {dayOptions}
-                  </select>
-                </>
-              )}
-              {isMDY && (
-                <>
-                  <select
-                    name={`${fieldName}_month`}
-                    className={`${fieldClass} ${
-                      errors[fieldName] ? "is-invalid" : ""
-                    }`}
-                    value={selectedMonth}
-                    onChange={(e) =>
-                      handleChangeDatePart("month", e.target.value)
-                    }
-                  >
-                    <option value="">Month</option>
-                    {monthOptions}
-                  </select>
-                  <select
-                    name={`${fieldName}_day`}
-                    className={`${fieldClass} ${
-                      errors[fieldName] ? "is-invalid" : ""
-                    }`}
-                    value={selectedDay}
-                    onChange={(e) =>
-                      handleChangeDatePart("day", e.target.value)
-                    }
-                  >
-                    <option value="">Day</option>
-                    {dayOptions}
-                  </select>
-                  <select
-                    name={`${fieldName}_year`}
-                    className={`${fieldClass} ${
-                      errors[fieldName] ? "is-invalid" : ""
-                    }`}
-                    value={selectedYear}
-                    onChange={(e) =>
-                      handleChangeDatePart("year", e.target.value)
-                    }
-                  >
-                    <option value="">Year</option>
-                    {yearOptions}
-                  </select>
-                </>
-              )}
-            </div>
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="text-danger">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "date":
-        const formatOfDate =
-        schemaModel.uiSchema[fieldName]?.["ui:options"]?.format || "MM/dd/yyyy";
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <DatePicker
-              selected={formData[fieldName]}
-              onChange={(date) =>
-                handleDateChange(fieldName, date, formatOfDate)
-              }
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              } form-control`}
-              dateFormat={formatOfDate}
-              placeholderText={uiField["ui:placeholder"]}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "progress":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <div className="progress" style={{ height: "30px" }}>
-              <div
-                className="progress-bar"
-                role="progressbar"
-                style={{
-                  width: `${field?.default}%`,
-                  backgroundColor: "#007bff",
-                }}
-                aria-valuenow={field?.default || 0}
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                {field?.default || 0}%
-              </div>
-            </div>
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="text-danger mb-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "time":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title}</label>
-            <input
-              type="time"
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-              placeholder={uiField["ui:placeholder"]}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "datetime":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title}</label>
-            <input
-              type="datetime-local"
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "calendar":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title}</label>
-            <input
-              type="date"
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "year":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title}</label>
-            <input
-              type="number"
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              min="1900"
-              max="2100"
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "month":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title}</label>
-            <input
-              type="month"
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "day":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title}</label>
-            <input
-              type="date"
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "file":
-        return (
-          <div key={fieldName} className={`${colClass}`}>
-            <label className="form-label">{title}</label>
-            <input
-              type="file"
-              onChange={(e) => handleFileChange(fieldName, e)}
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-            />
-
-            {((formData[fieldName] &&
-              typeof formData[fieldName] === "string" &&
-              formData[fieldName].startsWith("data:")) ||
-              preview) && (
-              <div className="mt-2">
-                <img
-                  src={preview || formData[fieldName]}
-                  alt="Preview"
-                  style={{
-                    maxWidth: "100%",
-                    maxHeight: "200px",
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
-            )}
-
-            {fileDetails && (
-              <div className="mt-2">
-                <p>
-                  <strong>File Name:</strong> {fileDetails.name}
-                </p>
-                <p>
-                  <strong>File Type:</strong> {fileDetails.type}
-                </p>
-                <p>
-                  <strong>File Size:</strong>{" "}
-                  {Math.round(fileDetails.size / 1024)} KB
-                </p>
-              </div>
-            )}
-
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "string" || "text":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <input
-              type="text"
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-              name={fieldName}
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              placeholder={uiField["ui:placeholder"]}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "updown":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <input
-              type="number"
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-              name={fieldName}
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              placeholder={uiField["ui:placeholder"]}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "textarea":
-        return (
-          <div key={fieldName} className={`${colClass} `}>
-            <label className="form-label">{title || fieldName}</label>
-            <textarea
-              type="textarea"
-              className={`${fieldClass} ${
-                errors[fieldName] ? "is-invalid" : ""
-              }`}
-              name={fieldName}
-              value={formData[fieldName] || ""}
-              onChange={(e) => handleChange(fieldName, e.target.value)}
-              placeholder={uiField["ui:placeholder"]}
-            />
-            {errors[fieldName] &&
-              errors[fieldName].map((error, index) => (
-                <p key={index} className="invalid-feedback m-0">
-                  {error}
-                </p>
-              ))}
-          </div>
-        );
-
-      case "button":
-        return <Button uiField={uiField} />;
-
-      default:
+    const Component = inputFields[widget];
+    if (Component) {
+      return (
+        <Component
+          schemaModel={schemaModel}
+          formData={formData}
+          field={field}
+          uiField={uiField}
+          errors={errors}
+          handleChange={handleChange}
+          fieldName={fieldName}
+          colClass={colClass}
+          title={title}
+          fieldClass={fieldClass}
+        />
+      );
+    } else {
+      if (fields) {
         const CustomField = fields[widget];
+        console.log("custom field : ", CustomField);
         if (CustomField) {
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
           return (
@@ -944,7 +202,8 @@ const CustomContentTemplate = ({
             </div>
           );
         }
-        return <p className="text-danger">No such component available</p>;
+      }
+      return <p className="text-danger">No such component available</p>;
     }
   };
 
@@ -953,32 +212,47 @@ const CustomContentTemplate = ({
 
     if (!layout || layout.length === 0) {
       // Fallback to normal rendering when layout is not provided
-      return Object.keys(schemaModel.schema.properties || {}).map((fieldName, index) => {
-        const field = getFieldSchemaByName(schemaModel.schema, fieldName);
-        return field ? renderField(field, fieldName) : null;
-      });
+      return Object.keys(schemaModel.schema.properties || {}).map(
+        (fieldName, index) => {
+          const field = getFieldSchemaByName(schemaModel.schema, fieldName);
+          return field ? renderField(field, fieldName) : null;
+        }
+      );
     }
-    
+
     return layout.map((section, index) => {
       const { title, classNames, fields } = section;
       return (
         <div key={index} className={`${classNames}`}>
           {title && <h5>{title}</h5>}
           {fields.map((fieldPathOrSection, fieldIndex) => {
-            if (typeof fieldPathOrSection === 'string') {
-              const fieldName = fieldPathOrSection.split('.').pop();
+            if (typeof fieldPathOrSection === "string") {
+              const fieldName = fieldPathOrSection.split(".").pop();
               const field = getFieldSchemaByName(schemaModel.schema, fieldName);
               if (field) {
                 return renderField(field, fieldPathOrSection);
               }
-            } else if (typeof fieldPathOrSection === 'object' && fieldPathOrSection.type === 'section') {
+            } else if (
+              typeof fieldPathOrSection === "object" &&
+              fieldPathOrSection.type === "section"
+            ) {
               return (
-                <div key={fieldIndex} className={`${fieldPathOrSection.classNames}`}>
-                  {fieldPathOrSection.title && <h6>{fieldPathOrSection.title}</h6>}
+                <div
+                  key={fieldIndex}
+                  className={`${fieldPathOrSection.classNames}`}
+                >
+                  {fieldPathOrSection.title && (
+                    <h6>{fieldPathOrSection.title}</h6>
+                  )}
                   {fieldPathOrSection.fields.map((nestedField) => {
-                    const nestedFieldName = nestedField.split('.').pop();
-                    const nestedFieldSchema = getFieldSchemaByName(schemaModel.schema, nestedFieldName);
-                    return nestedFieldSchema ? renderField(nestedFieldSchema, nestedField) : null;
+                    const nestedFieldName = nestedField.split(".").pop();
+                    const nestedFieldSchema = getFieldSchemaByName(
+                      schemaModel.schema,
+                      nestedFieldName
+                    );
+                    return nestedFieldSchema
+                      ? renderField(nestedFieldSchema, nestedField)
+                      : null;
                   })}
                 </div>
               );
@@ -992,11 +266,6 @@ const CustomContentTemplate = ({
 
   return (
     <div className="w-100">
-      {/* {Object.keys(schema.schema.properties).map((fieldName) => {
-        const field = schema.schema.properties[fieldName];
-        return renderField(field, fieldName);
-      })} */}
-
       {renderSections()}
     </div>
   );

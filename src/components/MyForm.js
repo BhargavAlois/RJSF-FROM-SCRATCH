@@ -16,7 +16,7 @@ export default function MyForm(props) {
     errorSchema,
   } = props;
   const templates = props?.templates;
-  const templateName = props?.schemaModel.uiSchema["ui:layout"];
+  const templateName = props?.schemaModel.uiSchema["template"];
   var MyTemplate;
   if (templateName) {
     MyTemplate = templates[templateName];
