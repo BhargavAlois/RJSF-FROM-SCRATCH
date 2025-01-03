@@ -33,9 +33,9 @@ export const schemaModel = {
       },
       preferences: {
         type: "array",
-        oneOf : [
-          ["Sports", "Music", "Movies", "Reading"],
-        ],
+        // oneOf : [
+        //   ["Sports", "Music", "Movies", "Reading"],
+        // ],
         items: {
           type: "string",
           enum: ["Sports", "Music", "Movies", "Reading"],

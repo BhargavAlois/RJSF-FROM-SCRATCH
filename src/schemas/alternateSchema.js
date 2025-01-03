@@ -110,12 +110,12 @@ export const schemaModel = {
             type: "string",
             title: "Password",
           },
-          // dateOfJoining: {
-          //   type: 'string',
-          //   format: 'date',
-          //   title: 'Date Of Joining',
-          //   dateType: 'dateOfJoining',
-          // },
+          dateOfJoining: {
+            type: "string",
+            format: "date",
+            title: "Date Of Joining",
+            dateType: "dateOfJoining",
+          },
           employeementtype: {
             type: "string",
             title: "employeement type",
@@ -197,6 +197,7 @@ export const schemaModel = {
           "employeeinfo.password",
           "employeeinfo.employeementtype",
           "employeeinfo.department",
+          "employeeinfo.dateOfJoining",
           "employeeinfo.shift",
           "employeeinfo.shiftTiming",
           "employeeinfo.reportTo",
@@ -302,9 +303,12 @@ export const schemaModel = {
       employeementtype: {
         "ui:placeholder": "Enter employeement type",
       },
-      // dateOfJoining: {
-      //   'ui:widget': 'DatePickerWidget',
-      // },
+      dateOfJoining: {
+        "ui:widget": "date",
+        "ui:options": {
+          format: "MM/dd/yyyy",
+        },
+      },
       department: {
         "ui:placeholder": "Select Department",
       },

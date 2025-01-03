@@ -7,12 +7,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import "./scss/style.scss";
 import * as customFields from "./fields/fields";
+import { prefillValues } from "./data/prefillvalues";
 
 function App() {
-  const [formData, setFormData] = useState({
-    'firstName': 'bhargav',
-    'lastName': 'patel'
-  });
+  const [formData, setFormData] = useState(prefillValues);
 
   const templates = {
     myCustomRowTemplate: CustomTemplate,
