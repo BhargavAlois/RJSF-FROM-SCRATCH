@@ -5,6 +5,7 @@ export default function RangeInput(props) {
   const min = field.minimum || 0;
   const max = field.maximum || 100;
   const oneOf = field.oneOf;
+  console.log("Inside range : ");
   
   const defaultValue =
     field.default !== undefined && field.default !== null ? field.default : min;

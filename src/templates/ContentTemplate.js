@@ -53,10 +53,11 @@ export default function ContentTemplate({
   ) => {
     const { title, enum: enumValues, oneOf, format } = field;
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName;
-    console.log("fieldName : ", fieldName);
+    // console.log("fieldName : ", fieldName);
     const uiField = getDeepValue(schema.uiSchema, fieldPath) || {};
     const fieldClass = `form-control ${uiField["classNames"]}`;
     const widget = uiField["ui:widget"] || format || "string";
+    // console.log("Widget : ", widget);
     const layoutClass = uiField["ui:layout"];
     const isColumnLayout = uiField["ui:layout"] === "column";
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
@@ -138,6 +139,7 @@ export default function ContentTemplate({
       time: formFields.TimeInput,
       updown: formFields.UpDownInput,
       year: formFields.YearInput,
+      numberEnum: formFields.RadioInput
     };
 
     const Component = inputFields[widget];

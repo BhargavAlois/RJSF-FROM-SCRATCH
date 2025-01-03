@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MyForm from "./components/MyForm";
-import { schemaModel } from './schemas/schema';
-// import { schemaModel } from "./schemas/alternateSchema";
+// import { schemaModel } from './schemas/schema';
+import { schemaModel } from "./schemas/alternateSchema";
 import CustomTemplate from "./templates/CustomTemplate";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
@@ -10,8 +10,6 @@ import * as customFields from "./fields/fields";
 
 function App() {
   const [formData, setFormData] = useState({});
-
-  console.log("schema ", schemaModel);
 
   const templates = {
     myCustomRowTemplate: CustomTemplate,

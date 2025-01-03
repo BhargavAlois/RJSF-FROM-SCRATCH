@@ -15,9 +15,7 @@ export default function MyForm(props) {
     formData: prefilledFormData,
     errorSchema,
   } = props;
-  console.log("-----------------", schema);
   const templates = props?.templates;
-  console.log("ui schema : ", schema.uiSchema);
   const templateName = schema?.uiSchema?.["template"];
   var MyTemplate;
   if (templateName) {
@@ -25,53 +23,6 @@ export default function MyForm(props) {
   }
   const prefilledData = prefilledFormData;
   const fields = props?.fields;
-
-  // const convertToSchemaFormat = (schema, data) => {
-  //     const formattedData = {};
-
-  //     // Check if schema and properties are defined
-  //     if (!schema.schema || !schema.schema.properties) {
-  //         console.error("Schema or schema.properties is undefined", schema);
-  //         return formattedData;  // Return an empty object if properties are missing
-  //     }
-
-  //     // Loop through all properties in the schema
-  //     Object.keys(schema.schema.properties).forEach((fieldName) => {
-  //         const field = schema.schema.properties[fieldName];
-  //         const fieldValue = data ? data[fieldName] : undefined;
-
-  //         console.log("field name : ", fieldName);
-
-  //         // Check if field has properties and if it's an object type
-  //         if (field.type === 'string' && field.format === 'date' && fieldValue) {
-  //             const formatString = field['ui:options']?.format || 'yyyy-MM-dd';
-  //             try {
-  //                 let parsedDate;
-
-  //                 // Handle ISO date strings or standard date formats
-  //                 if (fieldValue.includes('T') || fieldValue.includes('Z')) {
-  //                     parsedDate = parseISO(fieldValue);
-  //                 } else {
-  //                     parsedDate = new Date(fieldValue);
-  //                 }
-
-  //                 formattedData[fieldName] = format(parsedDate, formatString);
-  //             } catch (error) {
-  //                 formattedData[fieldName] = fieldValue; // If there's an error, return the raw value
-  //             }
-  //         }
-  //         // If the field is a nested object, handle it recursively
-  //         else if (field.type === 'object' && field.properties) {
-  //             formattedData[fieldName] = convertToSchemaFormat(field, fieldValue || {});  // Recursively handle nested objects
-  //         }
-  //         // If it's a simple field, just assign the value
-  //         else {
-  //             formattedData[fieldName] = fieldValue;
-  //         }
-  //     });
-
-  //     return formattedData;
-  // };
 
   const convertToSchemaFormat = (schema, data) => {
     const formattedData = {};
@@ -151,41 +102,6 @@ export default function MyForm(props) {
     // Process the top-level schema properties
     return processProperties(schema.schema.properties, data);
   };
-
-  //Code working with displaying errors
-  // const convertToSchemaFormat = (schema, data) => {
-  //     const formattedData = {};
-
-  //     Object.keys(schema.schema.properties).forEach((fieldName) => {
-  //         const field = schema.schema.properties[fieldName];
-  //         const fieldValue = data[fieldName];
-
-  //         if (field.type === 'string' && field.format === 'date' && fieldValue) {
-  //             const formatString = field['ui:options']?.format || 'yyyy-MM-dd';
-  //             try {
-  //                 let parsedDate;
-  //                 if (fieldValue.includes('T') || fieldValue.includes('Z')) {
-  //                     parsedDate = parseISO(fieldValue);
-  //                 } else {
-  //                     parsedDate = new Date(fieldValue);
-  //                 }
-  //                 formattedData[fieldName] = format(parsedDate, formatString);
-  //             } catch (error) {
-  //                 formattedData[fieldName] = fieldValue;
-  //             }
-  //         } else if (field.type === 'object' && fieldName === 'dateRange') {
-  //             const dateRange = fieldValue || {};
-  //             formattedData[fieldName] = {
-  //                 startDate: dateRange.startDate ? formatDate(dateRange.startDate, field['ui:options']?.format) : '',
-  //                 endDate: dateRange.endDate ? formatDate(dateRange.endDate, field['ui:options']?.format) : '',
-  //             };
-  //         } else {
-  //             formattedData[fieldName] = fieldValue;
-  //         }
-  //     });
-
-  //     return formattedData;
-  // };
 
   const formatDate = (date, formatString) => {
     try {
@@ -441,43 +357,16 @@ export default function MyForm(props) {
     defaultSubmit(e);
   };
 
-  // const initializeFormData = (schema) => {
-  //     const initialData = {};
-
-  //     Object.keys(schema.properties).forEach((fieldName) => {
-  //         const field = schema.properties[fieldName];
-
-  //         const prefilledValue = prefilledData?.[fieldName];
-  //         if (prefilledValue !== undefined) {
-  //             initialData[fieldName] = prefilledValue;
-  //         } else if (fieldName === 'dateRange') {
-  //             const dateRange = field.properties || {};
-  //             initialData['dateRange'] = {
-  //                 startDate: prefilledData?.startDate || dateRange.startDate?.default || '',
-  //                 endDate: prefilledData?.endDate || dateRange.endDate?.default || ''
-  //             };
-  //         } else if (field.default !== undefined) {
-  //             initialData[fieldName] = field.default;
-  //         } else if (field.type === "object" && field.properties) {
-  //             initialData[fieldName] = initializeFormData(field);
-  //         } else if (field.type === "array" && field.items && field.items.enum) {
-  //             initialData[fieldName] = [];
-  //         }
-  //     });
-
-  //     return initialData;
-  // };
-
-  // useEffect(() => {
-  //     if (prefilledData) {
-  //         const initialFormData = convertToSchemaFormat(schema, prefilledData);
-  //         setFormData(initialFormData);
-  //     }
-  // }, [prefilledData, schema]);
+  const normalizeFieldName = (fieldName) => {
+    const parts = fieldName.split('.');
+    return parts[parts.length - 1]; // Return the last part of the path
+  };
 
   const handleChange = (fieldName, value) => {
     // const options = uiSchema[fieldName]['ui:options'];
+
     console.log("Change in field : ", fieldName);
+
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: value,

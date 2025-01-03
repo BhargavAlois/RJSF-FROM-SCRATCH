@@ -1,10 +1,23 @@
 import React from "react";
 
 export default function SelectInput(props) {
-  const {schemaModel, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
-  const {oneOf, enum:enumValues} = field;
+  const {
+    schemaModel,
+    formData,
+    errors,
+    title,
+    field,
+    uiField,
+    fieldClass,
+    colClass,
+    handleChange,
+    fieldName,
+  } = props;
+
+  const { oneOf, enum: enumValues } = field;
+
   return (
-    <div key={fieldName} className={`${colClass} `}>
+    <div key={fieldName} className={`${colClass}`}>
       <label className="form-label">{title || fieldName}</label>
       <select
         name={fieldName}
@@ -14,10 +27,16 @@ export default function SelectInput(props) {
         placeholder={uiField["ui:placeholder"]}
       >
         <option value="">Select an option</option>
-        {(oneOf || enumValues) &&
-          (oneOf || enumValues).map((value, index) => (
+        {enumValues &&
+          enumValues.map((value, index) => (
+            <option key={index} value={value}>
+              {value}
+            </option>
+          ))}
+        {oneOf &&
+          oneOf.map((value, index) => (
             <option key={index} value={value.const}>
-              {value.title}
+              {value.title || value.const}
             </option>
           ))}
       </select>

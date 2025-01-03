@@ -4,6 +4,7 @@ export default function RadioInput(props) {
   const {schemaModel, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
   const isColumnLayout = uiField["ui:layout"] === "column";
   const {oneOf, enum: enumValues} = field;
+  console.log("Inside radio input");
 
   return (
     <div key={fieldName} className={`${colClass} `}>

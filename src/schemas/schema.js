@@ -167,7 +167,7 @@ export const schemaModel = {
     type: 'object',
     "ui:order": [
       "firstName", "lastName", "email", "password", "phoneNumber", "role", "preferences", "dateRange", "date",
-      "time", "datetime", "calendar", "year", "month", "day", "file",
+      "time", "datetime", "calendar", "year", "month", "day", "file", "integerRange",
       "actionButton", "myButton"
     ],
     "layout": [{
@@ -177,7 +177,7 @@ export const schemaModel = {
   }, {
     type: "section",
     fields: ["email", "password", "phoneNumber", "role", "preferences", "dateRange", "date",
-      "time", "datetime", "calendar", "year", "month", "day", "file",
+      "time", "datetime", "calendar", "year", "month", "day", "file", "integerRange", "numberEnum",
       "actionButton", "myButton"]
   }],
     // "ui:layout": "myCustomRowTemplate",
@@ -223,7 +223,7 @@ export const schemaModel = {
       "ui:widget": "radio",
       "classNames": "form-check-input"
     },
-    "integerRange": {
+    integerRange: {
       "ui:widget": "range",
       "classNames": "form-control-range"
     },
