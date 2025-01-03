@@ -9,7 +9,10 @@ import "./scss/style.scss";
 import * as customFields from "./fields/fields";
 
 function App() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    'firstName': 'bhargav',
+    'lastName': 'patel'
+  });
 
   const templates = {
     myCustomRowTemplate: CustomTemplate,
@@ -58,6 +61,7 @@ function App() {
         onChange={handleOnChange}
         onSuccess={handleOnSuccess}
         onError={handleOnError}
+        formData={formData}
       />
     </div>
   );

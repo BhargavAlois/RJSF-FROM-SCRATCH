@@ -15,98 +15,136 @@ export default function MyForm(props) {
     formData: prefilledFormData,
     errorSchema,
   } = props;
+  console.log("Received form data : ", prefilledFormData);
+  console.log("form data after initialization: ", formData);
   const templates = props?.templates;
   const templateName = schema?.uiSchema?.["template"];
   var MyTemplate;
   if (templateName) {
     MyTemplate = templates[templateName];
   }
-  const prefilledData = prefilledFormData;
   const fields = props?.fields;
 
-  const convertToSchemaFormat = (schema, data) => {
-    const formattedData = {};
+  // const convertToSchemaFormat = (schema, data) => {
+  //   const formattedData = {};
 
-    Object.keys(prefilledData).map((fieldName) => {
-      formData[fieldName] = prefilledData[fieldName];
-    });
+  //   Object.keys(prefilledFormData).map((fieldName) => {
+  //     formData[fieldName] = prefilledFormData[fieldName];
+  //   });
 
-    console.log("Form data : ", formData);
+  //   console.log("Form data : ", formData);
 
-    // Helper function to process nested objects
-    const processProperties = (properties, data, parentPath = "") => {
-      Object.keys(properties).forEach((fieldName) => {
-        const fieldSchema = properties[fieldName];
-        const fieldValue = data?.[fieldName];
-        console.log("field Name : ", fieldName);
-        const fullPath = parentPath ? `${fieldName}` : fieldName;
+  //   // Helper function to process nested objects
+  //   const processProperties = (properties, data, parentPath = "") => {
+  //     Object.keys(properties).forEach((fieldName) => {
+  //       const fieldSchema = properties[fieldName];
+  //       const fieldValue = data?.[fieldName];
+  //       console.log("field Name : ", fieldName);
+  //       const fullPath = parentPath ? `${fieldName}` : fieldName;
 
-        // If the field is an object, recursively process its properties
-        if (fieldSchema.type === "object" && fieldSchema.properties) {
-          formattedData[fullPath] = processProperties(
-            fieldSchema.properties,
-            fieldValue,
-            fullPath
-          );
-        } else {
-          // For simple fields, handle specific cases (e.g., date formatting)
-          if (
-            fieldSchema.type === "string" &&
-            fieldSchema.format === "date" &&
-            fieldValue
-          ) {
-            const formatString =
-              fieldSchema["ui:options"]?.format || "yyyy-MM-dd";
-            try {
-              let parsedDate;
-              if (fieldValue.includes("T") || fieldValue.includes("Z")) {
-                parsedDate = parseISO(fieldValue);
-              } else {
-                parsedDate = new Date(fieldValue);
-              }
-              formattedData[fullPath] = format(parsedDate, formatString);
-            } catch (error) {
-              formattedData[fullPath] = fieldValue;
-            }
-          } else if (
-            fieldName === "dateRange" &&
-            fieldSchema.type === "object"
-          ) {
-            // Handle special case for `dateRange` object field
-            const dateRange = fieldValue || {};
-            formattedData[fullPath] = {
-              startDate: dateRange.startDate
-                ? formatDate(
-                    dateRange.startDate,
-                    fieldSchema["ui:options"]?.format
-                  )
-                : "",
-              endDate: dateRange.endDate
-                ? formatDate(
-                    dateRange.endDate,
-                    fieldSchema["ui:options"]?.format
-                  )
-                : "",
-            };
-          } else {
-            // Default handling for other fields
-            formattedData[fullPath] = fieldValue;
-          }
-        }
-      });
+  //       // If the field is an object, recursively process its properties
+  //       if (fieldSchema.type === "object" && fieldSchema.properties) {
+  //         formattedData[fullPath] = processProperties(
+  //           fieldSchema.properties,
+  //           fieldValue,
+  //           fullPath
+  //         );
+  //       } else {
+  //         // For simple fields, handle specific cases (e.g., date formatting)
+  //         if (
+  //           fieldSchema.type === "string" &&
+  //           fieldSchema.format === "date" &&
+  //           fieldValue
+  //         ) {
+  //           const formatString =
+  //             fieldSchema["ui:options"]?.format || "yyyy-MM-dd";
+  //           try {
+  //             let parsedDate;
+  //             if (fieldValue.includes("T") || fieldValue.includes("Z")) {
+  //               parsedDate = parseISO(fieldValue);
+  //             } else {
+  //               parsedDate = new Date(fieldValue);
+  //             }
+  //             formattedData[fullPath] = format(parsedDate, formatString);
+  //           } catch (error) {
+  //             formattedData[fullPath] = fieldValue;
+  //           }
+  //         } else if (
+  //           fieldName === "dateRange" &&
+  //           fieldSchema.type === "object"
+  //         ) {
+  //           // Handle special case for `dateRange` object field
+  //           const dateRange = fieldValue || {};
+  //           formattedData[fullPath] = {
+  //             startDate: dateRange.startDate
+  //               ? formatDate(
+  //                   dateRange.startDate,
+  //                   fieldSchema["ui:options"]?.format
+  //                 )
+  //               : "",
+  //             endDate: dateRange.endDate
+  //               ? formatDate(
+  //                   dateRange.endDate,
+  //                   fieldSchema["ui:options"]?.format
+  //                 )
+  //               : "",
+  //           };
+  //         } else {
+  //           // Default handling for other fields
+  //           formattedData[fullPath] = fieldValue;
+  //         }
+  //       }
+  //     });
 
-      console.log("Formatted data : ", formattedData);
-      return formattedData;
-    };
+  //     console.log("Formatted data : ", formattedData);
+  //     return formattedData;
+  //   };
 
-    // Process the top-level schema properties
-    return processProperties(schema.schema.properties, data);
-  };
+  //   // Process the top-level schema properties
+  //   return processProperties(schema.properties, data);
+  // };
 
   const normalizeFieldName = (fieldName) => {
     const parts = fieldName.split('.');
     return parts[parts.length - 1]; // Return the last part of the path
   };
+
+  const normalizeData = (schema, data) => {
+    const normalizedData = {};
+  
+    const processProperties = (properties, data) => {
+      console.log("inside process properties");
+      Object.keys(properties).forEach((fieldName) => {
+        const fieldSchema = properties[fieldName];
+        const fieldValue = data?.[fieldName];
+  
+        if (fieldSchema.type === "string" && fieldSchema.format === "date") {
+          const displayFormat = fieldSchema["ui:options"]?.format || "MM/dd/yyyy";
+          try {
+            normalizedData[fieldName] = format(parseISO(fieldValue), displayFormat);
+          } catch {
+            normalizedData[fieldName] = fieldValue; // Fallback to raw value
+          }
+        } else if (fieldSchema.type === "object" && fieldSchema.properties) {
+          normalizedData[fieldName] = processProperties(
+            fieldSchema.properties,
+            fieldValue || {}
+          );
+        } else {
+          normalizedData[fieldName] = fieldValue;
+        }
+      });
+  
+      return normalizedData;
+    };
+
+    console.log("Before process properties");
+    return processProperties(schema.properties, data || {});
+  };  
+
+  useEffect(() => {
+    setFormData(prefilledFormData);
+  }, [prefilledFormData]);
 
   const formatDate = (date, formatString) => {
     try {
