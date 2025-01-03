@@ -103,6 +103,11 @@ export default function MyForm(props) {
     return processProperties(schema.schema.properties, data);
   };
 
+  const normalizeFieldName = (fieldName) => {
+    const parts = fieldName.split('.');
+    return parts[parts.length - 1]; // Return the last part of the path
+  };
+
   const formatDate = (date, formatString) => {
     try {
       let parsedDate = date;
@@ -176,9 +181,7 @@ export default function MyForm(props) {
 
     // Helper function to validate single field
     const validateField = (fieldName, fieldSchema, value, parentPath = "") => {
-      console.log("value inside validate field : ", value);
       const fullPath = parentPath ? `${parentPath}.${fieldName}` : fieldName;
-      console.log("Full path : ", fullPath);
       const fieldTitle = fieldSchema.title || fieldName;
       const errors = [];
       // console.log("fieldSchema : ", fieldSchema);
@@ -283,10 +286,10 @@ export default function MyForm(props) {
         ) {
           errors.push(...fieldUiSchema.pattern_message);
         }
-        formErrors[fullPath] = errors;
+        const normalizedFieldName = normalizeFieldName(fullPath);
+        formErrors[normalizedFieldName] = errors;
       }
 
-      console.log("Errors from myform : ", formErrors[fullPath]);
     };
 
     // Recursive function to handle nested objects
@@ -296,9 +299,8 @@ export default function MyForm(props) {
           const fullPath = parentPath
             ? `${parentPath}.${fieldName}`
             : fieldName; // Construct the full path
-          const value = formData?.[fullPath]; // Use the full path to access the value
-
-          console.log(`${fullPath} : ${value}`);
+          const normalizedFieldName = normalizeFieldName(fullPath);
+          const value = formData?.[normalizedFieldName]; // Use the full path to access the value
 
           if (fieldSchema.type === "object") {
             // Recursively validate nested objects
@@ -316,7 +318,6 @@ export default function MyForm(props) {
 
     // Set errors in state
     setErrors(formErrors);
-    console.log("Form errors : ", formErrors);
     return Object.keys(formErrors).length === 0;
   };
 
@@ -357,14 +358,8 @@ export default function MyForm(props) {
     defaultSubmit(e);
   };
 
-  const normalizeFieldName = (fieldName) => {
-    const parts = fieldName.split('.');
-    return parts[parts.length - 1]; // Return the last part of the path
-  };
-
   const handleChange = (fieldName, value) => {
     // const options = uiSchema[fieldName]['ui:options'];
-
     console.log("Change in field : ", fieldName);
 
     setFormData((prevData) => ({

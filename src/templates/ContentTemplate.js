@@ -19,6 +19,11 @@ export default function ContentTemplate({
     return path.split(".").reduce((acc, part) => acc && acc[part], obj);
   };
 
+  const normalizeFieldName = (fieldName) => {
+    const parts = fieldName.split('.');
+    return parts[parts.length - 1]; // Return the last part of the path
+  };
+
   const getFieldSchemaByName = (schema, fieldName) => {
     // Recursive function to find the field by its name
     const findField = (currentSchema, currentFieldName) => {
@@ -61,6 +66,7 @@ export default function ContentTemplate({
     const layoutClass = uiField["ui:layout"];
     const isColumnLayout = uiField["ui:layout"] === "column";
     const colClass = uiField["ui:col"] ? `col-${uiField["ui:col"]}` : "col-12";
+    const normalizedFieldName = normalizeFieldName(fieldName);
 
     if (field.type === "object" && field.properties) {
       return (
@@ -113,8 +119,7 @@ export default function ContentTemplate({
 
     //Implementation of handleDefaultFieldChange where only target value is accepted as parameter
     const handleDefaultFieldChange = (value) => {
-      console.log(`Change in default field : ${fieldName}`, value);
-      handleChange(fieldName, value);
+      handleChange(normalizedFieldName, value);
     };
 
     const inputFields = {
@@ -152,7 +157,7 @@ export default function ContentTemplate({
           uiField={uiField}
           errors={errors}
           handleChange={handleChange}
-          fieldName={fieldName}
+          fieldName={normalizedFieldName}
           colClass={colClass}
           title={title}
           fieldClass={fieldClass}
@@ -161,7 +166,6 @@ export default function ContentTemplate({
     } else {
       if (fields) {
         const CustomField = fields[widget];
-        console.log("custom field : ", CustomField);
         if (CustomField) {
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
           return (
@@ -170,14 +174,14 @@ export default function ContentTemplate({
               <CustomField
                 schema={field}
                 uiSchema={uiField}
-                fieldName={fieldName}
-                value={formData[fieldName]}
+                fieldName={normalizedFieldName}
+                value={formData[normalizedFieldName]}
                 onChange={handleDefaultFieldChange}
-                errors={errors[fieldName]}
+                errors={errors[normalizedFieldName]}
                 placeholder={uiField?.["ui:placeholder"]}
               />
-              {errors[fieldName] &&
-                errors[fieldName].map((error, index) => (
+              {errors[normalizedFieldName] &&
+                errors[normalizedFieldName].map((error, index) => (
                   <p key={index} className="text-danger m-0">
                     {error}
                   </p>
