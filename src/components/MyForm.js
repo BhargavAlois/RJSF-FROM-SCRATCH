@@ -15,8 +15,6 @@ export default function MyForm(props) {
     formData: prefilledFormData,
     errorSchema,
   } = props;
-  console.log("Received form data : ", prefilledFormData);
-  console.log("form data after initialization: ", formData);
   const templates = props?.templates;
   const templateName = schema?.uiSchema?.["template"];
   var MyTemplate;
@@ -105,45 +103,52 @@ export default function MyForm(props) {
   // };
 
   const normalizeFieldName = (fieldName) => {
-    const parts = fieldName.split('.');
+    const parts = fieldName.split(".");
     return parts[parts.length - 1]; // Return the last part of the path
   };
 
   const normalizeData = (schema, data) => {
     const normalizedData = {};
-  
+
     const processProperties = (properties, data) => {
-      console.log("inside process properties");
+      // console.log("Data : ", data);
+      // console.log("inside process properties");
       Object.keys(properties).forEach((fieldName) => {
         const fieldSchema = properties[fieldName];
         const fieldValue = data?.[fieldName];
-  
+
         if (fieldSchema.type === "string" && fieldSchema.format === "date") {
           const displayFormat = fieldSchema["ui:options"]?.format || "MM/dd/yyyy";
           try {
-            normalizedData[fieldName] = format(parseISO(fieldValue), displayFormat);
+            normalizedData[fieldName] = format(
+              parseISO(fieldValue),
+              displayFormat
+            );
           } catch {
-            normalizedData[fieldName] = fieldValue; // Fallback to raw value
+            if (data[fieldName]) {
+              normalizedData[fieldName] = fieldValue; // Fallback to raw value
+            }
           }
         } else if (fieldSchema.type === "object" && fieldSchema.properties) {
-          normalizedData[fieldName] = processProperties(
+          processProperties(
             fieldSchema.properties,
-            fieldValue || {}
+            data
           );
         } else {
-          normalizedData[fieldName] = fieldValue;
+          if (data[fieldName] !== undefined && data[fieldName] !== null) {
+            normalizedData[fieldName] = fieldValue;
+          }
         }
       });
-  
+
       return normalizedData;
     };
-
-    console.log("Before process properties");
     return processProperties(schema.properties, data || {});
-  };  
+  };
 
   useEffect(() => {
-    setFormData(prefilledFormData);
+    const normalizedData = normalizeData(schema.schema, prefilledFormData);
+    setFormData(normalizedData);
   }, [prefilledFormData]);
 
   const formatDate = (date, formatString) => {
@@ -241,10 +246,7 @@ export default function MyForm(props) {
         if (fieldSchema.pattern) {
           const regex = new RegExp(fieldSchema.pattern);
           if (!regex.test(value)) {
-            const fieldUiSchema = getFieldUiSchema(
-              fieldName,
-              schema.uiSchema
-            );
+            const fieldUiSchema = getFieldUiSchema(fieldName, schema.uiSchema);
             errors.push(`${fieldTitle} is not in the correct format`);
           }
         }
@@ -327,7 +329,6 @@ export default function MyForm(props) {
         const normalizedFieldName = normalizeFieldName(fullPath);
         formErrors[normalizedFieldName] = errors;
       }
-
     };
 
     // Recursive function to handle nested objects
