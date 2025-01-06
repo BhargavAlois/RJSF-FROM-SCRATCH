@@ -41,7 +41,7 @@ export const schemaModel = {
           enum: ["Sports", "Music", "Movies", "Reading"],
         },
         title: "Preferences",
-        default: ["Music", "Movies"],
+        default: ["movies"],
       },
       numberEnum: {
         "type": "number",

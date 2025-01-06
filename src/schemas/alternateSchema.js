@@ -16,6 +16,7 @@ export const schemaModel = {
           firstName: {
             type: "string",
             title: "First Name",
+            default: 'DefaultFirstName' //Added to test the functionality of default values provision
           },
           lastName: {
             type: "string",
@@ -44,6 +45,7 @@ export const schemaModel = {
               { const: "female", title: "Female" },
               { const: "other", title: "Other" },
             ],
+            default: 'other'
           },
           // dateOfBirth: {
           //   type: 'string',
@@ -84,6 +86,7 @@ export const schemaModel = {
               { const: "Non-US", title: "Non-US" },
               { const: "US", title: "US" },
             ],
+            default: "Non-US"
           },
         },
         required: [
@@ -137,6 +140,7 @@ export const schemaModel = {
           },
           reportTo: {
             type: "string",
+            format: "email",
             title: "Report To",
           },
         },
