@@ -227,19 +227,17 @@ export default function MyForm(props) {
       const fullPath = parentPath ? `${parentPath}.${fieldName}` : fieldName;
       const fieldTitle = fieldSchema.title || fieldName;
       const errors = [];
-      // console.log("fieldSchema : ", fieldSchema);
-      // console.log(`field schema from validate fields for ${fieldName} : ${fieldSchema} and value is ${value}`);
+    
       // Required field validation
       if (
         fieldSchema.required ||
         (getRequiredFields(schema.schema) || []).includes(fieldName)
       ) {
         if (value === undefined || value === "" || value === null) {
-          // console.log("Inside required validation");
           errors.push(`${fieldTitle} is required`);
         }
       }
-
+    
       // String validations
       if (value && fieldSchema.type === "string") {
         // Pattern validation
@@ -247,13 +245,21 @@ export default function MyForm(props) {
           const regex = new RegExp(fieldSchema.pattern);
           if (!regex.test(value)) {
             const fieldUiSchema = getFieldUiSchema(fieldName, schema.uiSchema);
-            errors.push(`${fieldTitle} is not in the correct format`);
+            if (
+              fieldUiSchema?.pattern_message &&
+              Array.isArray(fieldUiSchema.pattern_message)
+            ) {
+              // Add specific pattern_message errors
+              errors.push(...fieldUiSchema.pattern_message);
+            } else {
+              // Default error message for invalid format
+              errors.push(`${fieldTitle} is not in the correct format`);
+            }
           }
         }
-
+    
         // Length validations
         if (fieldSchema.minLength && value.length < fieldSchema.minLength) {
-          console.log("Inside minlength");
           errors.push(
             `${fieldTitle} should have at least ${fieldSchema.minLength} characters`
           );
@@ -263,7 +269,7 @@ export default function MyForm(props) {
             `${fieldTitle} should have no more than ${fieldSchema.maxLength} characters`
           );
         }
-
+    
         // Date validation
         if (fieldSchema.format === "date" && value) {
           const date = new Date(value);
@@ -284,7 +290,7 @@ export default function MyForm(props) {
           }
         }
       }
-
+    
       // Number validations
       if (value && fieldSchema.type === "number") {
         if (fieldSchema.minimum !== undefined && value < fieldSchema.minimum) {
@@ -298,7 +304,7 @@ export default function MyForm(props) {
           );
         }
       }
-
+    
       // File validations
       const uiOptions = schema.uiSchema[fieldName]?.["ui:options"] || {};
       if (uiOptions.accept && value) {
@@ -317,15 +323,8 @@ export default function MyForm(props) {
           );
         }
       }
-
-      const fieldUiSchema = getFieldUiSchema(fieldName, schema.uiSchema);
+    
       if (errors.length > 0) {
-        if (
-          fieldUiSchema?.pattern_message &&
-          Array.isArray(fieldUiSchema.pattern_message)
-        ) {
-          errors.push(...fieldUiSchema.pattern_message);
-        }
         const normalizedFieldName = normalizeFieldName(fullPath);
         formErrors[normalizedFieldName] = errors;
       }
