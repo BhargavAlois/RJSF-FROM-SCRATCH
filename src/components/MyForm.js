@@ -147,9 +147,81 @@ export default function MyForm(props) {
   };
 
   useEffect(() => {
-    const normalizedData = normalizeData(schema.schema, prefilledFormData);
-    setFormData(normalizedData);
-  }, [prefilledFormData]);
+    const flattenData = (data, parentKey = '') => {
+      let result = {};
+    
+      Object.entries(data || {}).forEach(([key, value]) => {
+        // Keep only the final part of the key (leaf node)
+        const newKey = parentKey ? key : key; // Keep just the field name as key
+    
+        if (Array.isArray(value)) {
+          // If the value is an array, preserve the array structure
+          result[newKey] = value;
+        } else if (typeof value === 'object' && value !== null) {
+          // If the value is an object, recursively flatten its properties
+          result = { ...result, ...flattenData(value, newKey) };
+        } else {
+          // If the value is a primitive (string, number, etc.), assign the value directly
+          result[newKey] = value;
+        }
+      });
+    
+      return result;
+    };
+  
+    const initializeFormData = () => {
+      // Extract default data from schema
+      const extractDefaults = (schema) => {
+        const defaults = {};
+  
+        const processSchema = (properties) => {
+          Object.entries(properties || {}).forEach(([key, value]) => {
+            if (value.type === "object" && value.properties) {
+              defaults[key] = extractDefaults(value); // Recursively process nested objects
+            } else if (value.type === "array" && value.default) {
+              defaults[key] = value.default; // Handle default arrays
+            } else if (value.default !== undefined) {
+              defaults[key] = value.default; // Handle primitive defaults
+            }
+          });
+        };
+  
+        processSchema(schema?.properties);
+        return defaults;
+      };
+  
+      // Get default data from schema
+      const defaultData = extractDefaults(schema.schema);
+
+      console.log("Default data : ", defaultData);
+
+      // Flatten the default data
+      const flattenedDefaultData = flattenData(defaultData);
+
+      console.log("Default flattened data : ", flattenedDefaultData);
+
+      // Flatten the prefilled data
+      console.log("Prefilled form data : ", prefilledFormData);
+      const flattenedPrefilledData = flattenData(prefilledFormData);
+      console.log("flattenedPrefilledData : ", flattenedPrefilledData);
+  
+      // Merge flattened data: prefilled data takes priority over default data
+      const mergedData = {
+        ...flattenedDefaultData,
+        ...flattenedPrefilledData,
+      };
+
+      // Normalize the merged data (if needed)
+      const normalizedData = normalizeData(schema.schema, mergedData);
+
+      console.log("Normalized : ", normalizedData);
+  
+      // Set form data
+      setFormData(normalizedData);
+    };
+  
+    initializeFormData();
+  }, [prefilledFormData, schema.schema]);
 
   const formatDate = (date, formatString) => {
     try {
@@ -240,6 +312,12 @@ export default function MyForm(props) {
     
       // String validations
       if (value && fieldSchema.type === "string") {
+        if (fieldSchema.format === "email") {
+          const emailPattern = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+          if (!emailPattern.test(value)) {
+            errors.push(`${fieldTitle} must be a valid email address`);
+          }
+        }
         // Pattern validation
         if (fieldSchema.pattern) {
           const regex = new RegExp(fieldSchema.pattern);
