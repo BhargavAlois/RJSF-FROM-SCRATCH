@@ -1,7 +1,18 @@
 import React from "react";
 
 export default function TextInput(props) {
-  const {schemaModel, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+  const {
+    schemaModel,
+    formData,
+    errors,
+    title,
+    field,
+    uiField,
+    fieldClass,
+    colClass,
+    handleChange,
+    fieldName,
+  } = props;
   return (
     <div key={fieldName} className={`${colClass} `}>
       <label className="form-label">{title || fieldName}</label>

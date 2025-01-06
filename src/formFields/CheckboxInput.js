@@ -16,6 +16,12 @@ export default function CheckboxInput(props) {
 
   const isColumnLayout = uiField["ui:layout"] === "column";
 
+  console.log(`From checkbox ${fieldName} : ${formData[fieldName]}`);
+
+  // Ensure formData[fieldName] is always an array
+  const currentValues = Array.isArray(formData[fieldName]) ? formData[fieldName] : [];
+  console.log("current : ", currentValues);
+
   const renderCheckboxes = (enumValues) => {
     return enumValues.map((value, index) => (
       <div key={index} className="form-check" style={{ flexBasis: "20%" }}>

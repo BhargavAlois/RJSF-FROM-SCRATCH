@@ -37,7 +37,6 @@ const PhoneNumberWidget = (props) => {
     return (
         <div className="mb-3">
             <div className="input-group">
-                {/* Country Code Dropdown */}
                 <select
                     className="form-select"
                     style={{ maxWidth: "4.4rem" }}
@@ -51,7 +50,6 @@ const PhoneNumberWidget = (props) => {
                         </option>
                     ))}
                 </select>
-                {/* Phone Number Input */}
                 <input
                     type="tel"
                     className="form-control"

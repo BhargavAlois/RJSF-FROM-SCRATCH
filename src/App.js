@@ -10,7 +10,7 @@ import * as customFields from "./fields/fields";
 import { prefillValues } from "./data/prefillvalues";
 
 function App() {
-  const [formData, setFormData] = useState(prefillValues);
+  const [formData, setFormData] = useState(prefillValues || {});
 
   const templates = {
     myCustomRowTemplate: CustomTemplate,
