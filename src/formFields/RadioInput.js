@@ -1,35 +1,68 @@
 import React from "react";
 
 export default function RadioInput(props) {
-  const {schemaModel, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+  const {
+    schemaModel,
+    formData,
+    errors,
+    title,
+    field,
+    uiField,
+    fieldClass,
+    colClass,
+    handleChange,
+    fieldName,
+  } = props;
+
   const isColumnLayout = uiField["ui:layout"] === "column";
-  const {oneOf, enum: enumValues} = field;
-  console.log("Inside radio input");
+
+  const renderEnumOptions = (enumValues) => {
+    return enumValues.map((value, index) => (
+      <div key={index} className="form-check">
+        <input
+          type="radio"
+          className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
+          name={fieldName}
+          value={value}
+          checked={formData[fieldName] === value}
+          onChange={() => handleChange(fieldName, value)}
+        />
+        <label className="form-check-label">{value}</label>
+      </div>
+    ));
+  };
+
+  const renderOneOfOptions = (oneOfOptions) => {
+    return oneOfOptions.map((option, index) => {
+      const value = typeof option === "object" ? option.const : option;
+      const label = typeof option === "object" ? option.title : option;
+
+      return (
+        <div key={index} className="form-check">
+          <input
+            type="radio"
+            className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
+            name={fieldName}
+            value={value}
+            checked={formData[fieldName] === value}
+            onChange={() => handleChange(fieldName, value)}
+          />
+          <label className="form-check-label">{label}</label>
+        </div>
+      );
+    });
+  };
 
   return (
-    <div key={fieldName} className={`${colClass} `}>
+    <div key={fieldName} className={`${colClass}`}>
       <label className="form-label">{title || fieldName}</label>
       <div
         className={`form-check ${
           isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
         }`}
       >
-        {(oneOf || enumValues) &&
-          (oneOf || enumValues).map((value, index) => (
-            <div key={index} className="form-check">
-              <input
-                type="radio"
-                className={`${fieldClass} ${
-                  errors[fieldName] ? "is-invalid" : ""
-                }`}
-                name={fieldName}
-                value={value}
-                checked={formData[fieldName] === value}
-                onChange={() => handleChange(fieldName, value)}
-              />
-              <label className="form-check-label">{value}</label>
-            </div>
-          ))}
+        {field.enum && renderEnumOptions(field.enum)}
+        {field.oneOf && renderOneOfOptions(field.oneOf)}
       </div>
       {errors[fieldName] &&
         errors[fieldName].map((error, index) => (

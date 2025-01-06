@@ -38,24 +38,29 @@ export default function CheckboxInput(props) {
   };
 
   const renderOneOfOptions = (oneOfOptions) => {
-    return oneOfOptions.map((option, index) => (
-      <div key={index} className="form-check" style={{ flexBasis: "20%" }}>
-        <input
-          type="checkbox"
-          className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
-          name={fieldName}
-          value={option.const}
-          checked={formData[fieldName]?.includes(option.const)}
-          onChange={(e) => {
-            const updatedValues = e.target.checked
-              ? [...(formData[fieldName] || []), option.const]
-              : (formData[fieldName] || []).filter((val) => val !== option.const);
-            handleChange(fieldName, updatedValues);
-          }}
-        />
-        <label className="form-check-label">{option.title}</label>
-      </div>
-    ));
+    return oneOfOptions.map((option, index) => {
+      const value = typeof option === "object" ? option.const : option;
+      const label = typeof option === "object" ? option.title : option;
+
+      return (
+        <div key={index} className="form-check" style={{ flexBasis: "20%" }}>
+          <input
+            type="checkbox"
+            className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
+            name={fieldName}
+            value={value}
+            checked={formData[fieldName]?.includes(value)}
+            onChange={(e) => {
+              const updatedValues = e.target.checked
+                ? [...(formData[fieldName] || []), value]
+                : (formData[fieldName] || []).filter((val) => val !== value);
+              handleChange(fieldName, updatedValues);
+            }}
+          />
+          <label className="form-check-label">{label}</label>
+        </div>
+      );
+    });
   };
 
   return (
@@ -67,7 +72,6 @@ export default function CheckboxInput(props) {
         }`}
         style={{ overflow: "hidden" }}
       >
-        {/* Render based on the type of field */}
         {field.items?.enum && renderCheckboxes(field.items.enum)}
         {field.oneOf && renderOneOfOptions(field.oneOf)}
       </div>
