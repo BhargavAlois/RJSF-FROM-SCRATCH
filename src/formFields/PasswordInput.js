@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaRegEyeSlash, FaEye } from "react-icons/fa6";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function PasswordInput(props) {
   const {
@@ -23,15 +23,15 @@ export default function PasswordInput(props) {
   };
 
   return (
-    <div key={fieldName} className={`${colClass} `}>
+    <div key={fieldName} className={`${colClass} mb-3`}>
       <label className="form-label">{title || fieldName}</label>
-      <div className="input-group">
+      <div className="input-group has-validation">
         <input
           type={isPasswordVisible ? "text" : "password"}
           name={fieldName}
-          className={`${fieldClass} ${
+          className={`${fieldClass} form-control ${
             errors[fieldName] ? "is-invalid" : ""
-          } form-control`}
+          }`}
           value={formData[fieldName] || ""}
           onChange={(e) => handleChange(fieldName, e.target.value)}
           placeholder={uiField["ui:placeholder"]}
@@ -40,22 +40,26 @@ export default function PasswordInput(props) {
           type="button"
           onClick={togglePasswordVisibility}
           aria-label="Toggle password visibility"
-          className="btn"
+          className="btn btn-outline-secondary"
           style={{
-            border: "1px solid #ced4da",
-            borderRadius: "0.5",
-            backgroundColor: "white",
-          }}
+            border: '1px solid #ced4da',
+            borderLeft: 'none',
+            borderRadius: '0.5',
+            backgroundColor: 'white',
+        }}
         >
-          {isPasswordVisible ? <FaEye /> : <FaRegEyeSlash />}
+          {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
         </button>
+        {errors[fieldName] && (
+          <div className="invalid-feedback">
+            {errors[fieldName].map((error, index) => (
+              <p key={index} className="m-0">
+                {error}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
-      {errors[fieldName] &&
-        errors[fieldName].map((error, index) => (
-          <p key={index} className="invalid-feedback m-0">
-            {error}
-          </p>
-        ))}
     </div>
   );
 }
