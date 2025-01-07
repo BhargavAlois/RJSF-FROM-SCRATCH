@@ -295,7 +295,7 @@ export const schemaModel = {
       },
       password: {
         "ui:placeholder": "Enter Password",
-        "ui:widget": "CustomGenPassword",
+        "ui:widget": "password",
         pattern_message: [
           "Contains at least one uppercase letter (A-Z).",
           "Contains at least one lowercase letter (a-z).",
