@@ -3,7 +3,8 @@ import { FaRegEyeSlash, FaEye } from "react-icons/fa6";
 
 export default function PasswordInput(props) {
   const {
-    schemaModel,
+    schema,
+    uiSchema,
     formData,
     errors,
     title,

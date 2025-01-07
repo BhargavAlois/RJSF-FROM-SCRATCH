@@ -2,7 +2,7 @@ import React from "react";
 
 export default function RadioInput(props) {
   const {
-    schemaModel,
+    schema, uiSchema,
     formData,
     errors,
     title,

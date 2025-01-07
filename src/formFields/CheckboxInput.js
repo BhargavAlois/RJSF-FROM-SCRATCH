@@ -1,18 +1,7 @@
 import React from "react";
 
 export default function CheckboxInput(props) {
-  const {
-    schemaModel,
-    formData,
-    errors,
-    title,
-    field,
-    uiField,
-    fieldClass,
-    colClass,
-    handleChange,
-    fieldName,
-  } = props;
+  const {schemaModel, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
 
   const isColumnLayout = uiField["ui:layout"] === "column";
 

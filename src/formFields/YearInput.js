@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function YearInput(props) {
-  const {schemaModel, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+  const {schema, uiSchema, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
   return (
     <div key={fieldName} className={`${colClass} `}>
       <label className="form-label">{title}</label>

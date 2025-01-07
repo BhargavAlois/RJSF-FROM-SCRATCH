@@ -5,6 +5,7 @@ import * as formFields from '../formFields/InputFieldsExports';
 export default function ContentTemplate({
   formData,
   schema,
+  uiSchema,
   fields,
   errors,
   onChange: handleChange,
@@ -12,6 +13,7 @@ export default function ContentTemplate({
   onError,
   onSubmit,
 }) {
+  console.log("UI : ", uiSchema);
   const [preview, setPreview] = useState();
   const [fileDetails, setFileDetails] = useState(null);
 
@@ -59,7 +61,7 @@ export default function ContentTemplate({
     const { title, enum: enumValues, oneOf, format } = field;
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName;
     // console.log("fieldName : ", fieldName);
-    const uiField = getDeepValue(schema.uiSchema, fieldPath) || {};
+    const uiField = getDeepValue(uiSchema, fieldPath) || {};
     const fieldClass = `form-control ${uiField["classNames"]}`;
     const widget = uiField["ui:widget"] || format || "string";
     // console.log("Widget : ", widget);
@@ -77,7 +79,7 @@ export default function ContentTemplate({
           {Object.keys(field.properties).map((nestedFieldName) => {
             const nestedField = field.properties[nestedFieldName];
             const updatedParentSchema =
-              parentSchema.schema.properties[nestedFieldName];
+              parentSchema.properties[nestedFieldName];
             return renderField(
               nestedField,
               `${nestedFieldName}`,
@@ -152,6 +154,7 @@ export default function ContentTemplate({
       return (
         <Component
           schema={schema}
+          uiSchema={uiSchema}
           formData={formData}
           field={field}
           uiField={uiField}
@@ -195,13 +198,13 @@ export default function ContentTemplate({
   };
 
   const renderSections = () => {
-    const layout = schema.uiSchema.layout || [];
+    const layout = uiSchema.layout || [];
 
     if (!layout || layout.length === 0) {
       // Fallback to normal rendering when layout is not provided
-      return Object.keys(schema.schema.properties || {}).map(
+      return Object.keys(schema.properties || {}).map(
         (fieldName, index) => {
-          const field = getFieldSchemaByName(schema.schema, fieldName);
+          const field = getFieldSchemaByName(schema, fieldName);
           return field ? renderField(field, fieldName) : null;
         }
       );
@@ -215,7 +218,7 @@ export default function ContentTemplate({
           {fields.map((fieldPathOrSection, fieldIndex) => {
             if (typeof fieldPathOrSection === "string") {
               const fieldName = fieldPathOrSection.split(".").pop();
-              const field = getFieldSchemaByName(schema.schema, fieldName);
+              const field = getFieldSchemaByName(schema, fieldName);
               if (field) {
                 return renderField(field, fieldPathOrSection);
               }
@@ -234,7 +237,7 @@ export default function ContentTemplate({
                   {fieldPathOrSection.fields.map((nestedField) => {
                     const nestedFieldName = nestedField.split(".").pop();
                     const nestedFieldSchema = getFieldSchemaByName(
-                      schema.schema,
+                      schema,
                       nestedFieldName
                     );
                     return nestedFieldSchema

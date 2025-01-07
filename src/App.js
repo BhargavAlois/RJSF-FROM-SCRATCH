@@ -51,8 +51,8 @@ function App() {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center align-middle">
       <MyForm
-        schema={schemaModel}
-        // uiSchema={uiSchema}
+        schema={schemaModel.schema}
+        uiSchema={schemaModel.uiSchema}
         templates={templates}
         fields={fields}
         onSubmit={handleFormSubmit}

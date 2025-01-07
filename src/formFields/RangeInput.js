@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function RangeInput(props) {
-  const {schemaModel, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+  const {schema, uiSchema, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
   const min = field.minimum || 0;
   const max = field.maximum || 100;
   const oneOf = field.oneOf;
