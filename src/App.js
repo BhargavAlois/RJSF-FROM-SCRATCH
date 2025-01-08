@@ -54,7 +54,7 @@ function App() {
         schema={schemaModel.schema}
         uiSchema={schemaModel.uiSchema}
         templates={templates}
-        fields={fields}
+        widgets={fields}
         onSubmit={handleFormSubmit}
         onChange={handleOnChange}
         onSuccess={handleOnSuccess}

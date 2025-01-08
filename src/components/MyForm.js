@@ -22,7 +22,7 @@ export default function MyForm(props) {
   if (templateName) {
     MyTemplate = templates[templateName];
   }
-  const fields = props?.fields;
+  const fields = props?.widgets;
 
   const normalizeFieldName = (fieldName) => {
     const parts = fieldName.split(".");
