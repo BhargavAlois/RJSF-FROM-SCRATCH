@@ -18,3 +18,4 @@ export { default as SelectInput } from '../formFields/SelectInput';
 export { default as TimeInput } from '../formFields/TimeInput';
 export { default as UpDownInput } from '../formFields/UpDownInput';
 export { default as YearInput } from '../formFields/YearInput';
+export { default as TextArea } from '../formFields/TextArea';

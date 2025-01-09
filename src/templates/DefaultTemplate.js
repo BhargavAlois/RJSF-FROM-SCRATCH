@@ -4,7 +4,7 @@ export default function MainTemplate(props) {
     const { schema, content, onSubmit, submitBtnOptions } = props;
     const submitBtnClass = submitBtnOptions?.props?.className || 'primaryButton';
     return (
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column w-100" style={{maxWidth: '100%'}}>
             <header className="mb-4">
                 <h3>{schema.title}</h3>
                 <p style={{fontSize: '15px', fontStyle: 'normal', fontWeight: 'normal'}}>{schema.description}</p>
