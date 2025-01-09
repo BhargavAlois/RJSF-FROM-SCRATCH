@@ -18,6 +18,7 @@ export default function MyForm(props) {
   } = props;
   const templates = props?.templates;
   const templateName = uiSchema?.["template"];
+  console.log("Form data : ", formData);
   var MyTemplate;
   if (templateName) {
     MyTemplate = templates[templateName];
@@ -40,7 +41,8 @@ export default function MyForm(props) {
         const fieldValue = data?.[fieldName];
 
         if (fieldSchema.type === "string" && fieldSchema.format === "date") {
-          const displayFormat = fieldSchema["ui:options"]?.format || "MM/dd/yyyy";
+          const fieldUiSchema = getFieldUiSchema(fieldName, uiSchema);
+          const displayFormat = fieldUiSchema["ui:options"]?.format || "yyyy/MM/dd";
           try {
             normalizedData[fieldName] = format(
               parseISO(fieldValue),
@@ -120,12 +122,12 @@ export default function MyForm(props) {
       // Flatten the default data
       const flattenedDefaultData = flattenData(defaultData);
 
-      console.log("Default flattened data : ", flattenedDefaultData);
+      // console.log("Default flattened data : ", flattenedDefaultData);
 
       // Flatten the prefilled data
-      console.log("Prefilled form data : ", prefilledFormData);
+      // console.log("Prefilled form data : ", prefilledFormData);
       const flattenedPrefilledData = flattenData(prefilledFormData);
-      console.log("flattenedPrefilledData : ", flattenedPrefilledData);
+      // console.log("flattenedPrefilledData : ", flattenedPrefilledData);
   
       // Merge flattened data: prefilled data takes priority over default data
       const mergedData = {
@@ -136,7 +138,7 @@ export default function MyForm(props) {
       // Normalize the merged data (if needed)
       const normalizedData = normalizeData(schema, mergedData);
 
-      console.log("Normalized : ", normalizedData);
+      // console.log("Normalized : ", normalizedData);
   
       // Set form data
       setFormData(normalizedData);
