@@ -2,8 +2,8 @@ import React from 'react';
 import Button from '@mui/material/Button';
 
 export default function MainTemplate(props) {
-    const { schema, content, onSubmit } = props;
-
+    const { schema, content, onSubmit, submitBtnOptions } = props;
+    const submitBtnClass = submitBtnOptions?.props?.className || 'primaryButton';
     return (
         <div className="d-flex flex-column w-100">
             <header className="text-center mb-4">
@@ -32,7 +32,7 @@ export default function MainTemplate(props) {
                     onMouseEnter={(e) => e.target.style.backgroundColor = '#0056b3'} 
                     onMouseLeave={(e) => e.target.style.backgroundColor = '#1976d2'} 
                 >Submit</Button> */}
-                <button type='submit' className="primaryButton">Submit</button>
+                <button type='submit' className={`${submitBtnOptions?.props?.className} mt-3`} disabled={submitBtnOptions?.props?.disabled}>{submitBtnOptions?.submitText || 'Submit'}</button>
             </form>
 
             <footer className="mt-4 text-center">

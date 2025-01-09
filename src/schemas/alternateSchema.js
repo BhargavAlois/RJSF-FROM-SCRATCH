@@ -164,17 +164,17 @@ export const schemaModel = {
       {
         type: "section",
         title: "Employee Information",
-        classNames: "d-flex flex-column", // Makes all items in a single row
+        classNames: "d-flex flex-column", 
         fields: [
-          "info.profilePic", // First column
+          "info.profilePic", 
           {
-            type: "section", // Second column (firstName and lastName)
-            classNames: "d-flex flex-row", // Column layout for the fields
+            type: "section", 
+            classNames: "d-flex flex-row", 
             fields: ["info.firstName", "info.lastName"],
           },
           {
-            type: "section", // Third column (empId and designation)
-            classNames: "d-flex flex-row", // Column layout for the fields
+            type: "section", 
+            classNames: "d-flex flex-row", 
             fields: ["info.empId", "info.designation"],
           },
         ],
@@ -208,6 +208,14 @@ export const schemaModel = {
         ],
       },
     ],
+    'ui:submitButtonOptions': {
+    "submitText": "Submit",
+    "norender": false,
+    "props": {
+      "disabled": false,
+      "className": "primaryButton"
+    }
+  },
     info: {
       classNames: "employe-info",
       profilePic: {
@@ -246,7 +254,6 @@ export const schemaModel = {
       },
       designation: {
         "ui:col": 6,
-
         classNames: "designation",
         "ui:placeholder": "Enter Designation",
       },

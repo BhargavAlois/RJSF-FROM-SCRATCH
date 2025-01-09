@@ -416,6 +416,8 @@ export default function MyForm(props) {
     }
   };
 
+  const submitBtnOptions = uiSchema['ui:submitButtonOptions'];
+  console.log("submitButtonSchema")
   const content = (
     <ContentTemplate
       formData={formData}
@@ -437,6 +439,7 @@ export default function MyForm(props) {
         uiSchema={uiSchema}
         content={content}
         onSubmit={handleSubmit}
+        submitBtnOptions={submitBtnOptions}
       />
     );
   }
@@ -448,6 +451,7 @@ export default function MyForm(props) {
       uiSchema={uiSchema}
       content={content}
       onSubmit={handleSubmit}
+      submitBtnOptions={submitBtnOptions}
     />
   );
 }
