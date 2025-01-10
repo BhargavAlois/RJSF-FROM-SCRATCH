@@ -2,15 +2,19 @@ import React from "react";
 
 export default function TextArea(props) {
   const {schema, uiSchema, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+  const rows = uiField?.['ui:options']?.rows;
+  const cols = uiField?.['ui:options']?.cols;
+
   return (
-    <div key={fieldName} className={`${colClass} `}>
+    <div key={fieldName} className={`${colClass}`}>
       <label className="form-label">{title || fieldName}</label>
       <textarea
-        type="textarea"
         className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
         name={fieldName}
         value={formData[fieldName] || ""}
         onChange={(e) => handleChange(fieldName, e.target.value)}
+        rows={rows}
+        cols={cols}
         placeholder={uiField["ui:placeholder"]}
       />
       {errors[fieldName] &&

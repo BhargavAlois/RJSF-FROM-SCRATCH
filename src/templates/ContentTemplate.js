@@ -56,7 +56,8 @@ export default function ContentTemplate({
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName
     // console.log("fieldName : ", fieldName);
     const uiField = getDeepValue(uiSchema, fieldPath) || {}
-    const fieldClass = `form-control ${uiField['classNames']}`
+    const uiFieldClassNames = uiField['classNames'] || uiField?.['ui:options']?.classNames;
+    const fieldClass = `form-control ${uiFieldClassNames}`;
     const widget = uiField['ui:widget'] || format || 'string'
     // console.log("Widget : ", widget);
     const layoutClass = uiField['ui:layout']
@@ -109,7 +110,6 @@ export default function ContentTemplate({
 
     //Implementation of handleDefaultFieldChange where only target value is accepted as parameter
     const handleDefaultFieldChange = (value) => {
-      console.log(`${normalizedFieldName} : ${value}`);
       handleChange(normalizedFieldName, value)
     }
 
@@ -160,7 +160,6 @@ export default function ContentTemplate({
       if (fields) {
         const CustomField = fields[widget]
         if (CustomField) {
-          console.log(`Value for ${normalizedFieldName} : ${formData[normalizedFieldName]}`);
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
           return (
             <div className={`${colClass}`}>
@@ -175,13 +174,11 @@ export default function ContentTemplate({
                 placeholder={uiField?.['ui:placeholder']}
               />
               {errors[normalizedFieldName] && (
-                <div>
-                  {errors[normalizedFieldName].map((error, index) => (
-                    <p key={index} className="text-danger" style={{fontSize: '0.875rem'}}>
+                  errors[normalizedFieldName].map((error, index) => (
+                    <p key={index} className="text-danger mt-0" style={{fontSize: '0.875rem', marginTop: 0}}>
                       {error}
                     </p>
-                  ))}
-                </div>
+                  ))
               )}
             </div>
           )
