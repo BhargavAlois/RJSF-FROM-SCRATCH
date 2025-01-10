@@ -385,7 +385,7 @@ export default function MyForm(props) {
         } else {
           defaultOnSuccess();
         }
-        onSubmit(formData);
+        onSubmit(formData, e);
         return;
       } else {
         if (onError) {
