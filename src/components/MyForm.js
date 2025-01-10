@@ -364,15 +364,15 @@ export default function MyForm(props) {
 
   const defaultSubmit = (e) => {
     e.preventDefault();
-    window.alert("Default submit called");
+    console.log("Default submit called");
   };
 
   const defaultOnSuccess = (e) => {
-    window.alert("Submission successfull!");
+    console.log("Submission successfull!");
   };
 
   const defaultOnError = (e) => {
-    window.alert("Error occurred!");
+    console.log("Error occurred!");
   };
 
   const handleSubmit = (e) => {
