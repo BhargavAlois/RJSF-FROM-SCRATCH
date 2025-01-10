@@ -18,7 +18,7 @@ export default function MyForm(props) {
   } = props;
   const templates = props?.templates;
   const templateName = uiSchema?.["template"];
-  console.log("Form data : ", formData);
+  // console.log("Form data : ", formData);
   var MyTemplate;
   if (templateName) {
     MyTemplate = templates[templateName];
@@ -358,7 +358,7 @@ export default function MyForm(props) {
 
     // Set errors in state
     setErrors(formErrors);
-    console.log("Form errors : ", formErrors);
+    // console.log("Form errors : ", formErrors);
     return Object.keys(formErrors).length === 0;
   };
 
@@ -377,7 +377,7 @@ export default function MyForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form data : ", formData);
+    // console.log("Form data : ", formData);
     if (onSubmit) {
       if (validateForm()) {
         if (onSuccess) {
@@ -401,7 +401,7 @@ export default function MyForm(props) {
 
   const handleChange = (fieldName, value) => {
     // const options = uiSchema[fieldName]['ui:options'];
-    console.log("Change in field : ", fieldName);
+    // console.log("Change in field : ", fieldName);
 
     setFormData((prevData) => ({
       ...prevData,
@@ -419,7 +419,6 @@ export default function MyForm(props) {
   };
 
   const submitBtnOptions = uiSchema['ui:submitButtonOptions'];
-  console.log("submitButtonSchema")
   const content = (
     <ContentTemplate
       formData={formData}
