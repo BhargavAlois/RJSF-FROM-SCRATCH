@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function AltDateInput(props) {
-  const {schema, uiSchema, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+    const {schema, uiSchema, formData, errors, title, field, uiField, layoutClass, fieldClass, handleChange, fieldName} = props;
   const { yearsRange, format: dateFormat } = uiField["ui:options"] || {};
   const startYear = yearsRange ? yearsRange[0] : 1900;
   const endYear = yearsRange ? yearsRange[1] : 2100;
@@ -64,7 +64,7 @@ export default function AltDateInput(props) {
   const isMDY = dateFormat === "MDY";
 
   return (
-    <div key={fieldName} className={`${colClass} `}>
+    <div key={fieldName} className={`${layoutClass} `}>
       <label className="form-label">{title || fieldName}</label>
       <div
         className={`${

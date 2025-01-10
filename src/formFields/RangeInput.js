@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function RangeInput(props) {
-  const {schema, uiSchema, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+    const {schema, uiSchema, formData, errors, title, field, uiField, layoutClass, fieldClass, handleChange, fieldName} = props;
   const min = field.minimum || 0;
   const max = field.maximum || 100;
   const oneOf = field.oneOf;
@@ -12,7 +12,7 @@ export default function RangeInput(props) {
   const rangeValue = formData[fieldName] || defaultValue;
 
   return (
-    <div key={fieldName} className={`${colClass}`}>
+    <div key={fieldName} className={`${layoutClass}`}>
       <label className="form-label">{title || fieldName}</label>
       <input
         type="range"

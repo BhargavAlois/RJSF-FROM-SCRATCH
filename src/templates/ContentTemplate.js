@@ -56,11 +56,11 @@ export default function ContentTemplate({
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName
     // console.log("fieldName : ", fieldName);
     const uiField = getDeepValue(uiSchema, fieldPath) || {}
-    const uiFieldClassNames = uiField['classNames'] || uiField?.['ui:options']?.classNames;
-    const fieldClass = `form-control ${uiFieldClassNames}`;
+    const uiFieldClassNames = uiField['ui:classNames'] || uiField['classNames'] || uiField?.['ui:options']?.classNames;
+    const layoutClass = `${uiFieldClassNames}`;
     const widget = uiField['ui:widget'] || format || 'string'
     // console.log("Widget : ", widget);
-    const layoutClass = uiField['ui:layout']
+    const fieldClass = 'form-control';
     const isColumnLayout = uiField['ui:layout'] === 'column'
     const colClass = uiField?.['ui:col'] ? `col-${uiField['ui:col']}` : 'w-100';
     const normalizedFieldName = normalizeFieldName(fieldName)
@@ -151,9 +151,9 @@ export default function ContentTemplate({
           errors={errors}
           handleChange={handleChange}
           fieldName={normalizedFieldName}
-          colClass={colClass}
-          title={title}
           fieldClass={fieldClass}
+          title={title}
+          layoutClass={layoutClass}
         />
       )
     } else {
@@ -162,7 +162,7 @@ export default function ContentTemplate({
         if (CustomField) {
           // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
           return (
-            <div className={`${colClass}`}>
+            <div className={`${layoutClass}`}>
               <label className='form-label'>{field?.title}</label>
               <CustomField
                 schema={field}

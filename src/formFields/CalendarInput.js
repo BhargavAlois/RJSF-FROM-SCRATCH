@@ -1,10 +1,10 @@
 import React from "react";
 
 export default function CalendarInput(props) {
-  const {schema, uiSchema, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+    const {schema, uiSchema, formData, errors, title, field, uiField, layoutClass, fieldClass, handleChange, fieldName} = props;
 
   return (
-    <div key={fieldName} className={`${colClass} `}>
+    <div key={fieldName} className={`${layoutClass} `}>
       <label className="form-label">{title}</label>
       <input
         type="date"

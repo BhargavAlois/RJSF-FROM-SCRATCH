@@ -9,7 +9,7 @@ export default function FileInput(props) {
     field,
     uiField,
     fieldClass,
-    colClass,
+    layoutClass,
     handleChange,
     fieldName,
   } = props;
@@ -56,7 +56,7 @@ export default function FileInput(props) {
   };
 
   return (
-    <div key={fieldName} className={`${colClass}`}>
+    <div key={fieldName} className={`${layoutClass}`}>
       <label className="form-label">{title}</label>
       <input
         type="file"

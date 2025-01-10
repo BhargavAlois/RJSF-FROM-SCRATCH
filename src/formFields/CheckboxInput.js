@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function CheckboxInput(props) {
-  const {schemaModel, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+  const {schemaModel, formData, errors, title, field, uiField, fieldClass, layoutClass, handleChange, fieldName} = props;
 
   const isColumnLayout = uiField["ui:layout"] === "column";
 
@@ -59,7 +59,7 @@ export default function CheckboxInput(props) {
   };
 
   return (
-    <div key={fieldName} className={`${colClass}`}>
+    <div key={fieldName} className={`${layoutClass}`}>
       <label className="form-label">{title || fieldName}</label>
       <div
         className={`form-check ${

@@ -11,7 +11,7 @@ export default function PasswordInput(props) {
     field,
     uiField,
     fieldClass,
-    colClass,
+    layoutClass,
     handleChange,
     fieldName,
   } = props;
@@ -23,7 +23,7 @@ export default function PasswordInput(props) {
   };
 
   return (
-    <div key={fieldName} className={`${colClass} mb-3`}>
+    <div key={fieldName} className={`${layoutClass} mb-3`}>
       <label className="form-label">{title || fieldName}</label>
       <div className="input-group has-validation">
         <input

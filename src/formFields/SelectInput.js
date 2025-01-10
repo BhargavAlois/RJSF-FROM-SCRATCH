@@ -9,7 +9,7 @@ export default function SelectInput(props) {
     field,
     uiField,
     fieldClass,
-    colClass,
+    layoutClass,
     handleChange,
     fieldName,
   } = props;
@@ -38,7 +38,7 @@ export default function SelectInput(props) {
   };
 
   return (
-    <div key={fieldName} className={`${colClass}`}>
+    <div key={fieldName} className={`${layoutClass}`}>
       <label className="form-label">{title || fieldName}</label>
       <select
         name={fieldName}

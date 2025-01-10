@@ -3,7 +3,7 @@ import MyForm from "./components/MyForm";
 // import { schemaModel } from './schemas/schema';
 import { schemaModel } from "./schemas/alternateSchema";
 import CustomTemplate from "./templates/CustomTemplate";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import "./scss/style.scss";
 import * as customFields from "./fields/fields";

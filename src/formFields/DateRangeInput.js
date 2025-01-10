@@ -3,11 +3,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function DateRangeInput(props) {
-  const {schema, uiSchema, formData, errors, title, field, uiField, fieldClass, colClass, handleChange, fieldName} = props;
+    const {schema, uiSchema, formData, errors, title, field, uiField, layoutClass, fieldClass, handleChange, fieldName} = props;
   const isColumnLayout = uiField["ui:layout"] === "column";
 
   return (
-    <div key={fieldName} className={`${colClass} `}>
+    <div key={fieldName} className={`${layoutClass} `}>
       <label className="form-label">{title || fieldName}</label>
       <div
         className={`${

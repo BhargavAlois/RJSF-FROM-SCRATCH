@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import DefaultTemplate from "../templates/DefaultTemplate";
 import { format, parseISO } from "date-fns";
 import ContentTemplate from "../templates/ContentTemplate";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min.js"
 
 export default function MyForm(props) {
   const [formData, setFormData] = useState({});

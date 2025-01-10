@@ -9,7 +9,7 @@ export default function RadioInput(props) {
     field,
     uiField,
     fieldClass,
-    colClass,
+    layoutClass,
     handleChange,
     fieldName,
   } = props;
@@ -54,7 +54,7 @@ export default function RadioInput(props) {
   };
 
   return (
-    <div key={fieldName} className={`${colClass}`}>
+    <div key={fieldName} className={`${layoutClass}`}>
       <label className="form-label">{title || fieldName}</label>
       <div
         className={`form-check ${

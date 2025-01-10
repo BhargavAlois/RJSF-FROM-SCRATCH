@@ -9,12 +9,12 @@ export default function TextInput(props) {
     field,
     uiField,
     fieldClass,
-    colClass,
+    layoutClass,
     handleChange,
     fieldName,
   } = props;
   return (
-    <div key={fieldName} className={`${colClass} `}>
+    <div key={fieldName} className={`${layoutClass} `}>
       <label className="form-label">{title || fieldName}</label>
       <input
         type="text"
