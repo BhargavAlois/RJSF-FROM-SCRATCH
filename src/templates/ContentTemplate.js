@@ -56,13 +56,11 @@ export default function ContentTemplate({
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName
     // console.log("fieldName : ", fieldName);
     const uiField = getDeepValue(uiSchema, fieldPath) || {}
-    const uiFieldClassNames = uiField['ui:classNames'] || uiField['classNames'] || uiField?.['ui:options']?.classNames;
-    const layoutClass = `${uiFieldClassNames}`;
-    const widget = uiField['ui:widget'] || format || 'string'
+    const uiLayoutClassNames = uiField['ui:classNames'] || uiField['classNames'] || uiField?.['ui:options']?.classNames;
+    const layoutClass = uiLayoutClassNames ? `form-group ${uiLayoutClassNames}` : 'form-group';
+    const widget = uiField['ui:widget'] || format || 'string';
     // console.log("Widget : ", widget);
     const fieldClass = 'form-control';
-    const isColumnLayout = uiField['ui:layout'] === 'column'
-    const colClass = uiField?.['ui:col'] ? `col-${uiField['ui:col']}` : 'w-100';
     const normalizedFieldName = normalizeFieldName(fieldName)
 
     if (field.type === 'object' && field.properties) {
@@ -202,9 +200,9 @@ export default function ContentTemplate({
     return layout.map((section, index) => {
       const { title, classNames, fields } = section
       return (
-        <div key={index} className="section-container w-100">
-          {title && <h5 className="section-title">{title}</h5>}
-          <div className={`fields-container ${classNames}`}>
+        <div key={index} className="w-100 mb-4">
+          {title && <h5>{title}</h5>}
+          <div className={`${classNames}`}>
             {fields.map((fieldPathOrSection, fieldIndex) => {
               if (typeof fieldPathOrSection === 'string') {
                 const fieldName = fieldPathOrSection.split('.').pop()

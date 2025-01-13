@@ -47,12 +47,12 @@ export const schemaModel = {
             ],
             default: 'other'
           },
-          // dateOfBirth: {
-          //   type: 'string',
-          //   format: 'date',
-          //   title: 'Date Of Birth',
-          //   dateType: 'dateOfBirth',
-          // },
+          dateOfBirth: {
+            type: 'string',
+            format: 'date',
+            title: 'Date Of Birth',
+            dateType: 'dateOfBirth',
+          },
           bloodGroup: {
             type: "string",
             title: "Blood Group",
@@ -162,49 +162,65 @@ export const schemaModel = {
     hideTitle: true,
     layout: [
       {
-        type: "section",
-        title: "Employee Information",
-        classNames: "d-flex flex-column", 
+        type: 'section',
+        title: 'Employee Information',
+        classNames: 'd-flex flex-row gap-2',
         fields: [
-          "info.profilePic", 
+          'info.profilePic',
           {
-            type: "section", 
-            classNames: "d-flex flex-row", 
-            fields: ["info.firstName", "info.lastName"],
+            type: 'section',
+            classNames: 'd-flex flex-column',
+            fields: ['info.firstName', 'info.lastName'],
           },
           {
-            type: "section", 
-            classNames: "d-flex flex-row", 
-            fields: ["info.empId", "info.designation"],
+            type: 'section',
+            classNames: 'd-flex flex-column',
+            fields: ['info.empId', 'info.designation'],
           },
         ],
       },
       {
-        type: "section",
-        title: "Personal Information",
-        classNames: "",
+        type: 'section',
+        title: 'Personal Information',
+        classNames: 'd-flex flex-column',
         fields: [
-          "personalInfo.gender",
-          "personalInfo.bloodGroup",
-          "personalInfo.nationality",
-          "personalInfo.phoneNumber",
-          "personalInfo.address",
-          "personalInfo.residence",
+          {
+            type: 'section',
+            classNames: 'd-flex flex-row gap-2',
+            fields: ['personalInfo.gender', 'personalInfo.dateOfBirth', 'personalInfo.bloodGroup'],
+          },
+          {
+            type: 'section',
+            classNames: 'd-flex flex-row gap-2', 
+            fields: ['personalInfo.nationality', 'personalInfo.phoneNumber', 'personalInfo.address', ],
+          },
+          {
+            type: 'section',
+            classNames: 'd-flex flex-row',
+            fields: ['personalInfo.residence']
+          }
         ],
       },
       {
-        type: "section",
-        title: "Employee Info",
-        classNames: "",
+        type: 'section',
+        title: 'Employee Info',
+        classNames: 'd-flex flex-column gap-2',
         fields: [
-          "employeeinfo.email",
-          "employeeinfo.password",
-          "employeeinfo.employeementtype",
-          "employeeinfo.department",
-          "employeeinfo.dateOfJoining",
-          "employeeinfo.shift",
-          "employeeinfo.shiftTiming",
-          "employeeinfo.reportTo",
+          {
+            type: 'section',
+            classNames: 'd-flex flex-row gap-2',
+            fields: ['employeeinfo.email', 'employeeinfo.password', 'employeeinfo.dateOfJoining'],
+          },
+          {
+            type: 'section',
+            classNames: 'd-flex flex-row gap-2',
+            fields: ['employeeinfo.department', 'employeeinfo.shift', 'employeeinfo.shiftTiming'],
+          },
+          {
+            type: 'section',
+            classNames: 'd-flex flex-row',
+            fields: ['employeeinfo.reportTo'],
+          },
         ],
       },
     ],
@@ -266,10 +282,10 @@ export const schemaModel = {
         "ui:placeholder": "Select Gender",
         "ui:widget": "select",
       },
-      // dateOfBirth: {
-      //   classNames: 'date-of-birth',
-      //   'ui:widget': 'DatePickerWidget',
-      // },
+      dateOfBirth: {
+        classNames: 'date-of-birth',
+        'ui:widget': 'DatePickerWidget',
+      },
       bloodGroup: {
         classNames: "blood-group",
         "ui:placeholder": "Select Blood Group",

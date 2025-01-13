@@ -74,7 +74,6 @@ const DatePickerWidget = (props) => {
         min={minDate}
         max={maxDate}
       />
-      
     </div>
   );
 };
