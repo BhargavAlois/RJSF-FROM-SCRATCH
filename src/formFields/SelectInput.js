@@ -42,7 +42,7 @@ export default function SelectInput(props) {
       <label className="form-label">{title || fieldName}</label>
       <select
         name={fieldName}
-        className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
+        className={`form-select ${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
         value={formData[fieldName] || ""}
         onChange={(e) => handleChange(fieldName, e.target.value)}
         placeholder={uiField["ui:placeholder"]}

@@ -17,7 +17,7 @@ export default function RangeInput(props) {
       <input
         type="range"
         name={fieldName}
-        className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
+        className={`${fieldClass} form-range ${errors[fieldName] ? "is-invalid" : ""}`}
         value={rangeValue}
         onChange={(e) => handleChange(fieldName, e.target.value)}
         min={min}

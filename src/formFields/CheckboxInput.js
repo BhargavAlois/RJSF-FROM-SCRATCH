@@ -16,7 +16,7 @@ export default function CheckboxInput(props) {
       <div key={index} className="form-check" style={{ flexBasis: "20%" }}>
         <input
           type="checkbox"
-          className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
+          className={`${fieldClass} form-check-input ${errors[fieldName] ? "is-invalid" : ""}`}
           name={fieldName}
           value={value}
           checked={formData[fieldName]?.includes(value)}
@@ -41,7 +41,7 @@ export default function CheckboxInput(props) {
         <div key={index} className="form-check" style={{ flexBasis: "20%" }}>
           <input
             type="checkbox"
-            className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
+            className={`${fieldClass} form-check-input ${errors[fieldName] ? "is-invalid" : ""}`}
             name={fieldName}
             value={value}
             checked={formData[fieldName]?.includes(value)}

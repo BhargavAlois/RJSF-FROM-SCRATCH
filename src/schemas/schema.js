@@ -183,53 +183,53 @@ export const schemaModel = {
     // "ui:layout": "myCustomRowTemplate",
     firstName: {
       // "ui:widget": "text",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
       "ui:col": 6,
       "ui:placeholder": "Enter first name"
     },
     lastName: {
       // "ui:widget": "text",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
       "ui:col": 6,
       "ui:placeholder": "Enter last name"
     },
     email: {
       "ui:widget": "email",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
       // "ui:col": 6
       "ui:placeholder": "Enter your email"
     },
     password: {
       "ui:widget": "password",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
       // "ui:col": 6
       "ui:placeholder": "Enter password"
     },
     role: {
       "ui:widget": "select",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
     },
     preferences: {
       "ui:widget": "checkboxes",
-      "classNames": "form-check-input",
+      // "classNames": "form-check-input",
       "ui:layout": "row",
     },
     numberEnum: {
       "ui:widget": "radio",
-      "classNames": "form-check-input"
+      // "classNames": "form-check-input"
     },
     integerRange: {
       "ui:widget": "range",
-      "classNames": "form-control-range"
+      // "classNames": "form-control-range"
     },
     dateRange: {
       "ui:widget": "daterange",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
       "ui:options": {
         "format": "yyyy/dd/MM"
@@ -237,7 +237,7 @@ export const schemaModel = {
     },
     date: {
       "ui:widget": "date",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
       "ui:options": {
         "format": "MM/dd/yyyy"
@@ -245,7 +245,7 @@ export const schemaModel = {
     },
     phoneNumber: {
       // "ui:widget": "text",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
       "ui:placeholder": "Enter phone number",
       "pattern_message": [
@@ -254,17 +254,17 @@ export const schemaModel = {
     },
     time: {
       "ui:widget": "time",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
     },
     datetime: {
       "ui:widget": "datetime",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
     },
     calendar: {
       "ui:widget": "calendar",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
     },
     // year: {
@@ -284,7 +284,7 @@ export const schemaModel = {
     // },
     file: {
       "ui:widget": "file",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
       "ui:options": {
         "accept": ['image/png'],
@@ -297,22 +297,22 @@ export const schemaModel = {
         "yearsRange": [2000, 2100],
         "format": "MDY" //YMD ALSO WORKS
       },
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
     },
     progress: {
       "ui:widget": "progress",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:layout": "row",
     },
     passwordWidget: {
       "ui:widget": "CustomGenPassword",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:placeholder": "Enter password"
     },
     customFile: {
       "ui:widget": "customFileWidget",
-      "classNames": "form-control",
+      // "classNames": "form-control",
       "ui:options": {
         "accept": ['image/png'],
         "output": "base64", // blob is also possible
