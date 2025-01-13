@@ -321,7 +321,7 @@ export const schemaModel = {
     actionButton: {
       "ui:widget": "button",
       "ui:options": { "value": "Custom button", "onClick": () => { window.alert("Custom button pressed"); } },
-      "classNames": "btn btn-success border rounded-1 mt-3",
+      "classNames": "primaryButton",
       "ui:layout": "row",
       // "ui:col": 6,
     },

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import DefaultTemplate from '../templates/DefaultTemplate'
 import { format, parseISO } from 'date-fns'
 import ContentTemplate from '../templates/ContentTemplate'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.js'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.js";
 import '../mystyles/myStyle.css'
 
 export default function MyForm(props) {
