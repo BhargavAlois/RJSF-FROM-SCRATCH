@@ -11,7 +11,7 @@ export default function MyForm(props) {
   const [errors, setErrors] = useState({})
   const {
     schema,
-    uiSchema,
+    uiSchema = {},
     onSubmit,
     onChange,
     onSuccess,
@@ -45,7 +45,7 @@ export default function MyForm(props) {
 
         if (fieldSchema.type === 'string' && fieldSchema.format === 'date') {
           const fieldUiSchema = getFieldUiSchema(fieldName, uiSchema)
-          const displayFormat = fieldUiSchema['ui:options']?.format || 'yyyy/MM/dd'
+          const displayFormat = fieldUiSchema?.['ui:options']?.format || 'yyyy/MM/dd'
           try {
             normalizedData[fieldName] = format(parseISO(fieldValue), displayFormat)
           } catch {
@@ -377,7 +377,7 @@ export default function MyForm(props) {
   const handleSubmit = (e) => {
     e.preventDefault()
     // console.log('Form data : ', formData)
-    if (onSubmit) {
+    
       if (validateForm()) {
         if (onSuccess) {
           onSuccess()
@@ -389,8 +389,16 @@ export default function MyForm(props) {
 
         // Wrap transformedData as formData inside data
         const data = { formData: transformedData }
-        onSubmit(data, e)
-        return
+        if(onSubmit)
+        {
+          onSubmit(data, e)
+          return
+        }
+        else
+        {
+          defaultSubmit(e)
+          return
+        }
       } else {
         if (onError) {
           onError()
@@ -399,8 +407,7 @@ export default function MyForm(props) {
         }
         return
       }
-    }
-    defaultSubmit(e)
+    
   }
 
   const handleChange = (fieldName, value) => {
@@ -422,8 +429,7 @@ export default function MyForm(props) {
     }
   }
 
-  const submitBtnOptions = uiSchema['ui:submitButtonOptions']
-  // console.log('submitButtonSchema')
+  const submitBtnOptions = uiSchema?.['ui:submitButtonOptions']
   const content = (
     <ContentTemplate
       formData={formData}
@@ -451,7 +457,6 @@ export default function MyForm(props) {
   }
 
   return (
-    // <MyTemplate schema={schema} uiSchema={uiSchema} fields={fields} onChange={handleChange} onSubmit={handleSubmit} onError={onError} onSuccess={onSuccess} formData={formData} errors={errors} />
     <MyTemplate
       schema={schema}
       uiSchema={uiSchema}
