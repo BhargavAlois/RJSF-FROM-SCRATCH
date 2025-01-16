@@ -57,31 +57,32 @@ export default function ContentTemplate({
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName
     // console.log("fieldName : ", fieldName);
     const uiFieldSchema = getDeepValue(uiSchema, fieldPath) || {}
-    const uiLayoutClassNames = uiFieldSchema['ui:className'] || uiFieldSchema['ui:classNames'] || uiFieldSchema['classNames'] || uiFieldSchema?.['ui:options']?.classNames || 'w-100';
-    const layoutClass = uiLayoutClassNames ? `form-group ${uiLayoutClassNames}` : 'form-group';
-    const widget = uiFieldSchema['ui:widget'] || format || 'string';
+    const uiLayoutClassNames =
+      uiFieldSchema['ui:className'] ||
+      uiFieldSchema['ui:classNames'] ||
+      uiFieldSchema['classNames'] ||
+      uiFieldSchema?.['ui:options']?.classNames ||
+      'w-100'
+    const layoutClass = uiLayoutClassNames ? `form-group ${uiLayoutClassNames}` : 'form-group'
+    const widget = uiFieldSchema['ui:widget'] || format || 'string'
     // console.log("Widget : ", widget);
-    const fieldClass = 'form-control';
+    const fieldClass = 'form-control'
     const normalizedFieldName = normalizeFieldName(fieldName)
 
-    if(uiFieldSchema['ui:field'])
-    {
-      const Component = uiFieldSchema['ui:field'];
+    if (uiFieldSchema['ui:field']) {
+      const Component = uiFieldSchema['ui:field']
       return <Component uiSchema={uiFieldSchema} />
-    }
-    if(fields)
-    {
-      if(uiFieldSchema['ui:field'])
-        {
-          const Component = uiFieldSchema['ui:field'];
-          return <Component uiSchema={uiFieldSchema} />
-        }
+    } else if (fields) {
+      if (uiFieldSchema['ui:field']) {
+        const Component = fields?.[uiFieldSchema?.['ui:field']]
+        return <Component uiSchema={uiFieldSchema} />
+      }
     }
 
     if (field.type === 'object' && field.properties) {
       return (
         // <div className={`row ${uiFieldSchema?.classNames}`}>
-        <div className=''>
+        <div className="">
           <h5 className="mt-3">{title || fieldName}</h5>
           <p style={{ size: '5px' }}>{field?.description}</p>
           {Object.keys(field.properties).map((nestedFieldName) => {
@@ -155,7 +156,6 @@ export default function ContentTemplate({
     const Component = inputFields[widget]
     if (Component) {
       return (
-        
         <Component
           schema={schema}
           uiSchema={uiSchema}
@@ -169,36 +169,43 @@ export default function ContentTemplate({
           title={title}
           layoutClass={layoutClass}
         />
-      
       )
     } else {
+      let CustomWidget;
       if (widgets) {
-        const CustomWidget = widgets[widget]
-        if (CustomWidget) {
-          // return <CustomWidget schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
-          return (
-            <div className={`${layoutClass}`}>
-              <label className='form-label'>{field?.title}</label>
-              <CustomWidget
-                schema={field}
-                uiSchema={uiFieldSchema}
-                fieldName={normalizedFieldName}
-                value={formData[normalizedFieldName]}
-                onChange={handleDefaultFieldChange}
-                errors={errors[normalizedFieldName]}
-                placeholder={uiFieldSchema?.['ui:placeholder']}
-              />
-              {errors[normalizedFieldName] && (
-                  errors[normalizedFieldName].map((error, index) => (
-                    <p key={index} className="text-danger mt-0" style={{fontSize: '0.875rem', marginTop: 0}}>
-                      {error}
-                    </p>
-                  ))
-              )}
-            </div>
-          )
-        }
+        CustomWidget = widgets[widget]
+      } 
+      if(!CustomWidget && uiFieldSchema?.['ui:widget']) {
+        CustomWidget = uiFieldSchema?.['ui:widget']
       }
+      if (CustomWidget) {
+        // return <CustomWidget schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
+        return (
+          <div className={`${layoutClass}`}>
+            <label className="form-label">{field?.title}</label>
+            <CustomWidget
+              schema={field}
+              uiSchema={uiFieldSchema}
+              fieldName={normalizedFieldName}
+              value={formData[normalizedFieldName]}
+              onChange={handleDefaultFieldChange}
+              errors={errors[normalizedFieldName]}
+              placeholder={uiFieldSchema?.['ui:placeholder']}
+            />
+            {errors[normalizedFieldName] &&
+              errors[normalizedFieldName].map((error, index) => (
+                <p
+                  key={index}
+                  className="text-danger mt-0"
+                  style={{ fontSize: '0.875rem', marginTop: 0 }}
+                >
+                  {error}
+                </p>
+              ))}
+          </div>
+        )
+      }
+
       // return <p className="text-danger" style={{fontSize: '0.875em'}}>No such component available</p>;
     }
   }
@@ -208,22 +215,18 @@ export default function ContentTemplate({
 
     if (!layout || layout.length === 0) {
       // Fallback to normal rendering when layout is not provided
-      return (
-        
-       Object.keys(schema.properties || {}).map((fieldName, index) => {
+      return Object.keys(schema.properties || {}).map((fieldName, index) => {
         const field = getFieldSchemaByName(schema, fieldName)
         return field ? renderField(field, fieldName) : null
       })
-      
-    )
     }
 
     return layout.map((section, index) => {
       const { title, classNames, fields, id } = section
-      const section_id = `root_${id}`;
-      console.log("Title : ", title);
+      const section_id = `root_${id}`
+      console.log('Title : ', title)
       return (
-        <div key={index} className='w-100'>
+        <div key={index} className="w-100">
           {title && <h5>{title}</h5>}
           <div id={`${section_id}`}>
             {fields.map((fieldPathOrSection, fieldIndex) => {
@@ -256,9 +259,5 @@ export default function ContentTemplate({
     })
   }
 
-  return (
-    <div className='row w-100 justify-content-around'>
-    {renderSections()}
-    </div>
-  )
+  return <div className="row w-100 justify-content-around">{renderSections()}</div>
 }
