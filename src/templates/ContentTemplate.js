@@ -56,7 +56,7 @@ export default function ContentTemplate({
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName
     // console.log("fieldName : ", fieldName);
     const uiField = getDeepValue(uiSchema, fieldPath) || {}
-    const uiLayoutClassNames = uiField['ui:classNames'] || uiField['classNames'] || uiField?.['ui:options']?.classNames || 'w-100';
+    const uiLayoutClassNames = uiField['ui:className'] || uiField['ui:classNames'] || uiField['classNames'] || uiField?.['ui:options']?.classNames || 'w-100';
     const layoutClass = uiLayoutClassNames ? `form-group ${uiLayoutClassNames}` : 'form-group';
     const widget = uiField['ui:widget'] || format || 'string';
     // console.log("Widget : ", widget);
@@ -66,7 +66,7 @@ export default function ContentTemplate({
     if (field.type === 'object' && field.properties) {
       return (
         // <div className={`row ${uiField?.classNames}`}>
-        <>
+        <div className=''>
           <h5 className="mt-3">{title || fieldName}</h5>
           <p style={{ size: '5px' }}>{field?.description}</p>
           {Object.keys(field.properties).map((nestedFieldName) => {
@@ -74,7 +74,7 @@ export default function ContentTemplate({
             const updatedParentSchema = parentSchema.properties[nestedFieldName]
             return renderField(nestedField, `${nestedFieldName}`, updatedParentSchema, fieldPath)
           })}
-        </>
+        </div>
         /* </div> */
       )
     }
@@ -140,6 +140,7 @@ export default function ContentTemplate({
     const Component = inputFields[widget]
     if (Component) {
       return (
+        
         <Component
           schema={schema}
           uiSchema={uiSchema}
@@ -153,6 +154,7 @@ export default function ContentTemplate({
           title={title}
           layoutClass={layoutClass}
         />
+      
       )
     } else {
       if (fields) {
@@ -191,10 +193,14 @@ export default function ContentTemplate({
 
     if (!layout || layout.length === 0) {
       // Fallback to normal rendering when layout is not provided
-      return Object.keys(schema.properties || {}).map((fieldName, index) => {
+      return (
+        
+       Object.keys(schema.properties || {}).map((fieldName, index) => {
         const field = getFieldSchemaByName(schema, fieldName)
         return field ? renderField(field, fieldName) : null
       })
+      
+    )
     }
 
     return layout.map((section, index) => {
@@ -235,5 +241,9 @@ export default function ContentTemplate({
     })
   }
 
-  return renderSections()
+  return (
+    <div className='row w-100 justify-content-around'>
+    {renderSections()}
+    </div>
+  )
 }
