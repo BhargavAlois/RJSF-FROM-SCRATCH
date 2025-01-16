@@ -203,7 +203,7 @@ export default function ContentTemplate({
       console.log("Title : ", title);
       return (
         <div key={index} className='w-100'>
-          {title && <h5 className="mb-2">{title}</h5>}
+          {title && <h5>{title}</h5>}
           <div id={`${section_id}`}>
             {fields.map((fieldPathOrSection, fieldIndex) => {
               if (typeof fieldPathOrSection === 'string') {
