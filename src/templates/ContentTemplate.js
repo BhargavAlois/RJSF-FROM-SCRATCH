@@ -151,6 +151,7 @@ export default function ContentTemplate({
       year: formFields.YearInput,
       numberEnum: formFields.RadioInput,
       textarea: formFields.TextArea,
+      hidden: formFields.HiddenField
     }
 
     const Component = inputFields[widget]
@@ -179,10 +180,12 @@ export default function ContentTemplate({
         CustomWidget = uiFieldSchema?.['ui:widget']
       }
       if (CustomWidget) {
+        console.log("Found custom widget ", CustomWidget);
+
         // return <CustomWidget schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
         return (
           <div className={`${layoutClass}`}>
-            <label className="form-label">{field?.title}</label>
+            {field?.title && (<label className="form-label">{field?.title}</label>)}
             <CustomWidget
               schema={field}
               uiSchema={uiFieldSchema}
