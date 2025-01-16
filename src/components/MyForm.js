@@ -12,6 +12,8 @@ export default function MyForm(props) {
   const {
     schema,
     uiSchema = {},
+    widgets,
+    fields,
     onSubmit,
     onChange,
     onSuccess,
@@ -26,7 +28,6 @@ export default function MyForm(props) {
   if (templateName) {
     MyTemplate = templates[templateName]
   }
-  const fields = props?.widgets
 
   const normalizeFieldName = (fieldName) => {
     const parts = fieldName.split('.')
@@ -436,6 +437,7 @@ export default function MyForm(props) {
       schema={schema}
       uiSchema={uiSchema}
       errors={errors}
+      widgets={widgets}
       fields={fields}
       onSubmit={handleSubmit}
       onError={onError}

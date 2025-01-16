@@ -1,10 +1,10 @@
 import React from "react";
 
 export default function CheckboxInput(props) {
-  const {schemaModel, formData, errors, title, field, uiField, fieldClass, layoutClass, handleChange, fieldName} = props;
+  const {schemaModel, formData, errors, title, field, uiFieldSchema, fieldClass, layoutClass, handleChange, fieldName} = props;
 
-  const isColumnLayout = uiField["ui:layout"] === "column";
-
+  const isColumnLayout = uiFieldSchema["ui:layout"] === "column";
+  const { oneOf, enum: enumValues, enumNames } = field;
   console.log(`From checkbox ${fieldName} : ${formData[fieldName]}`);
 
   // Ensure formData[fieldName] is always an array

@@ -8,14 +8,15 @@ export default function RadioInput(props) {
     errors,
     title,
     field,
-    uiField,
+    uiFieldSchema,
     fieldClass,
     layoutClass,
     handleChange,
     fieldName,
   } = props;
 
-  const isColumnLayout = uiField["ui:layout"] === "column";
+  const { oneOf, enum: enumValues, enumNames } = field;
+  const isColumnLayout = uiFieldSchema["ui:layout"] === "column";
 
   const renderEnumNamesOption = (enumNames) => {
     return enumNames.map((value, index) => (

@@ -8,7 +8,7 @@ export default function SelectInput(props) {
     errors,
     title,
     field,
-    uiField,
+    uiFieldSchema,
     fieldClass,
     layoutClass,
     handleChange,
@@ -53,7 +53,7 @@ export default function SelectInput(props) {
         className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
         value={formData[fieldName] || ""}
         onChange={(e) => handleChange(fieldName, e.target.value)}
-        placeholder={uiField["ui:placeholder"]}
+        placeholder={uiFieldSchema["ui:placeholder"]}
       >
         <option value="">Select an option</option>
         {(enumNames && renderEnumNamesOption(enumNames)) ||

@@ -7,7 +7,7 @@ export default function TextInput(props) {
     errors,
     title,
     field,
-    uiField,
+    uiFieldSchema,
     fieldClass,
     layoutClass,
     handleChange,
@@ -22,7 +22,7 @@ export default function TextInput(props) {
         name={fieldName}
         value={formData[fieldName] || ""}
         onChange={(e) => handleChange(fieldName, e.target.value)}
-        placeholder={uiField["ui:placeholder"]}
+        placeholder={uiFieldSchema["ui:placeholder"]}
       />
       {errors[fieldName] &&
         errors[fieldName].map((error, index) => (

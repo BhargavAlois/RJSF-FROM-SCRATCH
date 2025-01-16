@@ -1,11 +1,11 @@
 import React from "react";
 
 export default function AltDateInput(props) {
-    const {schema, uiSchema, formData, errors, title, field, uiField, layoutClass, fieldClass, handleChange, fieldName} = props;
-  const { yearsRange, format: dateFormat } = uiField["ui:options"] || {};
+    const {schema, uiSchema, formData, errors, title, field, uiFieldSchema, layoutClass, fieldClass, handleChange, fieldName} = props;
+  const { yearsRange, format: dateFormat } = uiFieldSchema["ui:options"] || {};
   const startYear = yearsRange ? yearsRange[0] : 1900;
   const endYear = yearsRange ? yearsRange[1] : 2100;
-  const isColumnLayout = uiField["ui:layout"] === "column";
+  const isColumnLayout = uiFieldSchema["ui:layout"] === "column";
 
   const handleChangeDatePart = (part, value) => {
     const updatedDate = { ...formData[fieldName] };

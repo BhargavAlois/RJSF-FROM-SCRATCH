@@ -6,6 +6,7 @@ export default function ContentTemplate({
   formData,
   schema,
   uiSchema = {},
+  widgets,
   fields,
   errors,
   onChange: handleChange,
@@ -55,17 +56,31 @@ export default function ContentTemplate({
     const { title, enum: enumValues, oneOf, format } = field
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName
     // console.log("fieldName : ", fieldName);
-    const uiField = getDeepValue(uiSchema, fieldPath) || {}
-    const uiLayoutClassNames = uiField['ui:className'] || uiField['ui:classNames'] || uiField['classNames'] || uiField?.['ui:options']?.classNames || 'w-100';
+    const uiFieldSchema = getDeepValue(uiSchema, fieldPath) || {}
+    const uiLayoutClassNames = uiFieldSchema['ui:className'] || uiFieldSchema['ui:classNames'] || uiFieldSchema['classNames'] || uiFieldSchema?.['ui:options']?.classNames || 'w-100';
     const layoutClass = uiLayoutClassNames ? `form-group ${uiLayoutClassNames}` : 'form-group';
-    const widget = uiField['ui:widget'] || format || 'string';
+    const widget = uiFieldSchema['ui:widget'] || format || 'string';
     // console.log("Widget : ", widget);
     const fieldClass = 'form-control';
     const normalizedFieldName = normalizeFieldName(fieldName)
 
+    if(uiFieldSchema['ui:field'])
+    {
+      const Component = uiFieldSchema['ui:field'];
+      return <Component uiSchema={uiFieldSchema} />
+    }
+    if(fields)
+    {
+      if(uiFieldSchema['ui:field'])
+        {
+          const Component = uiFieldSchema['ui:field'];
+          return <Component uiSchema={uiFieldSchema} />
+        }
+    }
+
     if (field.type === 'object' && field.properties) {
       return (
-        // <div className={`row ${uiField?.classNames}`}>
+        // <div className={`row ${uiFieldSchema?.classNames}`}>
         <div className=''>
           <h5 className="mt-3">{title || fieldName}</h5>
           <p style={{ size: '5px' }}>{field?.description}</p>
@@ -92,7 +107,7 @@ export default function ContentTemplate({
     //   const inputType = e.target?.files ? 'file' : 'other';
     //   console.log("input type : ", inputType);
     //   if (inputType === 'file') {
-    //     const outputFormat = uiField['ui:options']['output'];
+    //     const outputFormat = uiFieldSchema['ui:options']['output'];
     //     const file = e.target.files[0];
     //     if (outputFormat === 'base64') {
     //       convertToBase64(file);
@@ -146,7 +161,7 @@ export default function ContentTemplate({
           uiSchema={uiSchema}
           formData={formData}
           field={field}
-          uiField={uiField}
+          uiFieldSchema={uiFieldSchema}
           errors={errors}
           handleChange={handleChange}
           fieldName={normalizedFieldName}
@@ -157,21 +172,21 @@ export default function ContentTemplate({
       
       )
     } else {
-      if (fields) {
-        const CustomField = fields[widget]
-        if (CustomField) {
-          // return <CustomField schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
+      if (widgets) {
+        const CustomWidget = widgets[widget]
+        if (CustomWidget) {
+          // return <CustomWidget schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
           return (
             <div className={`${layoutClass}`}>
               <label className='form-label'>{field?.title}</label>
-              <CustomField
+              <CustomWidget
                 schema={field}
-                uiSchema={uiField}
+                uiSchema={uiFieldSchema}
                 fieldName={normalizedFieldName}
                 value={formData[normalizedFieldName]}
                 onChange={handleDefaultFieldChange}
                 errors={errors[normalizedFieldName]}
-                placeholder={uiField?.['ui:placeholder']}
+                placeholder={uiFieldSchema?.['ui:placeholder']}
               />
               {errors[normalizedFieldName] && (
                   errors[normalizedFieldName].map((error, index) => (

@@ -17,7 +17,7 @@ function App() {
     myCustomRowTemplate: CustomTemplate,
   };
 
-  const fields = {
+  const widgets = {
     BodyField: customFields.JoditEditorField,
     AutoComplete: customFields.AutoCompleteField,
     ProfileImage: customFields.FileUploadWithPreview,
@@ -32,6 +32,8 @@ function App() {
     customFileWidget: customFields.CustomFileWidget,
   };
 
+  const fields = {};
+  
   const handleFormSubmit = (data) => {
     setFormData(data);
     console.log("data : ", data);
@@ -55,7 +57,8 @@ function App() {
         schema={schemaModel.schema}
         uiSchema={schemaModel.uiSchema}
         templates={templates}
-        widgets={fields}
+        widgets={widgets}
+        fields={fields}
         onSubmit={handleFormSubmit}
         onChange={handleOnChange}
         onSuccess={handleOnSuccess}

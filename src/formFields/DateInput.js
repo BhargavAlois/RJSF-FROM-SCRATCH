@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import {format} from 'date-fns';
 
 export default function DateInput(props) {
-    const {schema, uiSchema, formData, errors, title, field, uiField, layoutClass, fieldClass, handleChange, fieldName} = props;
+    const {schema, uiSchema, formData, errors, title, field, uiFieldSchema, layoutClass, fieldClass, handleChange, fieldName} = props;
   const formatOfDate =
     uiSchema[fieldName]?.["ui:options"]?.format || "MM/dd/yyyy";
 
@@ -40,7 +40,7 @@ export default function DateInput(props) {
           errors[fieldName] ? "is-invalid" : ""
         } form-control`}
         dateFormat={formatOfDate}
-        placeholderText={uiField["ui:placeholder"]}
+        placeholderText={uiFieldSchema["ui:placeholder"]}
       />
       {errors[fieldName] &&
         errors[fieldName].map((error, index) => (

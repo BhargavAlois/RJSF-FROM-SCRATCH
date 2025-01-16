@@ -7,7 +7,7 @@ export default function FileInput(props) {
     errors,
     title,
     field,
-    uiField,
+    uiFieldSchema,
     fieldClass,
     layoutClass,
     handleChange,
@@ -46,7 +46,7 @@ export default function FileInput(props) {
         });
       }
 
-      const outputFormat = uiField?.["ui:options"]?.["output"];
+      const outputFormat = uiFieldSchema?.["ui:options"]?.["output"];
       if (outputFormat === "base64") {
         convertToBase64(file);
       } else {

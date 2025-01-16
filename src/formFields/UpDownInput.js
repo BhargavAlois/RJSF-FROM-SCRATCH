@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function UpDownInput(props) {
-    const {schema, uiSchema, formData, errors, title, field, uiField, layoutClass, fieldClass, handleChange, fieldName} = props;
+    const {schema, uiSchema, formData, errors, title, field, uiFieldSchema, layoutClass, fieldClass, handleChange, fieldName} = props;
   return (
     <div key={fieldName} className={`${layoutClass} `}>
       <label className="form-label">{title || fieldName}</label>
@@ -11,7 +11,7 @@ export default function UpDownInput(props) {
         name={fieldName}
         value={formData[fieldName] || ""}
         onChange={(e) => handleChange(fieldName, e.target.value)}
-        placeholder={uiField["ui:placeholder"]}
+        placeholder={uiFieldSchema["ui:placeholder"]}
       />
       {errors[fieldName] &&
         errors[fieldName].map((error, index) => (

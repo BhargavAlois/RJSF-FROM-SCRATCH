@@ -1,6 +1,6 @@
 
 const ButtonWidget = (props) => {
-    const field = props.uiField;
+    const field = props.uiFieldSchema;
     const value = field['ui:options']['value'];
     const onClick = field['ui:options']['onClick'];
     const btnClass = field['classNames'];

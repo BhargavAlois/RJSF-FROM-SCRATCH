@@ -1,9 +1,9 @@
 import React from "react";
 
 export default function TextArea(props) {
-    const {schema, uiSchema, formData, errors, title, field, uiField, layoutClass, fieldClass, handleChange, fieldName} = props;
-  const rows = uiField?.['ui:options']?.rows;
-  const cols = uiField?.['ui:options']?.cols;
+    const {schema, uiSchema, formData, errors, title, field, uiFieldSchema, layoutClass, fieldClass, handleChange, fieldName} = props;
+  const rows = uiFieldSchema?.['ui:options']?.rows;
+  const cols = uiFieldSchema?.['ui:options']?.cols;
 
   return (
     <div key={fieldName} className={`${layoutClass}`}>
@@ -15,7 +15,7 @@ export default function TextArea(props) {
         onChange={(e) => handleChange(fieldName, e.target.value)}
         rows={rows}
         cols={cols}
-        placeholder={uiField["ui:placeholder"]}
+        placeholder={uiFieldSchema["ui:placeholder"]}
       />
       {errors[fieldName] &&
         errors[fieldName].map((error, index) => (

@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function DayInput(props) {
-    const {schema, uiSchema, formData, errors, title, field, uiField, layoutClass, fieldClass, handleChange, fieldName} = props;
+    const {schema, uiSchema, formData, errors, title, field, uiFieldSchema, layoutClass, fieldClass, handleChange, fieldName} = props;
   return (
     <div key={fieldName} className={`${layoutClass} `}>
       <label className="form-label">{title}</label>
