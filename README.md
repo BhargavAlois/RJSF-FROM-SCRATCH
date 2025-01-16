@@ -400,7 +400,6 @@ layout: [
         ],
       },
     ]
-
 - css file :
 ```javascript
 #root_info {
@@ -414,6 +413,9 @@ layout: [
   gap: 10px;
 }
 ```
+**id : info** in schema
+
+Use #root_**info** to assign css properties to that section
 
 Use #root_<id provided in layout> to assign css properties to that section
 
