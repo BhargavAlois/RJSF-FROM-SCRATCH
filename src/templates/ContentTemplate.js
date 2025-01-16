@@ -198,12 +198,13 @@ export default function ContentTemplate({
     }
 
     return layout.map((section, index) => {
-      const { title, classNames, fields } = section
+      const { title, classNames, fields, id } = section
+      const section_id = `root_${id}`;
       console.log("Title : ", title);
       return (
-        <div key={index} className="w-100 mb-2">
+        <div key={index} className='w-100'>
           {title && <h5 className="mb-2">{title}</h5>}
-          <div className={`${classNames}`}>
+          <div id={`${section_id}`}>
             {fields.map((fieldPathOrSection, fieldIndex) => {
               if (typeof fieldPathOrSection === 'string') {
                 const fieldName = fieldPathOrSection.split('.').pop()
@@ -216,14 +217,14 @@ export default function ContentTemplate({
                 fieldPathOrSection.type === 'section'
               ) {
                 return (
-                  <div key={fieldIndex} className={`${fieldPathOrSection.classNames}`}>
+                  <>
                     {fieldPathOrSection.title && <h6>{fieldPathOrSection.title}</h6>}
                     {fieldPathOrSection.fields.map((nestedField) => {
                       const nestedFieldName = nestedField.split('.').pop()
                       const nestedFieldSchema = getFieldSchemaByName(schema, nestedFieldName)
                       return nestedFieldSchema ? renderField(nestedFieldSchema, nestedField) : null
                     })}
-                  </div>
+                  </>
                 )
               }
               console.warn(`Unknown field type: ${fieldPathOrSection}`)

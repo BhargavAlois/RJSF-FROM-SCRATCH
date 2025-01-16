@@ -16,7 +16,7 @@ export const schemaModel = {
           firstName: {
             type: "string",
             title: "First Name",
-            default: 'DefaultFirstName' //Added to test the functionality of default values provision
+            default: "DefaultFirstName", //Added to test the functionality of default values provision
           },
           lastName: {
             type: "string",
@@ -45,13 +45,13 @@ export const schemaModel = {
               { const: "female", title: "Female" },
               { const: "other", title: "Other" },
             ],
-            default: 'other'
+            default: "other",
           },
           dateOfBirth: {
-            type: 'string',
-            format: 'date',
-            title: 'Date Of Birth',
-            dateType: 'dateOfBirth',
+            type: "string",
+            format: "date",
+            title: "Date Of Birth",
+            dateType: "dateOfBirth",
           },
           bloodGroup: {
             type: "string",
@@ -86,7 +86,7 @@ export const schemaModel = {
               { const: "Non-US", title: "Non-US" },
               { const: "US", title: "US" },
             ],
-            default: "Non-US"
+            default: "Non-US",
           },
         },
         required: [
@@ -162,76 +162,55 @@ export const schemaModel = {
     hideTitle: true,
     layout: [
       {
-        type: 'section',
-        title: 'Employee Information',
-        classNames: 'd-flex flex-row gap-2',
+        type: "section",
+        title: "Employee Information",
+        id: "info",
         fields: [
-          'info.profilePic',
-          {
-            type: 'section',
-            classNames: 'd-flex flex-column',
-            fields: ['info.firstName', 'info.lastName'],
-          },
-          {
-            type: 'section',
-            classNames: 'd-flex flex-column',
-            fields: ['info.empId', 'info.designation'],
-          },
+          "info.profilePic",
+          "info.firstName",
+          "info.lastName",
+          "info.empId",
+          "info.designation",
         ],
       },
       {
-        type: 'section',
-        title: 'Personal Information',
-        classNames: 'd-flex flex-column',
+        type: "section",
+        title: "Personal Information",
+        id: "personalInfo",
         fields: [
-          {
-            type: 'section',
-            classNames: 'd-flex flex-row gap-2',
-            fields: ['personalInfo.gender', 'personalInfo.dateOfBirth', 'personalInfo.bloodGroup'],
-          },
-          {
-            type: 'section',
-            classNames: 'd-flex flex-row gap-2', 
-            fields: ['personalInfo.nationality', 'personalInfo.phoneNumber', 'personalInfo.address', ],
-          },
-          {
-            type: 'section',
-            classNames: 'd-flex flex-row',
-            fields: ['personalInfo.residence']
-          }
+          "personalInfo.gender",
+          "personalInfo.dateOfBirth",
+          "personalInfo.bloodGroup",
+          "personalInfo.nationality",
+          "personalInfo.phoneNumber",
+          "personalInfo.address",
+          "personalInfo.residence",
         ],
       },
       {
-        type: 'section',
-        title: 'Employee Info',
-        classNames: 'd-flex flex-column gap-2',
+        type: "section",
+        title: "Employee Info",
+        id: "employeeinfo",
         fields: [
-          {
-            type: 'section',
-            classNames: 'd-flex flex-row gap-2',
-            fields: ['employeeinfo.email', 'employeeinfo.password', 'employeeinfo.dateOfJoining'],
-          },
-          {
-            type: 'section',
-            classNames: 'd-flex flex-row gap-2',
-            fields: ['employeeinfo.department', 'employeeinfo.shift', 'employeeinfo.shiftTiming'],
-          },
-          {
-            type: 'section',
-            classNames: 'd-flex flex-row',
-            fields: ['employeeinfo.reportTo'],
-          },
+          "employeeinfo.email",
+          "employeeinfo.password",
+          "employeeinfo.dateOfJoining",
+          "employeeinfo.department",
+          "employeeinfo.shift",
+          "employeeinfo.shiftTiming",
+          "employeeinfo.reportTo",
         ],
       },
     ],
-    'ui:submitButtonOptions': {
-    "submitText": "Submit",
-    "norender": false,
-    "props": {
-      "disabled": false,
-      "className": "primaryButton"
-    }
-  },
+
+    "ui:submitButtonOptions": {
+      submitText: "Submit",
+      norender: false,
+      props: {
+        disabled: false,
+        className: "primaryButton",
+      },
+    },
     info: {
       classNames: "employe-info",
       profilePic: {
@@ -252,24 +231,24 @@ export const schemaModel = {
       },
       firstName: {
         // "ui:layout": "row",
-        "ui:col": 6,
+        // "ui:col": 6,
         classNames: "first-name",
         "ui:placeholder": "Enter First Name",
       },
       lastName: {
         // "ui:layout": "row",
-        "ui:col": 6,
+        // "ui:col": 6,
         classNames: "last-name",
         "ui:placeholder": "Enter Last Name",
       },
       empId: {
         // "ui:layout": "row",
-        "ui:col": 6,
+        // "ui:col": 6,
         classNames: "emp-id",
         "ui:placeholder": "Enter Employee ID",
       },
       designation: {
-        "ui:col": 6,
+        // "ui:col": 6,
         classNames: "designation",
         "ui:placeholder": "Enter Designation",
       },
@@ -283,8 +262,8 @@ export const schemaModel = {
         "ui:widget": "select",
       },
       dateOfBirth: {
-        classNames: 'date-of-birth',
-        'ui:widget': 'DatePickerWidget',
+        classNames: "date-of-birth",
+        "ui:widget": "DatePickerWidget",
       },
       bloodGroup: {
         classNames: "blood-group",

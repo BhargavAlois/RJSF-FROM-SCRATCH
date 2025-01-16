@@ -56,11 +56,11 @@ function App() {
         uiSchema={schemaModel.uiSchema}
         templates={templates}
         widgets={fields}
-        // onSubmit={handleFormSubmit}
-        // onChange={handleOnChange}
-        // onSuccess={handleOnSuccess}
-        // onError={handleOnError}
-        // formData={formData}
+        onSubmit={handleFormSubmit}
+        onChange={handleOnChange}
+        onSuccess={handleOnSuccess}
+        onError={handleOnError}
+        formData={formData}
       />
     </div>
   );
