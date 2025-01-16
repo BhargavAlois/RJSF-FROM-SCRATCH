@@ -14,8 +14,15 @@ export default function SelectInput(props) {
     fieldName,
   } = props;
 
-  const { oneOf, enum: enumValues } = field;
+  const { oneOf, enum: enumValues, enumNames } = field;
 
+  const renderEnumNamesOption = (enumNames) => {
+    return enumNames.map((value, index) => (
+      <option key={index} value={value}>
+        {value}
+      </option>
+    ));
+  }
   const renderEnumOptions = (enumValues) => {
     return enumValues.map((value, index) => (
       <option key={index} value={value}>
@@ -42,14 +49,13 @@ export default function SelectInput(props) {
       <label className="form-label">{title || fieldName}</label>
       <select
         name={fieldName}
-        className={`form-select ${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
+        className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
         value={formData[fieldName] || ""}
         onChange={(e) => handleChange(fieldName, e.target.value)}
         placeholder={uiField["ui:placeholder"]}
       >
         <option value="">Select an option</option>
-        {enumValues && renderEnumOptions(enumValues)}
-        {oneOf && renderOneOfOptions(oneOf)}
+        {(enumNames && renderEnumNamesOption(enumNames)) || (enumValues && renderEnumOptions(enumValues)) || (oneOf && renderOneOfOptions(oneOf))}
       </select>
       {errors[fieldName] &&
         errors[fieldName].map((error, index) => (
