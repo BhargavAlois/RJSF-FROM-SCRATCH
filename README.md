@@ -417,8 +417,6 @@ layout: [
 
 Use #root_**info** to assign css properties to that section
 
-Use #root_<id provided in layout> to assign css properties to that section
-
 ### Widgets
 
 - can be mentioned using ui:widget:"widget_name" in uiSchema.
