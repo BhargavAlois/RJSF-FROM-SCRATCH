@@ -384,7 +384,7 @@ schemaModel = {
 };
 ```
 
-Layout divides fields into several divs. Where ids can be used to apply classes on these divs.
+Layout divides fields into several divs. Where ids can be used to apply styling on these divs.
 
 layout: [
       {
