@@ -2,7 +2,6 @@
 
 It is a robust and customizable React package designed to dynamically generate user-friendly forms based on a provided JSON schema. It streamlines the process of building interactive, data-driven forms with built-in support for custom fields, templates, and validation.
 
-
 ## Installation
 
 Install my-rjsf with npm
@@ -10,15 +9,14 @@ Install my-rjsf with npm
 ```bash
   npm install my-rjsf
 ```
-    
+
 ## Usage/Examples
 
 ```javascript
-
 import React, { useState } from "react";
-import { schemaModel } from './schemas/schema';
+import { schemaModel } from "./schemas/schema";
 import CustomTemplate from "./templates/CustomTemplate";
-import { MyForm } from 'my-rjsf';
+import { MyForm } from "my-rjsf";
 
 function App() {
   const [formData, setFormData] = useState();
@@ -51,27 +49,25 @@ function App() {
   };
 
   return (
-      <MyForm
-        schema={schemaModel.schema}
-        uiSchema={schemaModel.uiSchema}
-        templates={templates}
-        widgets={fields}
-        onSubmit={handleFormSubmit}
-        onChange={handleOnChange}
-        onSuccess={handleOnSuccess}
-        onError={handleOnError}
-        formData={formData}
-        validator={validator}
-      />
+    <MyForm
+      schema={schemaModel.schema}
+      uiSchema={schemaModel.uiSchema}
+      templates={templates}
+      widgets={fields}
+      onSubmit={handleFormSubmit}
+      onChange={handleOnChange}
+      onSuccess={handleOnSuccess}
+      onError={handleOnError}
+      formData={formData}
+      validator={validator}
+    />
   );
 }
 
 export default App;
-
 ```
 
-
-## Schema 
+## Schema
 
 ```javascript
 schemaModel = {
@@ -122,10 +118,10 @@ schemaModel = {
             ],
           },
           dateOfBirth: {
-            type: 'string',
-            format: 'date',
-            title: 'Date Of Birth',
-            dateType: 'dateOfBirth',
+            type: "string",
+            format: "date",
+            title: "Date Of Birth",
+            dateType: "dateOfBirth",
           },
           bloodGroup: {
             type: "string",
@@ -236,27 +232,22 @@ schemaModel = {
       {
         type: "section",
         title: "Employee Information",
-        classNames: "d-flex flex-row justify-content-between", // Makes all items in a single row
+        id: "info",
         fields: [
-          "info.profilePic", // First column
-          {
-            type: "section", // Second column (firstName and lastName)
-            classNames: "d-flex flex-column", // Column layout for the fields
-            fields: ["info.firstName", "info.lastName"],
-          },
-          {
-            type: "section", // Third column (empId and designation)
-            classNames: "d-flex flex-column", // Column layout for the fields
-            fields: ["info.empId", "info.designation"],
-          },
+          "info.profilePic",
+          "info.firstName",
+          "info.lastName",
+          "info.empId",
+          "info.designation",
         ],
       },
       {
         type: "section",
         title: "Personal Information",
-        classNames: "",
+        id: "personalInfo",
         fields: [
           "personalInfo.gender",
+          "personalInfo.dateOfBirth",
           "personalInfo.bloodGroup",
           "personalInfo.nationality",
           "personalInfo.phoneNumber",
@@ -267,13 +258,12 @@ schemaModel = {
       {
         type: "section",
         title: "Employee Info",
-        classNames: "",
+        id: "employeeinfo",
         fields: [
           "employeeinfo.email",
           "employeeinfo.password",
-          "employeeinfo.employeementtype",
-          "employeeinfo.department",
           "employeeinfo.dateOfJoining",
+          "employeeinfo.department",
           "employeeinfo.shift",
           "employeeinfo.shiftTiming",
           "employeeinfo.reportTo",
@@ -324,8 +314,8 @@ schemaModel = {
         "ui:widget": "select",
       },
       dateOfBirth: {
-        classNames: 'date-of-birth',
-        'ui:widget': 'DatePickerWidget',
+        classNames: "date-of-birth",
+        "ui:widget": "DatePickerWidget",
       },
       bloodGroup: {
         classNames: "blood-group",
@@ -400,38 +390,37 @@ Layout divides fields into several divs. Where classNames can be used to apply c
 
 - can be mentioned using ui:widget:"widget_name" in uiSchema.
 
+| **Widget Name** | **Description**                                                                 |
+| --------------- | ------------------------------------------------------------------------------- |
+| `string`        | Renders a standard text input field for single-line text input.                 |
+| `text`          | Alias for `string`, renders a single-line text input.                           |
+| `alt-date`      | Renders an alternate date input field with customized formatting.               |
+| `password`      | Renders a password input field that masks user input for sensitive data.        |
+| `email`         | Renders an input field for email addresses with validation for email format.    |
+| `file`          | Renders a file upload input allowing users to select and upload files.          |
+| `button`        | Renders a button element, typically used for form submission or actions.        |
+| `calendar`      | Renders a calendar picker for selecting dates directly from a calendar view.    |
+| `checkboxes`    | Renders a group of checkboxes for multiple selection options.                   |
+| `date`          | Renders a standard date input field for selecting dates.                        |
+| `daterange`     | Renders inputs to select a start date and an end date for date range selection. |
+| `datetime`      | Renders a date and time input field.                                            |
+| `day`           | Renders an input field specifically for selecting a day of the month.           |
+| `month`         | Renders an input field specifically for selecting a month.                      |
+| `progress`      | Renders a progress bar input, useful for visualizing completion percentage.     |
+| `radio`         | Renders a group of radio buttons for single-option selection.                   |
+| `range`         | Renders a slider input for selecting a range value.                             |
+| `select`        | Renders a dropdown (select) menu for single-option or multi-option selection.   |
+| `time`          | Renders an input field for selecting time.                                      |
+| `updown`        | Renders a numeric input with increment and decrement controls.                  |
+| `year`          | Renders an input field for selecting a year.                                    |
+| `numberEnum`    | Renders a group of radio buttons for numeric options.                           |
+| `textarea`      | Renders a multi-line text input area for longer text input.                     |
 
-| **Widget Name**      | **Description**                                                                 |
-|-----------------------|---------------------------------------------------------------------------------|
-| `string`             | Renders a standard text input field for single-line text input.                |
-| `text`               | Alias for `string`, renders a single-line text input.                          |
-| `alt-date`           | Renders an alternate date input field with customized formatting.              |
-| `password`           | Renders a password input field that masks user input for sensitive data.       |
-| `email`              | Renders an input field for email addresses with validation for email format.   |
-| `file`               | Renders a file upload input allowing users to select and upload files.         |
-| `button`             | Renders a button element, typically used for form submission or actions.       |
-| `calendar`           | Renders a calendar picker for selecting dates directly from a calendar view.   |
-| `checkboxes`         | Renders a group of checkboxes for multiple selection options.                  |
-| `date`               | Renders a standard date input field for selecting dates.                       |
-| `daterange`          | Renders inputs to select a start date and an end date for date range selection.|
-| `datetime`           | Renders a date and time input field.                                           |
-| `day`                | Renders an input field specifically for selecting a day of the month.          |
-| `month`              | Renders an input field specifically for selecting a month.                     |
-| `progress`           | Renders a progress bar input, useful for visualizing completion percentage.    |
-| `radio`              | Renders a group of radio buttons for single-option selection.                  |
-| `range`              | Renders a slider input for selecting a range value.                            |
-| `select`             | Renders a dropdown (select) menu for single-option or multi-option selection.  |
-| `time`               | Renders an input field for selecting time.                                     |
-| `updown`             | Renders a numeric input with increment and decrement controls.                 |
-| `year`               | Renders an input field for selecting a year.                                   |
-| `numberEnum`         | Renders a group of radio buttons for numeric options.                          |
-| `textarea`           | Renders a multi-line text input area for longer text input.                    |
-
-### Validation 
+### Validation
 
 - **Required Fields**: Enforces mandatory completion of specific fields.
-  
 - **Min/Max Length**: Sets minimum and maximum character limits for string inputs (e.g., passwords).
+
   - **How to Use**:
     - To set a minimum length for a string input, use the `minLength` property.
     - To set a maximum length for a string input, use the `maxLength` property.
@@ -445,6 +434,7 @@ Layout divides fields into several divs. Where classNames can be used to apply c
     - This ensures the field value falls within the defined character limits.
 
 - **Pattern Matching**: Ensures input conforms to a specific regex pattern (e.g., email and phone number formats).
+
   - **How to Use**:
     - Use the `pattern` property to provide a regular expression for the input value.
     ```json
@@ -456,6 +446,7 @@ Layout divides fields into several divs. Where classNames can be used to apply c
     - This pattern checks for an email format.
 
 - **Pattern Messages**: Customizes error messages for pattern mismatches and allows multiple messages to be displayed if needed.
+
   - **How to Use**:
     - You can define the `patternMessage` property to specify custom error messages that should be displayed when the input doesn't match the defined pattern.
     - If you want to display multiple error messages for different patterns, you can use an array of messages.
@@ -472,6 +463,7 @@ Layout divides fields into several divs. Where classNames can be used to apply c
     - This allows flexibility in displaying multiple messages to guide the user in correcting their input.
 
 - **Range Validation**: Defines minimum and maximum values for numeric fields (e.g., integer range and progress).
+
   - **How to Use**:
     - For numeric fields, use `minimum` and `maximum` properties to specify valid numeric ranges.
     ```json
@@ -484,6 +476,7 @@ Layout divides fields into several divs. Where classNames can be used to apply c
     - This ensures the numeric value is within the specified range.
 
 - **Format Validation**: Ensures data conforms to specific formats like `email`, `date`, `time`, or `date-time`.
+
   - **How to Use**:
     - Use the `format` property to specify predefined formats.
     ```json
