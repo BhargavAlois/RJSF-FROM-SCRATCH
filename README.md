@@ -384,7 +384,38 @@ schemaModel = {
 };
 ```
 
-Layout divides fields into several divs. Where classNames can be used to apply classes on these divs.
+Layout divides fields into several divs. Where ids can be used to apply classes on these divs.
+
+layout: [
+      {
+        type: "section",
+        title: "Employee Information",
+        id: "info",
+        fields: [
+          "info.profilePic",
+          "info.firstName",
+          "info.lastName",
+          "info.empId",
+          "info.designation",
+        ],
+      },
+    ]
+
+- css file :
+```javascript
+#root_info {
+  display: grid;
+  grid-template-areas:
+    'title title title'
+    'profile-pic first-name emp-id'
+    'profile-pic last-name designation';
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 10px;
+}
+```
+
+Use #root_<id provided in layout> to assign css properties to that section
 
 ### Widgets
 
