@@ -2,7 +2,8 @@ import React from "react";
 
 export default function SelectInput(props) {
   const {
-    schema, uiSchema,
+    schema,
+    uiSchema,
     formData,
     errors,
     title,
@@ -22,7 +23,7 @@ export default function SelectInput(props) {
         {value}
       </option>
     ));
-  }
+  };
   const renderEnumOptions = (enumValues) => {
     return enumValues.map((value, index) => (
       <option key={index} value={value}>
@@ -55,7 +56,10 @@ export default function SelectInput(props) {
         placeholder={uiField["ui:placeholder"]}
       >
         <option value="">Select an option</option>
-        {(enumNames && renderEnumNamesOption(enumNames)) || (enumValues && renderEnumOptions(enumValues)) || (oneOf && renderOneOfOptions(oneOf))}
+        {(enumNames && renderEnumNamesOption(enumNames)) ||
+          (enumValues && renderEnumOptions(enumValues)) ||
+          (field?.items?.enum && renderEnumOptions(field?.items?.enum)) ||
+          (oneOf && renderOneOfOptions(oneOf))}
       </select>
       {errors[fieldName] &&
         errors[fieldName].map((error, index) => (

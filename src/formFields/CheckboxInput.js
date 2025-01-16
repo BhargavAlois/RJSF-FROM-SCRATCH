@@ -11,6 +11,35 @@ export default function CheckboxInput(props) {
   const currentValues = Array.isArray(formData[fieldName]) ? formData[fieldName] : [];
   console.log("current : ", currentValues);
 
+  const renderEnumNamesOption = (enumNames) => {
+    return enumNames.map((value, index) => (
+      <div key={index} className="form-check" style={{ flexBasis: "20%" }}>
+        <input
+          type="checkbox"
+          className={`${fieldClass} form-check-input ${errors[fieldName] ? "is-invalid" : ""}`}
+          name={fieldName}
+          value={value}
+          checked={formData[fieldName]?.includes(value)}
+          onChange={(e) => {
+            const updatedValues = e.target.checked
+              ? [...(formData[fieldName] || []), value]
+              : (formData[fieldName] || []).filter((val) => val !== value);
+            handleChange(fieldName, updatedValues);
+          }}
+        />
+        <label className="form-check-label">{value}</label>
+      </div>
+    ));
+  };
+
+  const renderEnumOptions = (enumValues) => {
+    return enumValues.map((value, index) => (
+      <option key={index} value={value}>
+        {value}
+      </option>
+    ));
+  };
+
   const renderCheckboxes = (enumValues) => {
     return enumValues.map((value, index) => (
       <div key={index} className="form-check" style={{ flexBasis: "20%" }}>
@@ -67,8 +96,11 @@ export default function CheckboxInput(props) {
         }`}
         style={{ overflow: "hidden" }}
       >
-        {field.items?.enum && renderCheckboxes(field.items.enum)}
-        {field.oneOf && renderOneOfOptions(field.oneOf)}
+        {(enumNames && renderEnumNamesOption(enumNames)) ||
+          (enumValues && renderCheckboxes(enumValues)) ||
+          (field?.items?.enum && renderEnumOptions(field?.items?.enum)) ||
+          (oneOf && renderOneOfOptions(oneOf))}
+
       </div>
       {errors[fieldName] &&
         errors[fieldName].map((error, index) => (

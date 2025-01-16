@@ -2,7 +2,8 @@ import React from "react";
 
 export default function RadioInput(props) {
   const {
-    schema, uiSchema,
+    schema,
+    uiSchema,
     formData,
     errors,
     title,
@@ -15,6 +16,22 @@ export default function RadioInput(props) {
   } = props;
 
   const isColumnLayout = uiField["ui:layout"] === "column";
+
+  const renderEnumNamesOption = (enumNames) => {
+    return enumNames.map((value, index) => (
+      <div key={index} className="form-check">
+        <input
+          type="radio"
+          className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
+          name={fieldName}
+          value={value}
+          checked={formData[fieldName] === value}
+          onChange={() => handleChange(fieldName, value)}
+        />
+        <label className="form-check-label">{value}</label>
+      </div>
+    ));
+  }
 
   const renderEnumOptions = (enumValues) => {
     return enumValues.map((value, index) => (
@@ -61,8 +78,10 @@ export default function RadioInput(props) {
           isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
         }`}
       >
-        {field.enum && renderEnumOptions(field.enum)}
-        {field.oneOf && renderOneOfOptions(field.oneOf)}
+        {(enumNames && renderEnumNamesOption(enumNames)) ||
+          (enumValues && renderEnumOptions(enumValues)) ||
+          (field?.items?.enum && renderEnumOptions(field?.items?.enum)) ||
+          (oneOf && renderOneOfOptions(oneOf))}
       </div>
       {errors[fieldName] &&
         errors[fieldName].map((error, index) => (
