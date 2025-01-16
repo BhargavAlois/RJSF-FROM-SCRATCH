@@ -5,7 +5,7 @@ import * as formFields from '../formFields/InputFieldsExports'
 export default function ContentTemplate({
   formData,
   schema,
-  uiSchema,
+  uiSchema = {},
   fields,
   errors,
   onChange: handleChange,
@@ -56,7 +56,7 @@ export default function ContentTemplate({
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName
     // console.log("fieldName : ", fieldName);
     const uiField = getDeepValue(uiSchema, fieldPath) || {}
-    const uiLayoutClassNames = uiField['ui:classNames'] || uiField['classNames'] || uiField?.['ui:options']?.classNames;
+    const uiLayoutClassNames = uiField['ui:classNames'] || uiField['classNames'] || uiField?.['ui:options']?.classNames || 'w-100';
     const layoutClass = uiLayoutClassNames ? `form-group ${uiLayoutClassNames}` : 'form-group';
     const widget = uiField['ui:widget'] || format || 'string';
     // console.log("Widget : ", widget);
@@ -199,6 +199,7 @@ export default function ContentTemplate({
 
     return layout.map((section, index) => {
       const { title, classNames, fields } = section
+      console.log("Title : ", title);
       return (
         <div key={index} className="w-100 mb-2">
           {title && <h5 className="mb-2">{title}</h5>}
