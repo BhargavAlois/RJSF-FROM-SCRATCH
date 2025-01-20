@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import DefaultTemplate from '../templates/DefaultTemplate'
 import { format, parseISO } from 'date-fns'
 import ContentTemplate from '../templates/ContentTemplate'
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.js";
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.js'
 import '../mystyles/myStyle.css'
 
 export default function MyForm(props) {
-  const [formData, setFormData] = useState({})
-  const [errors, setErrors] = useState({})
   const {
     schema,
     uiSchema = {},
@@ -21,9 +19,11 @@ export default function MyForm(props) {
     formData: prefilledFormData,
     errorSchema,
   } = props
+  const [formData, setFormData] = useState({})
+  const [errors, setErrors] = useState({})
   const templates = props?.templates
   const templateName = uiSchema?.['template']
-  // console.log('Form data : ', formData)
+
   var MyTemplate
   if (templateName) {
     MyTemplate = templates[templateName]
@@ -111,21 +111,9 @@ export default function MyForm(props) {
         processSchema(schema?.properties)
         return defaults
       }
-
-      // Get default data from schema
       const defaultData = extractDefaults(schema)
-
-      // console.log('Default data : ', defaultData)
-
-      // Flatten the default data
       const flattenedDefaultData = flattenData(defaultData)
-
-      // console.log("Default flattened data : ", flattenedDefaultData);
-
-      // Flatten the prefilled data
-      // console.log("Prefilled form data : ", prefilledFormData);
       const flattenedPrefilledData = flattenData(prefilledFormData)
-      // console.log("flattenedPrefilledData : ", flattenedPrefilledData);
 
       // Merge flattened data: prefilled data takes priority over default data
       const mergedData = {
@@ -135,15 +123,11 @@ export default function MyForm(props) {
 
       // Normalize the merged data (if needed)
       const normalizedData = normalizeData(schema, mergedData)
-
-      // console.log("Normalized : ", normalizedData);
-
-      // Set form data
       setFormData(normalizedData)
     }
 
     initializeFormData()
-  }, [prefilledFormData, schema])
+  }, [prefilledFormData])
 
   const formatDate = (date, formatString) => {
     try {
@@ -175,8 +159,6 @@ export default function MyForm(props) {
         // console.log("Searching required field : ", field);
         const nestedRequiredFields = getRequiredFields(field)
         nestedRequiredFields.forEach((nestedField) => {
-          // console.log("nested : ", nestedField);
-          // console.log("fieldName : ", fieldName);
           requiredFields.push(`${nestedField}`)
         })
       }
@@ -205,7 +187,6 @@ export default function MyForm(props) {
       }
     }
 
-    // Return null if the field is not found
     return null
   }
 
@@ -377,43 +358,43 @@ export default function MyForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // console.log('Form data : ', formData)
-    
-      if (validateForm()) {
-        if (onSuccess) {
-          onSuccess()
-        } else {
-          defaultOnSuccess()
-        }
-        const transformedData = transformFormData(schema, formData)
-        // console.log('Transformed data : ', transformedData)
 
-        // Wrap transformedData as formData inside data
-        const data = { formData: transformedData }
-        if(onSubmit)
-        {
-          onSubmit(data, e)
-          return
-        }
-        else
-        {
-          defaultSubmit(e)
-          return
-        }
+    if (validateForm()) {
+      if (onSuccess) {
+        onSuccess()
       } else {
-        if (onError) {
-          onError()
-        } else {
-          defaultOnError()
-        }
+        defaultOnSuccess()
+      }
+
+      const transformedData = transformFormData(schema, formData)
+      const data = { formData: transformedData }
+
+      if (onSubmit) {
+        onSubmit(data, e)
+        return
+      } else {
+        defaultSubmit(e)
         return
       }
-    
+    } else {
+      if (onError) {
+        onError()
+      } else {
+        defaultOnError()
+      }
+      return
+    }
   }
 
   const handleChange = (fieldName, value) => {
-    // const options = uiSchema[fieldName]['ui:options'];
-    // console.log('Change in field : ', fieldName)
+    console.log('Change in field:', fieldName, value)
+    let updatedData = { ...formData, [fieldName]: value }
+    const transformedData = transformFormData(schema, updatedData)
+    const data = { formData: transformedData }
+
+    if (onChange) {
+      onChange(data)
+    }
 
     setFormData((prevData) => ({
       ...prevData,
@@ -424,10 +405,6 @@ export default function MyForm(props) {
       ...prevErrors,
       [fieldName]: '',
     }))
-
-    if (onChange) {
-      onChange(fieldName)
-    }
   }
 
   const submitBtnOptions = uiSchema?.['ui:submitButtonOptions']

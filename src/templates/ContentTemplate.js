@@ -180,7 +180,7 @@ export default function ContentTemplate({
         CustomWidget = uiFieldSchema?.['ui:widget']
       }
       if (CustomWidget) {
-        console.log("Found custom widget ", CustomWidget);
+        // console.log("Found custom widget ", CustomWidget);
 
         // return <CustomWidget schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
         return (
@@ -227,11 +227,11 @@ export default function ContentTemplate({
     return layout.map((section, index) => {
       const { title, classNames, fields, id } = section
       const section_id = `root_${id}`
-      console.log('Title : ', title)
+      // console.log('Title : ', title)
       return (
         <div key={index} className="w-100">
           {title && <h5>{title}</h5>}
-          <div id={`${section_id}`}>
+          <div id={`${section_id}`} key={`${section_id}`}>
             {fields.map((fieldPathOrSection, fieldIndex) => {
               if (typeof fieldPathOrSection === 'string') {
                 const fieldName = fieldPathOrSection.split('.').pop()
@@ -244,14 +244,14 @@ export default function ContentTemplate({
                 fieldPathOrSection.type === 'section'
               ) {
                 return (
-                  <>
+                  <React.Fragment key={`nested-section-${fieldIndex}`}>
                     {fieldPathOrSection.title && <h6>{fieldPathOrSection.title}</h6>}
                     {fieldPathOrSection.fields.map((nestedField) => {
                       const nestedFieldName = nestedField.split('.').pop()
                       const nestedFieldSchema = getFieldSchemaByName(schema, nestedFieldName)
                       return nestedFieldSchema ? renderField(nestedFieldSchema, nestedField) : null
                     })}
-                  </>
+                  </React.Fragment>
                 )
               }
               console.warn(`Unknown field type: ${fieldPathOrSection}`)
