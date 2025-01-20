@@ -18,8 +18,8 @@ export default function RadioInput(props) {
   const { oneOf, enum: enumValues, enumNames } = field;
   const isColumnLayout = uiFieldSchema["ui:layout"] === "column";
 
-  const renderEnumNamesOption = (enumNames) => {
-    return enumNames.map((value, index) => (
+  const renderEnumNamesOption = (enumValues, enumNames) => {
+    return enumValues.map((value, index) => (
       <div key={index} className="form-check">
         <input
           type="radio"
@@ -29,10 +29,10 @@ export default function RadioInput(props) {
           checked={formData[fieldName] === value}
           onChange={() => handleChange(fieldName, value)}
         />
-        <label className="form-check-label">{value}</label>
+        <label className="form-check-label">{enumNames[index] || value}</label>
       </div>
     ));
-  }
+  };
 
   const renderEnumOptions = (enumValues) => {
     return enumValues.map((value, index) => (
@@ -53,7 +53,7 @@ export default function RadioInput(props) {
   const renderOneOfOptions = (oneOfOptions) => {
     return oneOfOptions.map((option, index) => {
       const value = typeof option === "object" ? option.const : option;
-      const label = typeof option === "object" ? option.title : option;
+      const label = typeof option === "object" ? option.title || value : value;
 
       return (
         <div key={index} className="form-check">
@@ -79,7 +79,7 @@ export default function RadioInput(props) {
           isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
         }`}
       >
-        {(enumNames && renderEnumNamesOption(enumNames)) ||
+        {(enumNames && enumValues && renderEnumNamesOption(enumValues, enumNames)) ||
           (enumValues && renderEnumOptions(enumValues)) ||
           (field?.items?.enum && renderEnumOptions(field?.items?.enum)) ||
           (oneOf && renderOneOfOptions(oneOf))}
