@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import DefaultTemplate from '../templates/DefaultTemplate'
 import { format, parseISO } from 'date-fns'
 import ContentTemplate from '../templates/ContentTemplate'
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.js";
+// import 'bootstrap/dist/css/bootstrap.min.css'
+// import 'bootstrap/dist/js/bootstrap.js'
 import '../mystyles/myStyle.css'
 
 export default function MyForm(props) {
-  const [formData, setFormData] = useState({})
-  const [errors, setErrors] = useState({})
+  // console.log('My form')
   const {
     schema,
     uiSchema = {},
+    widgets,
+    fields,
     onSubmit,
     onChange,
     onSuccess,
@@ -19,14 +20,19 @@ export default function MyForm(props) {
     formData: prefilledFormData,
     errorSchema,
   } = props
+  const [formData, setFormData] = useState({})
+  const defaultData = useRef({});
+  const [errors, setErrors] = useState({})
   const templates = props?.templates
   const templateName = uiSchema?.['template']
-  // console.log('Form data : ', formData)
+  const isInitialized = useRef(false)
+  // console.log('Prefilled data : ', prefilledFormData)
+  // console.log('form data myform : ', formData)
+
   var MyTemplate
   if (templateName) {
     MyTemplate = templates[templateName]
   }
-  const fields = props?.widgets
 
   const normalizeFieldName = (fieldName) => {
     const parts = fieldName.split('.')
@@ -45,7 +51,7 @@ export default function MyForm(props) {
 
         if (fieldSchema.type === 'string' && fieldSchema.format === 'date') {
           const fieldUiSchema = getFieldUiSchema(fieldName, uiSchema)
-          const displayFormat = fieldUiSchema?.['ui:options']?.format || 'yyyy/MM/dd'
+          const displayFormat = fieldUiSchema?.['ui:options']?.format || 'yyyy-MM-dd'
           try {
             normalizedData[fieldName] = format(parseISO(fieldValue), displayFormat)
           } catch {
@@ -67,82 +73,66 @@ export default function MyForm(props) {
     return processProperties(schema.properties, data || {})
   }
 
+  const flattenData = (data, parentKey = '') => {
+    let result = {}
+
+    Object.entries(data || {}).forEach(([key, value]) => {
+      const newKey = parentKey ? key : key // Keep just the field name as key
+
+      if (Array.isArray(value)) {
+        result[newKey] = value
+      } else if (typeof value === 'object' && value !== null) {
+        result = { ...result, ...flattenData(value, newKey) }
+      } else {
+        result[newKey] = value
+      }
+    })
+
+    return result
+  }
+
+  const initializeDefaultData = () => {
+    const extractDefaults = (schema) => {
+      const defaults = {}
+
+      const processSchema = (properties) => {
+        Object.entries(properties || {}).forEach(([key, value]) => {
+          if (value.type === 'object' && value.properties) {
+            defaults[key] = extractDefaults(value) // Recursively process nested objects
+          } else if (value.type === 'array' && value.default) {
+            defaults[key] = value.default // Handle default arrays
+          } else if (value.default !== undefined) {
+            defaults[key] = value.default // Handle primitive defaults
+          }
+        })
+      }
+
+      processSchema(schema?.properties)
+      // console.log("defaults : ", defaults);
+      return defaults
+    }
+
+    const defaultData = extractDefaults(schema)
+    return flattenData(defaultData)
+  }
+
   useEffect(() => {
-    const flattenData = (data, parentKey = '') => {
-      let result = {}
-
-      Object.entries(data || {}).forEach(([key, value]) => {
-        // Keep only the final part of the key (leaf node)
-        const newKey = parentKey ? key : key // Keep just the field name as key
-
-        if (Array.isArray(value)) {
-          // If the value is an array, preserve the array structure
-          result[newKey] = value
-        } else if (typeof value === 'object' && value !== null) {
-          // If the value is an object, recursively flatten its properties
-          result = { ...result, ...flattenData(value, newKey) }
-        } else {
-          // If the value is a primitive (string, number, etc.), assign the value directly
-          result[newKey] = value
-        }
-      })
-
-      return result
+   
+    if (!isInitialized.current) {
+      const flattenedDefaultData = initializeDefaultData()
+      defaultData.current = flattenedDefaultData;
+      isInitialized.current = true
+    }
+    const flattenedPrefilledData = flattenData(prefilledFormData)
+    const mergedData = {
+      ...defaultData.current,
+      ...flattenedPrefilledData,
     }
 
-    const initializeFormData = () => {
-      // Extract default data from schema
-      const extractDefaults = (schema) => {
-        const defaults = {}
-
-        const processSchema = (properties) => {
-          Object.entries(properties || {}).forEach(([key, value]) => {
-            if (value.type === 'object' && value.properties) {
-              defaults[key] = extractDefaults(value) // Recursively process nested objects
-            } else if (value.type === 'array' && value.default) {
-              defaults[key] = value.default // Handle default arrays
-            } else if (value.default !== undefined) {
-              defaults[key] = value.default // Handle primitive defaults
-            }
-          })
-        }
-
-        processSchema(schema?.properties)
-        return defaults
-      }
-
-      // Get default data from schema
-      const defaultData = extractDefaults(schema)
-
-      // console.log('Default data : ', defaultData)
-
-      // Flatten the default data
-      const flattenedDefaultData = flattenData(defaultData)
-
-      // console.log("Default flattened data : ", flattenedDefaultData);
-
-      // Flatten the prefilled data
-      // console.log("Prefilled form data : ", prefilledFormData);
-      const flattenedPrefilledData = flattenData(prefilledFormData)
-      // console.log("flattenedPrefilledData : ", flattenedPrefilledData);
-
-      // Merge flattened data: prefilled data takes priority over default data
-      const mergedData = {
-        ...flattenedDefaultData,
-        ...flattenedPrefilledData,
-      }
-
-      // Normalize the merged data (if needed)
-      const normalizedData = normalizeData(schema, mergedData)
-
-      // console.log("Normalized : ", normalizedData);
-
-      // Set form data
-      setFormData(normalizedData)
-    }
-
-    initializeFormData()
-  }, [prefilledFormData, schema])
+    const normalizedData = normalizeData(schema, mergedData)
+    // console.log("Normalized data : ", normalizedData);
+    setFormData(normalizedData)
+  }, [prefilledFormData])
 
   const formatDate = (date, formatString) => {
     try {
@@ -174,8 +164,6 @@ export default function MyForm(props) {
         // console.log("Searching required field : ", field);
         const nestedRequiredFields = getRequiredFields(field)
         nestedRequiredFields.forEach((nestedField) => {
-          // console.log("nested : ", nestedField);
-          // console.log("fieldName : ", fieldName);
           requiredFields.push(`${nestedField}`)
         })
       }
@@ -204,7 +192,6 @@ export default function MyForm(props) {
       }
     }
 
-    // Return null if the field is not found
     return null
   }
 
@@ -376,57 +363,56 @@ export default function MyForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // console.log('Form data : ', formData)
-    
-      if (validateForm()) {
-        if (onSuccess) {
-          onSuccess()
-        } else {
-          defaultOnSuccess()
-        }
-        const transformedData = transformFormData(schema, formData)
-        // console.log('Transformed data : ', transformedData)
 
-        // Wrap transformedData as formData inside data
-        const data = { formData: transformedData }
-        if(onSubmit)
-        {
-          onSubmit(data, e)
-          return
-        }
-        else
-        {
-          defaultSubmit(e)
-          return
-        }
+    if (validateForm()) {
+      if (onSuccess) {
+        onSuccess()
       } else {
-        if (onError) {
-          onError()
-        } else {
-          defaultOnError()
-        }
+        defaultOnSuccess()
+      }
+
+      const transformedData = transformFormData(schema, formData)
+      const data = { formData: transformedData }
+
+      if (onSubmit) {
+        onSubmit(data, e)
+        return
+      } else {
+        defaultSubmit(e)
         return
       }
-    
+    } else {
+      if (onError) {
+        onError()
+      } else {
+        defaultOnError()
+      }
+      return
+    }
   }
 
   const handleChange = (fieldName, value) => {
-    // const options = uiSchema[fieldName]['ui:options'];
-    // console.log('Change in field : ', fieldName)
-
+    // console.log('Change in field:', fieldName, value)
     setFormData((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }))
+    // console.log("formdata (MyForm) ", formData[fieldName]);
+    const updatedData = { ...formData, [fieldName]: value }
+    const transformedData = transformFormData(schema, updatedData)
+    const data = { formData: transformedData }
+
+    if (onChange) {
+      if (formData != prefilledFormData) {
+        // console.log("onChange called");
+        onChange(data)
+      }
+    }
 
     setErrors((prevErrors) => ({
       ...prevErrors,
       [fieldName]: '',
     }))
-
-    if (onChange) {
-      onChange(fieldName)
-    }
   }
 
   const submitBtnOptions = uiSchema?.['ui:submitButtonOptions']
@@ -436,6 +422,7 @@ export default function MyForm(props) {
       schema={schema}
       uiSchema={uiSchema}
       errors={errors}
+      widgets={widgets}
       fields={fields}
       onSubmit={handleSubmit}
       onError={onError}
