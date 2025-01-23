@@ -55,14 +55,14 @@ export default function ContentTemplate({
   const renderField = (field, fieldName, parentSchema = schema, fieldPath) => {
     const { title, enum: enumValues, oneOf, format } = field
     fieldPath = fieldPath ? `${fieldPath}.${fieldName}` : fieldName
-    // console.log("fieldName : ", fieldName);
+    console.log("fieldName : ", fieldName);
     const uiFieldSchema = getDeepValue(uiSchema, fieldPath) || {}
     const uiLayoutClassNames =
       uiFieldSchema['ui:className'] ||
       uiFieldSchema['ui:classNames'] ||
       uiFieldSchema['classNames'] ||
       uiFieldSchema?.['ui:options']?.classNames ||
-      'w-100'
+      uiFieldSchema?.['ui-options']?.classNames;
     const layoutClass = uiLayoutClassNames ? `form-group ${uiLayoutClassNames}` : 'form-group'
     const widget = uiFieldSchema['ui:widget'] || format || 'string'
     // console.log("Widget : ", widget);
@@ -71,20 +71,20 @@ export default function ContentTemplate({
 
     if (uiFieldSchema['ui:field']) {
       const Component = uiFieldSchema['ui:field']
-      return <Component uiSchema={uiFieldSchema} />
+      return <Component key={fieldName} uiSchema={uiFieldSchema} />
     } else if (fields) {
       if (uiFieldSchema['ui:field']) {
         const Component = fields?.[uiFieldSchema?.['ui:field']]
-        return <Component uiSchema={uiFieldSchema} />
+        return <Component key={fieldName} uiSchema={uiFieldSchema} />
       }
     }
 
     if (field.type === 'object' && field.properties) {
       return (
         // <div className={`row ${uiFieldSchema?.classNames}`}>
-        <div className="">
-          <h5 className="mt-3">{title || fieldName}</h5>
-          <p style={{ size: '5px' }}>{field?.description}</p>
+        <div id={`root_${normalizedFieldName}`} key={normalizedFieldName}>
+          {title && (<legend id={`root_${normalizedFieldName}__title`}>{title}</legend>)}
+          {field.description && (<p style={{ size: '5px' }}>{field?.description}</p>)}
           {Object.keys(field.properties).map((nestedFieldName) => {
             const nestedField = field.properties[nestedFieldName]
             const updatedParentSchema = parentSchema.properties[nestedFieldName]
@@ -157,7 +157,7 @@ export default function ContentTemplate({
     const Component = inputFields[widget]
     if (Component) {
       return (
-        <Component
+        <Component key={fieldName}
           schema={schema}
           uiSchema={uiSchema}
           formData={formData}
@@ -184,7 +184,7 @@ export default function ContentTemplate({
 
         // return <CustomWidget schema={schema.properties[fieldName]} uiSchema={uiSchema[fieldName]} fieldName={fieldName} onChange={(e) => handleChange(fieldName, e)} errors={errors[fieldName]}/>;
         return (
-          <div className={`${layoutClass}`}>
+          <div key={fieldName} className={`${layoutClass}`}>
             {field?.title && (<label className="form-label">{field?.title}</label>)}
             <CustomWidget
               schema={field}
@@ -226,10 +226,10 @@ export default function ContentTemplate({
 
     return layout.map((section, index) => {
       const { title, classNames, fields, id } = section
-      const section_id = `root_${id}`
+      const section_id = id ? `root_${id}` : '';
       // console.log('Title : ', title)
       return (
-        <div key={index} className="w-100">
+        <div key={index} className="w-100 mt-3">
           {title && <h5>{title}</h5>}
           <div id={`${section_id}`} key={`${section_id}`}>
             {fields.map((fieldPathOrSection, fieldIndex) => {
@@ -262,5 +262,5 @@ export default function ContentTemplate({
     })
   }
 
-  return <div className="row w-100 justify-content-around">{renderSections()}</div>
+  return <div className="w-100 row justify-content-around">{renderSections()}</div>
 }
