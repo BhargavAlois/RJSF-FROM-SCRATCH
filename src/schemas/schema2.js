@@ -1,4 +1,4 @@
-const schemaModel = {
+export const schemaModel = {
     name: 'singleuser',
     title: 'Single User',
     schema: {
@@ -20,6 +20,7 @@ const schemaModel = {
             lastName: {
               type: 'string',
               title: 'Last Name',
+              default : 'thelast'
             },
             empId: {
               type: 'string',
@@ -65,6 +66,7 @@ const schemaModel = {
                 { const: 'O+', title: 'O+' },
                 { const: 'O-', title: 'O-' },
               ],
+              default : "A+"
             },
             nationality: {
               type: 'string',
@@ -158,70 +160,70 @@ const schemaModel = {
     },
     uiSchema: {
       hideTitle: true,
-      layout: [
-        {
-          type: 'section',
-          title: 'Employee Information',
-          classNames: 'd-flex flex-row gap-2',
-          fields: [
-            'info.profilePic',
-            {
-              type: 'section',
-              classNames: 'd-flex flex-column',
-              fields: ['info.firstName', 'info.lastName'],
-            },
-            {
-              type: 'section',
-              classNames: 'd-flex flex-column',
-              fields: ['info.empId', 'info.designation'],
-            },
-          ],
-        },
-        {
-          type: 'section',
-          title: 'Personal Information',
-          classNames: 'd-flex flex-column',
-          fields: [
-            {
-              type: 'section',
-              classNames: 'd-flex flex-row gap-2',
-              fields: ['personalInfo.gender', 'personalInfo.dateOfBirth', 'personalInfo.bloodGroup'],
-            },
-            {
-              type: 'section',
-              classNames: 'd-flex flex-row gap-2', 
-              fields: ['personalInfo.nationality', 'personalInfo.phoneNumber', 'personalInfo.address', ],
-            },
-            {
-              type: 'section',
-              classNames: 'd-flex flex-row',
-              fields: ['personalInfo.residence']
-            }
-          ],
-        },
-        {
-          type: 'section',
-          title: 'Employee Info',
-          classNames: 'd-flex flex-column gap-2',
-          fields: [
-            {
-              type: 'section',
-              classNames: 'd-flex flex-row gap-2',
-              fields: ['employeeinfo.email', 'employeeinfo.password', 'employeeinfo.dateOfJoining'],
-            },
-            {
-              type: 'section',
-              classNames: 'd-flex flex-row gap-2',
-              fields: ['employeeinfo.department', 'employeeinfo.shift', 'employeeinfo.shiftTiming'],
-            },
-            {
-              type: 'section',
-              classNames: 'd-flex flex-row',
-              fields: ['employeeinfo.reportTo'],
-            },
-          ],
-        },
-      ],
+      // layout: [
+      //   {
+      //     type: 'section',
+      //     title: 'Employee Information',
+      //     classNames: 'd-flex flex-row gap-2',
+      //     fields: [
+      //       'info.profilePic',
+      //       {
+      //         type: 'section',
+      //         classNames: 'd-flex flex-column',
+      //         fields: ['info.firstName', 'info.lastName'],
+      //       },
+      //       {
+      //         type: 'section',
+      //         classNames: 'd-flex flex-column',
+      //         fields: ['info.empId', 'info.designation'],
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     type: 'section',
+      //     title: 'Personal Information',
+      //     classNames: 'd-flex flex-column',
+      //     fields: [
+      //       {
+      //         type: 'section',
+      //         classNames: 'd-flex flex-row gap-2',
+      //         fields: ['personalInfo.gender', 'personalInfo.dateOfBirth', 'personalInfo.bloodGroup'],
+      //       },
+      //       {
+      //         type: 'section',
+      //         classNames: 'd-flex flex-row gap-2', 
+      //         fields: ['personalInfo.nationality', 'personalInfo.phoneNumber', 'personalInfo.address', ],
+      //       },
+      //       {
+      //         type: 'section',
+      //         classNames: 'd-flex flex-row',
+      //         fields: ['personalInfo.residence']
+      //       }
+      //     ],
+      //   },
+      //   {
+      //     type: 'section',
+      //     title: 'Employee Info',
+      //     classNames: 'd-flex flex-column gap-2',
+      //     fields: [
+      //       {
+      //         type: 'section',
+      //         classNames: 'd-flex flex-row gap-2',
+      //         fields: ['employeeinfo.email', 'employeeinfo.password', 'employeeinfo.dateOfJoining'],
+      //       },
+      //       {
+      //         type: 'section',
+      //         classNames: 'd-flex flex-row gap-2',
+      //         fields: ['employeeinfo.department', 'employeeinfo.shift', 'employeeinfo.shiftTiming'],
+      //       },
+      //       {
+      //         type: 'section',
+      //         classNames: 'd-flex flex-row',
+      //         fields: ['employeeinfo.reportTo'],
+      //       },
+      //     ],
+      //   },
+      // ],
       info: {
         classNames: 'employe-info',
         profilePic: {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MyForm from "./components/MyForm";
 // import { schemaModel } from './schemas/schema';
-import { schemaModel } from "./schemas/schema3";
+import { schemaModel } from "./schemas/schema2";
 import CustomTemplate from "./templates/CustomTemplate";
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import "bootstrap/dist/js/bootstrap.js";
