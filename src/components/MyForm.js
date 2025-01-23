@@ -3,7 +3,7 @@ import DefaultTemplate from '../templates/DefaultTemplate'
 import { format, parseISO } from 'date-fns'
 import ContentTemplate from '../templates/ContentTemplate'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.js'
+import 'bootstrap/dist/js/bootstrap.js' 
 import '../mystyles/myStyle.css'
 
 export default function MyForm(props) {
@@ -108,7 +108,7 @@ export default function MyForm(props) {
       }
 
       processSchema(schema?.properties)
-      console.log("defaults : ", defaults);
+      // console.log("defaults : ", defaults);
       return defaults
     }
 
@@ -225,9 +225,16 @@ export default function MyForm(props) {
           const regex = new RegExp(fieldSchema.pattern)
           if (!regex.test(value)) {
             const fieldUiSchema = getFieldUiSchema(fieldName, uiSchema)
-            if (fieldUiSchema?.pattern_message && Array.isArray(fieldUiSchema.pattern_message)) {
+            if (fieldUiSchema?.pattern_message) {
               // Add specific pattern_message errors
-              errors.push(...fieldUiSchema.pattern_message)
+              if(Array.isArray(fieldUiSchema.pattern_message))
+              {
+                errors.push(...fieldUiSchema.pattern_message)
+              }
+              else 
+              {
+                errors.push(fieldUiSchema.pattern_message);
+              }
             } else {
               // Default error message for invalid format
               errors.push(`${fieldTitle} is not in the correct format`)
@@ -373,6 +380,8 @@ export default function MyForm(props) {
 
       const transformedData = transformFormData(schema, formData)
       const data = { formData: transformedData }
+
+      console.log("Data : ", data);
 
       if (onSubmit) {
         onSubmit(data, e)
