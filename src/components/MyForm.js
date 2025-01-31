@@ -446,6 +446,8 @@ export default function MyForm(props) {
   }
 
   const submitBtnOptions = uiSchema?.['ui:submitButtonOptions']
+  const requiredFields = getRequiredFields(schema);
+  
   const content = (
     <ContentTemplate
       formData={formData}
@@ -458,6 +460,7 @@ export default function MyForm(props) {
       onError={onError}
       onChange={handleChange}
       onSuccess={onSuccess}
+      requiredFields={requiredFields}
     />
   )
 

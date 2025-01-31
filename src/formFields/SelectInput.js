@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export default function SelectInput(props) {
   const {
@@ -13,48 +13,53 @@ export default function SelectInput(props) {
     layoutClass,
     handleChange,
     fieldName,
-  } = props;
+    isRequired,
+    showLabel
+  } = props
 
-  const { oneOf, enum: enumValues, enumNames } = field;
+  const { oneOf, enum: enumValues, enumNames } = field
 
   const renderEnumOptions = (enumValues) => {
     return enumValues.map((value, index) => (
       <option key={index} value={value}>
         {value}
       </option>
-    ));
-  };
+    ))
+  }
 
   const renderEnumNamesOption = (enumValues, enumNames) => {
     return enumValues.map((value, index) => (
       <option key={index} value={value}>
         {enumNames[index] || value}
       </option>
-    ));
-  };
+    ))
+  }
 
   const renderOneOfOptions = (oneOfOptions) => {
     return oneOfOptions.map((option, index) => {
-      const value = typeof option === "object" ? option.const : option;
-      const label = typeof option === "object" ? option.title || value : value;
+      const value = typeof option === 'object' ? option.const : option
+      const label = typeof option === 'object' ? option.title || value : value
 
       return (
         <option key={index} value={value}>
           {label}
         </option>
-      );
-    });
-  };
+      )
+    })
+  }
 
   return (
     <div key={fieldName} className={`${layoutClass}`}>
-      <label className="form-label">{title || fieldName}</label>
+      {(title || fieldName) && (showLabel) && <label className="form-label">
+        {title || fieldName}
+        {isRequired && <span>*</span>}
+      </label>}
       <select
         name={fieldName}
-        className={`form-select ${errors[fieldName] ? "is-invalid" : ""}`}
-        value={formData[fieldName] || ""}
+        className={`form-select ${errors[fieldName] ? 'is-invalid' : ''}`}
+        value={formData[fieldName] || ''}
         onChange={(e) => handleChange(fieldName, e.target.value)}
-        placeholder={uiFieldSchema["ui:placeholder"]}
+        placeholder={uiFieldSchema['ui:placeholder']}
       >
         <option value="">Select an option</option>
         {(enumNames && enumValues && renderEnumNamesOption(enumValues, enumNames)) ||
@@ -69,5 +74,5 @@ export default function SelectInput(props) {
           </p>
         ))}
     </div>
-  );
+  )
 }

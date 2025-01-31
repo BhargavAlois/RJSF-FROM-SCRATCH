@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import React, { useState } from 'react'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 export default function PasswordInput(props) {
   const {
@@ -14,27 +14,30 @@ export default function PasswordInput(props) {
     layoutClass,
     handleChange,
     fieldName,
-  } = props;
+    isRequired,
+    showLabel
+  } = props
 
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   const togglePasswordVisibility = () => {
-    setIsPasswordVisible(!isPasswordVisible);
-  };
+    setIsPasswordVisible(!isPasswordVisible)
+  }
 
   return (
     <div key={fieldName} className={`${layoutClass} mb-3`}>
-      <label className="form-label">{title || fieldName}</label>
+      {(title || fieldName) && (showLabel) && <label className="form-label">
+        {title || fieldName}
+        {isRequired && <span>*</span>}
+      </label>}
       <div className="input-group has-validation">
         <input
-          type={isPasswordVisible ? "text" : "password"}
+          type={isPasswordVisible ? 'text' : 'password'}
           name={fieldName}
-          className={`${fieldClass} form-control ${
-            errors[fieldName] ? "is-invalid" : ""
-          }`}
-          value={formData[fieldName] || ""}
+          className={`${fieldClass} form-control ${errors[fieldName] ? 'is-invalid' : ''}`}
+          value={formData[fieldName] || ''}
           onChange={(e) => handleChange(fieldName, e.target.value)}
-          placeholder={uiFieldSchema["ui:placeholder"]}
+          placeholder={uiFieldSchema['ui:placeholder']}
         />
         <button
           type="button"
@@ -46,7 +49,7 @@ export default function PasswordInput(props) {
             borderLeft: 'none',
             borderRadius: '0.5',
             backgroundColor: 'white',
-        }}
+          }}
         >
           {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
         </button>
@@ -61,5 +64,5 @@ export default function PasswordInput(props) {
         )}
       </div>
     </div>
-  );
+  )
 }

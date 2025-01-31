@@ -1,15 +1,32 @@
-import React from "react";
+import React from 'react'
 
 export default function DateTimeInput(props) {
-    const {schema, uiSchema, formData, errors, title, field, uiFieldSchema, layoutClass, fieldClass, handleChange, fieldName} = props;
+  const {
+    schema,
+    uiSchema,
+    formData,
+    errors,
+    title,
+    field,
+    uiFieldSchema,
+    layoutClass,
+    fieldClass,
+    handleChange,
+    fieldName,
+    isRequired,
+    showLabel
+  } = props
   return (
     <div key={fieldName} className={`${layoutClass} `}>
-      <label className="form-label">{title}</label>
+      {(title || fieldName) && (showLabel) && <label className="form-label">
+        {title || fieldName}
+        {isRequired && <span>*</span>}
+      </label>}
       <input
         type="datetime-local"
-        value={formData[fieldName] || ""}
+        value={formData[fieldName] || ''}
         onChange={(e) => handleChange(fieldName, e.target.value)}
-        className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
+        className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
       />
       {errors[fieldName] &&
         errors[fieldName].map((error, index) => (
@@ -18,5 +35,5 @@ export default function DateTimeInput(props) {
           </p>
         ))}
     </div>
-  );
+  )
 }

@@ -12,6 +12,8 @@ export default function CheckboxInput(props) {
     layoutClass,
     handleChange,
     fieldName,
+    isRequired,
+    showLabel
   } = props;
 
   const isColumnLayout = uiFieldSchema["ui:layout"] === "column";
@@ -88,7 +90,10 @@ export default function CheckboxInput(props) {
 
   return (
     <div key={fieldName} className={`${layoutClass}`}>
-      <label className="form-label">{title || fieldName}</label>
+      {(title || fieldName) && (showLabel) && <label className="form-label">
+        {title || fieldName}
+        {isRequired && <span>*</span>}
+      </label>}
       <div
         className={`form-check ${
           isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"

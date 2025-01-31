@@ -1,8 +1,9 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from 'react'
 
 export default function FileInput(props) {
   const {
-    schema, uiSchema,
+    schema,
+    uiSchema,
     formData,
     errors,
     title,
@@ -12,70 +13,80 @@ export default function FileInput(props) {
     layoutClass,
     handleChange,
     fieldName,
-  } = props;
+    isRequired,
+    showLabel
+  } = props
 
-  const [preview, setPreview] = useState();
-  const [fileDetails, setFileDetails] = useState(null);
+  const value = formData[fieldName];
+  const [preview, setPreview] = useState(value)
+  const [fileDetails, setFileDetails] = useState(null)
+
+  useEffect(() => {
+    setPreview(value);
+  }, [value])
 
   const convertToBase64 = (file) => {
     // Convert file to Base64
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onloadend = () => {
-      const base64File = reader.result; // This will be a Base64 encoded string
-      handleChange(fieldName, base64File); // Pass the Base64 string to the handler
-    };
-    reader.readAsDataURL(file);
-  };
+      const base64File = reader.result // This will be a Base64 encoded string
+      handleChange(fieldName, base64File) // Pass the Base64 string to the handler
+    }
+    reader.readAsDataURL(file)
+  }
 
   const handleFileChange = (fieldName, e) => {
-    const file = e.target.files[0];
-    setPreview();
-    setFileDetails();
+    const file = e.target.files[0]
+    setPreview()
+    setFileDetails()
 
     if (file) {
-      if (file.type.startsWith("image/")) {
-        const objectUrl = URL.createObjectURL(file);
-        setPreview(objectUrl);
-        setFileDetails(null);
+      if (file.type.startsWith('image/')) {
+        const objectUrl = URL.createObjectURL(file)
+        setPreview(objectUrl)
+        setFileDetails(null)
       } else {
-        setPreview(null);
+        setPreview(null)
         setFileDetails({
           name: file.name,
           type: file.type,
           size: file.size,
-        });
+        })
       }
 
-      const outputFormat = uiFieldSchema?.["ui:options"]?.["output"];
-      if (outputFormat === "base64") {
-        convertToBase64(file);
+      const outputFormat = uiFieldSchema?.['ui:options']?.['output']
+      if (outputFormat === 'base64') {
+        convertToBase64(file)
       } else {
-        handleChange(fieldName, file);
+        handleChange(fieldName, file)
       }
     }
-  };
+  }
 
   return (
     <div key={fieldName} className={`${layoutClass}`}>
-      <label className="form-label">{title}</label>
+      {(title || fieldName) && (showLabel) && <label className="form-label">
+        {title || fieldName}
+        {isRequired && <span>*</span>}
+      </label>}
       <input
         type="file"
         onChange={(e) => handleFileChange(fieldName, e)}
-        className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
+        className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
       />
 
       {((formData[fieldName] &&
-        typeof formData[fieldName] === "string" &&
-        formData[fieldName].startsWith("data:")) ||
+        typeof formData[fieldName] === 'string' &&
+        formData[fieldName].startsWith('data:')) ||
         preview) && (
         <div className="mt-2">
           <img
             src={preview || formData[fieldName]}
             alt="Preview"
             style={{
-              maxWidth: "100%",
-              maxHeight: "200px",
-              objectFit: "cover",
+              maxWidth: '100%',
+              maxHeight: '200px',
+              objectFit: 'cover',
             }}
           />
         </div>
@@ -102,5 +113,5 @@ export default function FileInput(props) {
           </p>
         ))}
     </div>
-  );
+  )
 }

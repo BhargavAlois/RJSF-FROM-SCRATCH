@@ -1,23 +1,36 @@
-import React from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React from 'react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 export default function DateRangeInput(props) {
-    const {schema, uiSchema, formData, errors, title, field, uiFieldSchema, layoutClass, fieldClass, handleChange, fieldName} = props;
-  const isColumnLayout = uiFieldSchema["ui:layout"] === "column";
+  const {
+    schema,
+    uiSchema,
+    formData,
+    errors,
+    title,
+    field,
+    uiFieldSchema,
+    layoutClass,
+    fieldClass,
+    handleChange,
+    fieldName,
+    isRequired,
+    showLabel
+  } = props
+  const isColumnLayout = uiFieldSchema['ui:layout'] === 'column'
 
   return (
     <div key={fieldName} className={`${layoutClass} `}>
-      <label className="form-label">{title || fieldName}</label>
-      <div
-        className={`${
-          isColumnLayout ? "d-flex flex-column" : "d-flex flex-row"
-        }`}
-      >
+      {(title || fieldName) && (showLabel) && <label className="form-label">
+        {title || fieldName}
+        {isRequired && <span>*</span>}
+      </label>}
+      <div className={`${isColumnLayout ? 'd-flex flex-column' : 'd-flex flex-row'}`}>
         <DatePicker
           selected={formData.dateRange?.startDate || new Date()}
           onChange={(date) =>
-            handleChange("dateRange", {
+            handleChange('dateRange', {
               ...formData.dateRange,
               startDate: date,
             })
@@ -27,14 +40,14 @@ export default function DateRangeInput(props) {
           minDate={new Date()}
           endDate={formData.dateRange?.endDate}
           placeholderText="Start Date"
-          dateFormat={uiSchema[fieldName]["ui:options"]?.format}
-          className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
-          placeholder={uiFieldSchema["ui:placeholder"]}
+          dateFormat={uiSchema[fieldName]['ui:options']?.format}
+          className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+          placeholder={uiFieldSchema['ui:placeholder']}
         />
         <DatePicker
           selected={formData.dateRange?.endDate || new Date()}
           onChange={(date) =>
-            handleChange("dateRange", {
+            handleChange('dateRange', {
               ...formData.dateRange,
               endDate: date,
             })
@@ -44,9 +57,9 @@ export default function DateRangeInput(props) {
           endDate={formData.dateRange?.endDate}
           minDate={formData.dateRange?.startDate}
           placeholderText="End Date"
-          dateFormat={uiSchema[fieldName]["ui:options"]?.format}
-          className={`${fieldClass} ${errors[fieldName] ? "is-invalid" : ""}`}
-          placeholder={uiFieldSchema["ui:placeholder"]}
+          dateFormat={uiSchema[fieldName]['ui:options']?.format}
+          className={`${fieldClass} ${errors[fieldName] ? 'is-invalid' : ''}`}
+          placeholder={uiFieldSchema['ui:placeholder']}
         />
       </div>
       {errors[fieldName] &&
@@ -56,5 +69,5 @@ export default function DateRangeInput(props) {
           </p>
         ))}
     </div>
-  );
+  )
 }
