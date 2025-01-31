@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import MyForm from "./components/MyForm";
 // import { schemaModel } from './schemas/schema';
-import { schemaModel } from "./schemas/schema2";
+import { schemaModel } from "./schemas/schema4";
 import CustomTemplate from "./templates/CustomTemplate";
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "bootstrap/dist/js/bootstrap.js";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.js";
 import "./index.css";
 import "./scss/style.scss";
 import * as customFields from "./fields/fields";

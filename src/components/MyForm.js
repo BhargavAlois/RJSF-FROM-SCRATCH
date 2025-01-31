@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import DefaultTemplate from '../templates/DefaultTemplate'
 import { format, parseISO } from 'date-fns'
 import ContentTemplate from '../templates/ContentTemplate'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.js' 
 import '../mystyles/myStyle.css'
 
 export default function MyForm(props) {
-  // console.log('My form')
   const {
     schema,
     uiSchema = {},
@@ -20,16 +17,14 @@ export default function MyForm(props) {
     formData: prefilledFormData,
     errorSchema,
   } = props
-  const [formData, setFormData] = useState({})
-  const defaultData = useRef({});
+  const [formData, setFormData] = useState(prefilledFormData)
+  const defaultData = useRef({})
   const [errors, setErrors] = useState({})
   const templates = props?.templates
   const templateName = uiSchema?.['template']
   const isInitialized = useRef(false)
-  // console.log('Prefilled data : ', prefilledFormData)
-  // console.log('form data myform : ', formData)
 
-  var MyTemplate
+  let MyTemplate
   if (templateName) {
     MyTemplate = templates[templateName]
   }
@@ -43,14 +38,12 @@ export default function MyForm(props) {
     const normalizedData = {}
 
     const processProperties = (properties, data) => {
-      // console.log("Data : ", data);
-      // console.log("inside process properties");
       Object.keys(properties).forEach((fieldName) => {
         const fieldSchema = properties[fieldName]
         const fieldValue = data?.[fieldName]
 
         if (fieldSchema.type === 'string' && fieldSchema.format === 'date') {
-          const fieldUiSchema = getFieldUiSchema(fieldName, uiSchema)
+          const fieldUiSchema = getSchema(fieldName, uiSchema)
           const displayFormat = fieldUiSchema?.['ui:options']?.format || 'yyyy-MM-dd'
           try {
             normalizedData[fieldName] = format(parseISO(fieldValue), displayFormat)
@@ -102,35 +95,36 @@ export default function MyForm(props) {
           } else if (value.type === 'array' && value.default) {
             defaults[key] = value.default // Handle default arrays
           } else if (value.default !== undefined) {
-            defaults[key] = value.default // Handle primitive defaults
+            defaults[key] = value.default
           }
         })
       }
 
       processSchema(schema?.properties)
-      // console.log("defaults : ", defaults);
       return defaults
     }
 
-    const defaultData = extractDefaults(schema)
-    return flattenData(defaultData)
+    let defaultData = extractDefaults(schema)
+    defaultData = flattenData(defaultData)
+    return (defaultData) // Encode URLs
   }
 
   useEffect(() => {
-   
     if (!isInitialized.current) {
       const flattenedDefaultData = initializeDefaultData()
-      defaultData.current = flattenedDefaultData;
+      defaultData.current = flattenedDefaultData
       isInitialized.current = true
     }
-    const flattenedPrefilledData = flattenData(prefilledFormData)
+
+    let flattenedPrefilledData = flattenData(prefilledFormData)
+    flattenedPrefilledData = (flattenedPrefilledData) // Encode URLs
+
     const mergedData = {
       ...defaultData.current,
       ...flattenedPrefilledData,
     }
 
     const normalizedData = normalizeData(schema, mergedData)
-    // console.log("Normalized data : ", normalizedData);
     setFormData(normalizedData)
   }, [prefilledFormData])
 
@@ -161,7 +155,6 @@ export default function MyForm(props) {
       const field = schema.properties[fieldName]
 
       if (field.type === 'object' && field.properties) {
-        // console.log("Searching required field : ", field);
         const nestedRequiredFields = getRequiredFields(field)
         nestedRequiredFields.forEach((nestedField) => {
           requiredFields.push(`${nestedField}`)
@@ -174,17 +167,15 @@ export default function MyForm(props) {
 
   let fieldPath
 
-  function getFieldUiSchema(fieldName, uiSchema) {
-    // Base case: if uiSchema is an object and the field exists at the root level
-    if (typeof uiSchema === 'object' && uiSchema !== null) {
-      if (uiSchema.hasOwnProperty(fieldName)) {
-        return uiSchema[fieldName]
+  function getSchema(fieldName, schema) {
+    if (typeof schema === 'object' && schema !== null) {
+      if (schema.hasOwnProperty(fieldName)) {
+        return schema[fieldName]
       }
 
-      // Recursive case: iterate through nested objects
-      for (const key in uiSchema) {
-        if (uiSchema[key] && typeof uiSchema[key] === 'object') {
-          const result = getFieldUiSchema(fieldName, uiSchema[key])
+      for (const key in schema) {
+        if (schema[key] && typeof schema[key] === 'object') {
+          const result = getSchema(fieldName, schema[key])
           if (result) {
             return result
           }
@@ -195,8 +186,18 @@ export default function MyForm(props) {
     return null
   }
 
+  const isValidUrl = (str) => {
+    try{
+      new URL(str)
+      return true;
+    }
+    catch(err)
+    {
+      return false;
+    }
+  }
+
   const validateForm = () => {
-    // console.log("form data : ", formData);
     const formErrors = {}
 
     // Helper function to validate single field
@@ -207,7 +208,7 @@ export default function MyForm(props) {
 
       // Required field validation
       if (fieldSchema.required || (getRequiredFields(schema) || []).includes(fieldName)) {
-        if (value === undefined || value === '' || value === null) {
+        if (value === undefined || value === '' || value === null || value.length === 0) {
           errors.push(`${fieldTitle} is required`)
         }
       }
@@ -224,16 +225,13 @@ export default function MyForm(props) {
         if (fieldSchema.pattern) {
           const regex = new RegExp(fieldSchema.pattern)
           if (!regex.test(value)) {
-            const fieldUiSchema = getFieldUiSchema(fieldName, uiSchema)
+            const fieldUiSchema = getSchema(fieldName, uiSchema)
             if (fieldUiSchema?.pattern_message) {
               // Add specific pattern_message errors
-              if(Array.isArray(fieldUiSchema.pattern_message))
-              {
+              if (Array.isArray(fieldUiSchema.pattern_message)) {
                 errors.push(...fieldUiSchema.pattern_message)
-              }
-              else 
-              {
-                errors.push(fieldUiSchema.pattern_message);
+              } else {
+                errors.push(fieldUiSchema.pattern_message)
               }
             } else {
               // Default error message for invalid format
@@ -279,14 +277,22 @@ export default function MyForm(props) {
       const uiOptions = uiSchema[fieldName]?.['ui:options'] || {}
       if (uiOptions.accept && value) {
         let fileType
+
         if (typeof value === 'string' && value.startsWith('data:')) {
           const mimeTypeMatch = value.match(/data:(.*?);/)
           fileType = mimeTypeMatch?.[1]
-        } else if (value instanceof Blob) {
+        }
+        // Case 2: File object (from file input)
+        else if (value instanceof File || value instanceof Blob) {
           fileType = value.type
-        } else if (typeof value === 'string') {
-          const mimeTypeMatch = value.match(/^[^;]+/)
-          fileType = mimeTypeMatch?.[0]
+        }
+        // Case 3: URL (fetch the file type from the URL)
+        else if (typeof value === 'string' && isValidUrl(value)) {
+          // Extract file type from URL (e.g., .jpg, .png)
+          const extension = value.split('.').pop()?.toLowerCase()
+          if (extension) {
+            fileType = `image/${extension}` // Assume it's an image for simplicity
+          }
         }
 
         // console.log('File type : ', fileType)
@@ -323,24 +329,21 @@ export default function MyForm(props) {
 
     // Start validation from root schema
     validateObject(schema)
-
-    // Set errors in state
     setErrors(formErrors)
-    // console.log('Form errors : ', formErrors)
     return Object.keys(formErrors).length === 0
   }
 
   const defaultSubmit = (e) => {
-    e.preventDefault()
-    console.log('Default submit called')
+    if (e) e.preventDefault()
+    // console.log('Default submit called')
   }
 
   const defaultOnSuccess = (e) => {
-    console.log('Submission successfull!')
+    // console.log('Submission successfull!')
   }
 
   const defaultOnError = (e) => {
-    console.log('Error occurred!')
+    // console.log('Error occurred!')
   }
 
   const transformFormData = (schema, flatData) => {
@@ -369,7 +372,7 @@ export default function MyForm(props) {
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    if (e) e.preventDefault()
 
     if (validateForm()) {
       if (onSuccess) {
@@ -378,10 +381,9 @@ export default function MyForm(props) {
         defaultOnSuccess()
       }
 
+      //Transforming data into nesting format specified in schema
       const transformedData = transformFormData(schema, formData)
       const data = { formData: transformedData }
-
-      console.log("Data : ", data);
 
       if (onSubmit) {
         onSubmit(data, e)
@@ -401,21 +403,40 @@ export default function MyForm(props) {
   }
 
   const handleChange = (fieldName, value) => {
-    // console.log('Change in field:', fieldName, value)
-    setFormData((prevData) => ({
-      ...prevData,
-      [fieldName]: value,
-    }))
-    // console.log("formdata (MyForm) ", formData[fieldName]);
-    const updatedData = { ...formData, [fieldName]: value }
+    const fieldSchema = getSchema(fieldName, schema)
+    let updatedData;
+
+    if (fieldSchema?.type === 'array') {
+      if (Array.isArray(value)) {
+        const array = value.map((item) => {
+          return (item)
+        })
+        updatedData = {...formData, [fieldName]: array}
+        setFormData((prevData) => ({
+          ...prevData,
+          [fieldName]: array,
+        }))
+      } else {
+        updatedData = { ...formData, [fieldName]: [] }
+        setFormData((prevData) => ({
+          ...prevData,
+          [fieldName]: [],
+        }))
+      }
+    } else {
+      updatedData = { ...formData, [fieldName]: value ? value : null }
+      setFormData((prevData) => ({
+        ...prevData,
+        [fieldName]: value ? value : null,
+      }))
+    }
+
+    //Transforming data into nesting format specified in schema
     const transformedData = transformFormData(schema, updatedData)
     const data = { formData: transformedData }
 
     if (onChange) {
-      if (formData != prefilledFormData) {
-        // console.log("onChange called");
         onChange(data)
-      }
     }
 
     setErrors((prevErrors) => ({

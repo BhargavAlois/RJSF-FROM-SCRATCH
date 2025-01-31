@@ -6,8 +6,7 @@ import {format} from 'date-fns';
 export default function DateInput(props) {
     const {schema, uiSchema, formData, errors, title, field, uiFieldSchema, layoutClass, fieldClass, handleChange, fieldName} = props;
   const formatOfDate =
-    uiSchema[fieldName]?.["ui:options"]?.format || "MM/dd/yyyy";
-
+    uiSchema[fieldName]?.["ui:options"]?.format || uiSchema[fieldName]?.['ui-options']?.format || "MM/dd/yyyy";
     const handleDateChange = (fieldName, date, formatString) => {
         let formattedDate;
   
@@ -33,6 +32,7 @@ export default function DateInput(props) {
   return (
     <div key={fieldName} className={`${layoutClass} `}>
       <label className="form-label">{title || fieldName}</label>
+      <div>
       <DatePicker
         selected={formData[fieldName]}
         onChange={(date) => handleDateChange(fieldName, date, formatOfDate)}
@@ -48,6 +48,7 @@ export default function DateInput(props) {
             {error}
           </p>
         ))}
+        </div>
     </div>
   );
 }

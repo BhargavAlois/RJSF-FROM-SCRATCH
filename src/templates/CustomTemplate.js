@@ -5,7 +5,7 @@ export default function MainTemplate(props) {
     const { schema, content, onSubmit } = props;
 
     return (
-        <div className="d-flex flex-column" style={{ maxWidth: "60%", width: "60%" }}>
+        <div className="d-flex flex-column">
             <header className="mb-4 text-center">
                 <h3>{schema.title}</h3>
                 <p>{schema.description}</p>
